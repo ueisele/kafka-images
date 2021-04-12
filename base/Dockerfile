@@ -1,0 +1,79 @@
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.3 as base
+
+LABEL maintainer="code@uweeisele.eu"
+
+# This affects how strings in Java class files are interpreted.  We want UTF-8 and this is the only locale in the
+# base image that supports it
+ENV LANG="C.UTF-8"
+
+# Zulu openJDK
+ENV ZULU_OPENJDK="zulu11-jdk-headless"
+ENV JAVA_HOME="/usr/lib/jvm/zulu11"
+
+RUN microdnf install -y dnf \
+    && dnf update -y \
+    && dnf install -y openssl wget tar procps krb5-workstation iputils hostname \
+    # https://docs.azul.com/zulu/zuludocs/ZuluUserGuide/PrepareZuluPlatform/AttachYumRepositoryRHEL-SLES-OracleLinuxSys.htm
+    && rpm --import https://www.azul.com/files/0xB1998361219BD9C9.txt \
+    && dnf -y install https://cdn.azul.com/zulu/bin/zulu-repo-1.0.0-1.noarch.rpm \
+    && dnf -y install ${ZULU_OPENJDK} \
+    && dnf clean all \
+    && rm -rf /tmp/* \
+    && useradd --no-log-init --create-home --shell /bin/bash appuser
+
+USER appuser
+WORKDIR /home/appuser
+
+
+FROM base AS build
+
+USER root
+
+RUN dnf install -y git \
+    && dnf clean all \
+    && rm -rf /tmp/*
+
+USER appuser
+
+ARG KAFKA_BRANCH=2.8.0-rc1
+RUN git clone https://github.com/apache/kafka.git --branch ${KAFKA_BRANCH}
+
+RUN cd kafka \
+    && ./gradlew jar releaseTarGz
+
+RUN cd kafka/core/build/distributions \
+    && dist_file=kafka_*-$(sed -n 's/^version=\(.\+\)$/\1/p' /home/appuser/kafka/gradle.properties).tgz \
+    && mkdir -p /home/appuser/distributions/kafka \
+    && tar -xzf ${dist_file} --strip-components 1 -C /home/appuser/distributions/kafka
+
+
+FROM base as kafka-base
+
+LABEL maintainer="code@uweeisele.eu"
+
+USER root
+
+ENV PYTHON_VERSION="36-3.6.8"
+
+RUN dnf install -y git python${PYTHON_VERSION} \
+    && alternatives --set python /usr/bin/python3 \
+    && python3 -m pip install --upgrade pip setuptools \
+    && python3 -m pip install --prefer-binary --prefix=/usr/local --upgrade 'git+https://github.com/confluentinc/confluent-docker-utils@v0.0.44' \
+    && dnf remove -y git \
+    && dnf clean all \
+    && rm -rf /tmp/* \
+    && mkdir -p /opt/apache/kafka /usr/logs \
+    && chown appuser:appuser -R /opt/apache/kafka /usr/logs
+
+COPY --from=build --chown=appuser:appuser /home/appuser/distributions/kafka/bin /opt/apache/kafka/bin
+COPY --from=build --chown=appuser:appuser /home/appuser/distributions/kafka/config /opt/apache/kafka/config
+COPY --from=build --chown=appuser:appuser /home/appuser/distributions/kafka/libs /opt/apache/kafka/libs
+
+COPY --chown=appuser:appuser include/opt/apache/kafka/docker /opt/apache/kafka/docker
+
+ENV PATH=/opt/apache/kafka/bin:${PATH}
+
+# Set the classpath for JARs required by `cub`
+ENV CUB_CLASSPATH='"/opt/apache/kafka/libs/*"'
+
+USER appuser
