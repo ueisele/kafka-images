@@ -65,15 +65,18 @@ RUN dnf install -y git python${PYTHON_VERSION} \
     && mkdir -p /opt/apache/kafka /usr/logs \
     && chown appuser:appuser -R /opt/apache/kafka /usr/logs
 
+USER appuser
+
 COPY --from=build --chown=appuser:appuser /home/appuser/distributions/kafka/bin /opt/apache/kafka/bin
+ENV PATH=/opt/apache/kafka/bin:${PATH}
+
 COPY --from=build --chown=appuser:appuser /home/appuser/distributions/kafka/config /opt/apache/kafka/config
 COPY --from=build --chown=appuser:appuser /home/appuser/distributions/kafka/libs /opt/apache/kafka/libs
 
 COPY --chown=appuser:appuser include/opt/apache/kafka/docker /opt/apache/kafka/docker
 
-ENV PATH=/opt/apache/kafka/bin:${PATH}
+RUN mkdir -p /opt/apache/kafka/data /opt/apache/kafka/secrets
+VOLUME ["/opt/apache/kafka/data", "/opt/apache/kafka/secrets"]
 
 # Set the classpath for JARs required by `cub`
 ENV CUB_CLASSPATH='"/opt/apache/kafka/libs/*"'
-
-USER appuser
