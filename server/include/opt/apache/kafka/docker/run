@@ -31,6 +31,9 @@ id
 echo "===> Configuring ..."
 /opt/apache/kafka/docker/configure
 
+echo "===> Initializing ..."
+/opt/apache/kafka/docker/init
+
 echo "===> Running preflight checks ... "
 /opt/apache/kafka/docker/ensure
 

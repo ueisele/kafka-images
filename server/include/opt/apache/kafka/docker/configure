@@ -16,7 +16,21 @@
 
 . /opt/apache/kafka/docker/bash-config
 
-dub ensure KAFKA_ZOOKEEPER_CONNECT
+# If PROCESS_ROLES is set to 'broker', 'controller' or 'broker,controller' 
+# the server runs in KRaft mode.
+if [[ -z "${KAFKA_PROCESS_ROLES-}" ]]
+then
+  dub ensure KAFKA_ZOOKEEPER_CONNECT
+else
+  dub ensure KAFKA_CONTROLLER_QUORUM_VOTERS
+  dub ensure KAFKA_NODE_ID
+fi
+
+if [[ "${KAFKA_PROCESS_ROLES-}" == *"controller"* ]]
+then
+  dub ensure KAFKA_CONTROLLER_LISTENER_NAMES
+fi
+
 dub ensure KAFKA_ADVERTISED_LISTENERS
 
 # By default, LISTENERS is derived from ADVERTISED_LISTENERS by replacing
@@ -118,6 +132,6 @@ then
   fi
 fi
 
-dub template "/opt/apache/kafka/docker/kafka.properties.template" "/opt/apache/kafka/config/kafka.properties"
+dub template "/opt/apache/kafka/docker/server.properties.template" "/opt/apache/kafka/config/server.properties"
 dub template "/opt/apache/kafka/docker/log4j.properties.template" "/opt/apache/kafka/config/log4j.properties"
 dub template "/opt/apache/kafka/docker/tools-log4j.properties.template" "/opt/apache/kafka/config/tools-log4j.properties"
