@@ -7,4 +7,4 @@ EXPOSE 9092 9093
 
 COPY --chown=appuser:appuser include/opt/apache/kafka/docker /opt/apache/kafka/docker
 
-CMD ["/etc/confluent/docker/run"]
+CMD ["/opt/apache/kafka/docker/run"]

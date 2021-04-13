@@ -34,4 +34,4 @@ if [ "$KAFKA_JMX_PORT" ]; then
 fi
 
 echo "===> Launching Kafka ... "
-exec kafka-server-start /opt/apache/kafka/config/server.properties
+exec kafka-server-start.sh /opt/apache/kafka/config/server.properties
