@@ -44,7 +44,9 @@ RUN cd kafka \
 RUN cd kafka/core/build/distributions \
     && dist_file=kafka_*-$(sed -n 's/^version=\(.\+\)$/\1/p' /home/appuser/kafka/gradle.properties).tgz \
     && mkdir -p /home/appuser/distributions/kafka \
-    && tar -xzf ${dist_file} --strip-components 1 -C /home/appuser/distributions/kafka
+    && tar -xzf ${dist_file} --strip-components 1 -C /home/appuser/distributions/kafka \
+    && cp /home/appuser/kafka/shell/build/libs/* /home/appuser/distributions/kafka/libs \
+    && cp /home/appuser/kafka/shell/build/dependant-libs*/* /home/appuser/distributions/kafka/libs
 
 
 FROM base as kafka-base

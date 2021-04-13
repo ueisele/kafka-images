@@ -1,0 +1,25 @@
+= Apache Kafka Images
+
+Kafka Docker image which supports KRaft mode. 
+
+.To start Kafka in KRaft single mode just run: 
+[source,bash]
+----
+cd example/kraft-single-mode
+docker-compose up
+----
+
+.link:examples/kraft-single-mode/docker-compose.yaml[]
+[%collapsible]
+====
+[source,yaml]
+----
+include::examples/kraft-single-mode/docker-compose.yaml[]
+----
+====
+
+More information about KRaft in Early Access Release documentation: https://github.com/apache/kafka/blob/2.8.0-rc1/config/kraft/README.md
+
+== Warning
+
+KRaft mode in Kafka 2.8 is provided for testing only, NOT for production. We do not yet support upgrading existing ZooKeeper-based Kafka clusters into this mode. In fact, when Kafka 3.0 is released, it will not be possible to upgrade your KRaft clusters from 2.8 to 3.0. There may be bugs, including serious ones. You should assume that your data could be lost at any time if you try the early access release of KRaft mode.

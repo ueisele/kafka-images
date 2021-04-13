@@ -1,7 +1,7 @@
 #############################################################
 # KRaft Single Mode                                         #
 #############################################################
-#https://github.com/apache/kafka/blob/trunk/config/kraft/README.md
+#https://github.com/apache/kafka/blob/2.8.0-rc1/config/kraft/README.md
 ---
 version: '2.4'
 services:
@@ -32,8 +32,6 @@ services:
             KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 # (default: 3) The replication factor for the offsets topic. Must be 1, because we only have a single broker.
             KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1 # (default: 3) The replication factor for the transaction topic. Must be 1, because we only have a single broker.
             KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1 # (default: 2) Overridden min.insync.replicas config for the transaction topic. Must be 1, because we only have a single broker.
-            #### Group Coordinator Settings ####
-            KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0 # (default: 3000) The amount of time the group coordinator will wait for more consumers to join a new group before performing the first rebalance. Set to 0 to ensure, that consumers start faster in dev environments.
 
 volumes:
     kafka-node-1:
