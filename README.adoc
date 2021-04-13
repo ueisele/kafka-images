@@ -9,14 +9,7 @@ cd example/kraft-single-mode
 docker-compose up
 ----
 
-.examples/kraft-single-mode/docker-compose.yaml
-[%collapsible]
-====
-[source,yaml]
-----
-include::examples/kraft-single-mode/docker-compose.yaml[]
-----
-====
+You find this example at .link:examples/kraft-single-mode/docker-compose.yaml[].
 
 More information about KRaft in Early Access Release documentation: https://github.com/apache/kafka/blob/2.8.0-rc1/config/kraft/README.md
 
