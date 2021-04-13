@@ -9,7 +9,7 @@ cd example/kraft-single-mode
 docker-compose up
 ----
 
-.link:examples/kraft-single-mode/docker-compose.yaml[]
+.examples/kraft-single-mode/docker-compose.yaml
 [%collapsible]
 ====
 [source,yaml]
