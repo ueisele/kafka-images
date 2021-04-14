@@ -16,6 +16,7 @@ then
             dub ensure CLUSTER_ID
 
             # The next step is to format your storage directories
+            echo "Initializing storage dir for cluster id ${CLUSTER_ID}"
             kafka-storage.sh format -t $CLUSTER_ID -c /opt/apache/kafka/config/server.properties
         fi
     fi

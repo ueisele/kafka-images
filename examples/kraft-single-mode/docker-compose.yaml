@@ -1,7 +1,7 @@
 #############################################################
 # KRaft Single Mode                                         #
 #############################################################
-#https://github.com/apache/kafka/blob/2.8.0-rc1/config/kraft/README.md
+#https://github.com/apache/kafka/blob/2.8.0-rc2/config/kraft/README.md
 ---
 version: '2.4'
 services:
@@ -10,11 +10,11 @@ services:
     # Kafka Server (Broker,Controller)                          #
     #############################################################
     kafka-server:
-        image: ueisele/apache-kafka-server:2.8.0-rc1
+        image: ueisele/apache-kafka-server:2.8.0-rc2
         restart: always
-        network_mode: "host"
+        network_mode: host
         volumes:
-            - kafka-node-1:/opt/apache/kafka/data
+            - kafka-server-1:/opt/apache/kafka/data
         environment:
             #### Setup ####
             AUTO_GENERATE_CLUSTER_ID: "true" # (default: false) In KRaft mode the cluster id must be generated manually. If set to true the id is automatically generated during the first start. This should only be used in single mode.
@@ -34,4 +34,4 @@ services:
             KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1 # (default: 2) Overridden min.insync.replicas config for the transaction topic. Must be 1, because we only have a single broker.
 
 volumes:
-    kafka-node-1:
+    kafka-server-1:

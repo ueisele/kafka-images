@@ -35,7 +35,7 @@ RUN dnf install -y git \
 
 USER appuser
 
-ARG KAFKA_BRANCH=2.8.0-rc1
+ARG KAFKA_BRANCH=2.8.0-rc2
 RUN git clone https://github.com/apache/kafka.git --branch ${KAFKA_BRANCH}
 
 RUN cd kafka \

@@ -29,6 +29,9 @@ fi
 if [[ "${KAFKA_PROCESS_ROLES-}" == *"controller"* ]]
 then
   dub ensure KAFKA_CONTROLLER_LISTENER_NAMES
+  # In KRaft mode the controller needs to specify its listener explicitly without a advertised listener.
+  # Therefore its not possible to derive listeners from advertised listeners.
+  dub ensure KAFKA_LISTENERS
 fi
 
 dub ensure KAFKA_ADVERTISED_LISTENERS

@@ -10,12 +10,12 @@ BUILD=false
 
 DOCKERREGISTRY_USER="ueisele"
 
-KAFKA_BRANCH="2.8.0-rc1"
+KAFKA_BRANCH="2.8.0-rc2"
 
 function usage () {
     echo "$0: $1" >&2
     echo
-    echo "Usage: $0 [--build] [--push] [--user <name, e.g. ueisele>] --branch <kafka-branch, e.g. 2.8.0-rc1>"
+    echo "Usage: $0 [--build] [--push] [--user <name, e.g. ueisele>] --branch <kafka-branch, e.g. 2.8.0-rc2>"
     echo
     return 1
 }
