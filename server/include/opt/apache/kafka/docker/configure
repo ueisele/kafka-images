@@ -32,17 +32,17 @@ then
   # In KRaft mode the controller needs to specify its listener explicitly without a advertised listener.
   # Therefore its not possible to derive listeners from advertised listeners.
   dub ensure KAFKA_LISTENERS
-fi
+else
+  dub ensure KAFKA_ADVERTISED_LISTENERS
 
-dub ensure KAFKA_ADVERTISED_LISTENERS
-
-# By default, LISTENERS is derived from ADVERTISED_LISTENERS by replacing
-# hosts with 0.0.0.0. This is good default as it ensures that the broker
-# process listens on all ports.
-if [[ -z "${KAFKA_LISTENERS-}" ]]
-then
-  export KAFKA_LISTENERS
-  KAFKA_LISTENERS=$(cub listeners "$KAFKA_ADVERTISED_LISTENERS")
+  # By default, LISTENERS is derived from ADVERTISED_LISTENERS by replacing
+  # hosts with 0.0.0.0. This is good default as it ensures that the broker
+  # process listens on all ports.
+  if [[ -z "${KAFKA_LISTENERS-}" ]]
+  then
+    export KAFKA_LISTENERS
+    KAFKA_LISTENERS=$(cub listeners "$KAFKA_ADVERTISED_LISTENERS")
+  fi
 fi
 
 dub path /opt/apache/kafka/config writable
@@ -78,8 +78,8 @@ then
   exit 1
 fi
 
-# Set if ADVERTISED_LISTENERS has SSL:// or SASL_SSL:// endpoints.
-if [[ $KAFKA_ADVERTISED_LISTENERS == *"SSL://"* ]]
+# Set if LISTENERS has SSL:// or SASL_SSL:// endpoints.
+if [[ $KAFKA_LISTENERS == *"SSL://"* ]]
 then
   echo "SSL is enabled."
 
@@ -114,8 +114,8 @@ then
   
 fi
 
-# Set if KAFKA_ADVERTISED_LISTENERS has SASL_PLAINTEXT:// or SASL_SSL:// endpoints.
-if [[ $KAFKA_ADVERTISED_LISTENERS =~ .*SASL_.*://.* ]]
+# Set if KAFKA_LISTENERS has SASL_PLAINTEXT:// or SASL_SSL:// endpoints.
+if [[ $KAFKA_LISTENERS =~ .*SASL_.*://.* ]]
 then
   echo "SASL" is enabled.
 
