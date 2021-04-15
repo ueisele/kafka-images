@@ -8,7 +8,10 @@ It is not yet supported to upgrade existing ZooKeeper-based Kafka clusters into 
 In fact, when Kafka 3.0 is released, it will not be possible to upgrade your KRaft clusters from 2.8 to 3.0. 
 There may be bugs, including serious ones. You should assume that your data could be lost at any time if you try the early access release of KRaft mode.
 
-More information about KRaft in Early Access Release documentation: https://github.com/apache/kafka/blob/2.8.0-rc2/config/kraft/README.md
+You find mor information on this sites:
+
+* https://github.com/apache/kafka/blob/2.8.0-rc2/config/kraft/README.md
+* https://www.confluent.io/blog/kafka-without-zookeeper-a-sneak-peek/
 
 .To start Kafka in KRaft single mode just run: 
 [source,bash]
