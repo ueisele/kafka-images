@@ -1,6 +1,14 @@
 = Apache Kafka Images
 
-Kafka Docker image which supports KRaft mode. 
+Kafka Docker image which supports KRaft mode.
+
+Kafka 2.8 is the first release wich contains KRaft as an operation mode which requires no ZooKeeper.
+KRaft mode in Kafka 2.8 is provided for testing only, NOT for production. 
+It is not yet supported to upgrade existing ZooKeeper-based Kafka clusters into this mode. 
+In fact, when Kafka 3.0 is released, it will not be possible to upgrade your KRaft clusters from 2.8 to 3.0. 
+There may be bugs, including serious ones. You should assume that your data could be lost at any time if you try the early access release of KRaft mode.
+
+More information about KRaft in Early Access Release documentation: https://github.com/apache/kafka/blob/2.8.0-rc2/config/kraft/README.md
 
 .To start Kafka in KRaft single mode just run: 
 [source,bash]
@@ -9,10 +17,11 @@ cd example/kraft-single-mode
 docker-compose up
 ----
 
-You find this example at .link:examples/kraft-single-mode/docker-compose.yaml[].
+You find all examples in link:examples/[]:
+* link:examples/kraft-single-mode/docker-compose.yaml[]
+* link:examples/kraft-cluster-shared-mode/docker-compose.yaml[]
+* link:examples/kraft-cluster-dedicated-mode/docker-compose.yaml[]
 
-More information about KRaft in Early Access Release documentation: https://github.com/apache/kafka/blob/2.8.0-rc2/config/kraft/README.md
-
-== Warning
-
-KRaft mode in Kafka 2.8 is provided for testing only, NOT for production. We do not yet support upgrading existing ZooKeeper-based Kafka clusters into this mode. In fact, when Kafka 3.0 is released, it will not be possible to upgrade your KRaft clusters from 2.8 to 3.0. There may be bugs, including serious ones. You should assume that your data could be lost at any time if you try the early access release of KRaft mode.
+The Docker image `ueisele/apache-kafka-server:2.8.0-rc2` is available on Docker Hub.
+The configuration is basically the same than for Confluent Docker images (see link:https://docs.confluent.io/platform/current/installation/docker/config-reference.html#confluent-ak-configuration[Confluent Kafka configuration]).
+In addition this image supports configuration for KRaft mode (without the need to configure ZooKeeper connect, ...).
