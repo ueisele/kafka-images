@@ -25,6 +25,7 @@ You find all examples in link:examples/[]:
 * link:examples/kraft-single-mode/docker-compose.yaml[]
 * link:examples/kraft-cluster-shared-mode/docker-compose.yaml[]
 * link:examples/kraft-cluster-dedicated-mode/docker-compose.yaml[]
+* link:examples/kraft-cluster-mixed-mode/docker-compose.yaml[]
 
 The Docker image `ueisele/apache-kafka-server:2.8.0-rc2` is available on Docker Hub.
 The configuration is basically the same than for Confluent Docker images (see link:https://docs.confluent.io/platform/current/installation/docker/config-reference.html#confluent-ak-configuration[Confluent Kafka configuration]).
