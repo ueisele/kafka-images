@@ -18,6 +18,7 @@ docker-compose up
 ----
 
 You find all examples in link:examples/[]:
+
 * link:examples/kraft-single-mode/docker-compose.yaml[]
 * link:examples/kraft-cluster-shared-mode/docker-compose.yaml[]
 * link:examples/kraft-cluster-dedicated-mode/docker-compose.yaml[]
