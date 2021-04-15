@@ -1,14 +1,12 @@
 #############################################################
 # KRaft Single Mode                                         #
+# 1x broker,controller                                      #
 #############################################################
 #https://github.com/apache/kafka/blob/2.8.0-rc2/config/kraft/README.md
 ---
 version: '2.4'
 services:
     
-    #############################################################
-    # Kafka Server (Broker,Controller)                          #
-    #############################################################
     kafka-server:
         image: ueisele/apache-kafka-server:2.8.0-rc2
         restart: always

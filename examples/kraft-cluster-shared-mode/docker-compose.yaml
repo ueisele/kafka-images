@@ -1,5 +1,6 @@
 #############################################################
 # KRaft Cluster Shared Mode                                 #
+# 3x broker,controller                                      #
 #############################################################
 # https://github.com/apache/kafka/blob/2.8.0-rc2/config/kraft/README.md
 # In KRaft mode, only a small group of specially selected servers can act as controllers 
@@ -14,10 +15,7 @@
 ---
 version: '2.4'
 services:
-    
-    #############################################################
-    # Kafka Server (Broker,Controller)                          #
-    #############################################################
+
     kafka-server1:
         image: ueisele/apache-kafka-server:${KAFKA_VERSION}
         restart: always

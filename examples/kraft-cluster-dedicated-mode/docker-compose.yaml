@@ -1,5 +1,6 @@
 #############################################################
 # KRaft Cluster Dedicated Mode                              #
+# 3x controller + 3x broker                                 #
 #############################################################
 # https://github.com/apache/kafka/blob/2.8.0-rc2/config/kraft/README.md
 # In KRaft mode, only a small group of specially selected servers can act as controllers 
