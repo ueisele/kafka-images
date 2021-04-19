@@ -2,7 +2,7 @@
 # KRaft Cluster Shared Mode                                 #
 # 3x broker,controller                                      #
 #############################################################
-# https://github.com/apache/kafka/blob/2.8.0-rc2/config/kraft/README.md
+# https://github.com/apache/kafka/blob/2.8.0/config/kraft/README.md
 # In KRaft mode, only a small group of specially selected servers can act as controllers 
 # (unlike the ZooKeeper-based mode, where any server can become the Controller). 
 # The specially selected controller servers will participate in the metadata quorum. 

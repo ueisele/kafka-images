@@ -10,7 +10,7 @@ There may be bugs, including serious ones. You should assume that your data coul
 
 You find mor information on this sites:
 
-* https://github.com/apache/kafka/blob/2.8.0-rc2/config/kraft/README.md
+* https://github.com/apache/kafka/blob/2.8.0/config/kraft/README.md
 * https://www.confluent.io/blog/kafka-without-zookeeper-a-sneak-peek/
 
 .To start Kafka in KRaft single mode just run: 
@@ -27,6 +27,6 @@ You find all examples in link:examples/[]:
 * link:examples/kraft-cluster-dedicated-mode/docker-compose.yaml[]
 * link:examples/kraft-cluster-mixed-mode/docker-compose.yaml[]
 
-The Docker image `ueisele/apache-kafka-server:2.8.0-rc2` is available on Docker Hub.
+The Docker image `ueisele/apache-kafka-server:2.8.0` is available on Docker Hub.
 The configuration is basically the same than for Confluent Docker images (see link:https://docs.confluent.io/platform/current/installation/docker/config-reference.html#confluent-ak-configuration[Confluent Kafka configuration]).
 In addition this image supports configuration for KRaft mode (without the need to configure ZooKeeper connect, ...).

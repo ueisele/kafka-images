@@ -24,7 +24,7 @@ RUN microdnf install -y dnf \
 USER appuser
 WORKDIR /home/appuser
 
-ARG KAFKA_BRANCH=2.8.0-rc2
+ARG KAFKA_BRANCH=2.8.0
 RUN git clone https://github.com/apache/kafka.git --branch ${KAFKA_BRANCH}
 
 RUN cd kafka \
