@@ -1,0 +1,133 @@
+#############################################################
+# Kafka Cluster with ZooKeeper                              #
+# 3x ZooKeeper + 3x broker                                  #
+#############################################################
+---
+version: '2.4'
+services:
+    
+    #############################################################
+    # Zookeeper                                                 #
+    #############################################################
+    zookeeper1:
+        image: confluentinc/cp-zookeeper:${CONFLUENT_VERSION}
+        restart: always
+        hostname: zookeeper1
+        volumes:
+            - zookeeper1:/var/lib/zookeeper/data
+        # https://docs.confluent.io/current/zookeeper/deployment.html
+        # https://docs.confluent.io/current/installation/docker/config-reference.html#zk-configuration
+        environment:
+            ZOOKEEPER_SERVER_ID: 1 # (required in cluster mode) Sets the server ID in the myid file, which consists of a single line that contains only the text of that machine’s ID.
+            ZOOKEEPER_CLIENT_PORT: 2181 # (required) This is the port where ZooKeeper clients will listen on. This is where the Brokers will connect to ZooKeeper.
+            ZOOKEEPER_SERVERS: zookeeper1:2888:3888;zookeeper2:2888:3888;zookeeper3:2888:3888
+            ZOOKEEPER_TICK_TIME: 2000 # (default: 3000) The unit of time for ZooKeeper translated to milliseconds. This governs all ZooKeeper time dependent operations. It is used for heartbeats and timeouts especially.
+            # The initLimit and syncLimit are used to govern how long following ZooKeeper servers can take to initialize with the current leader and how long they can be out of sync with the leader.
+            ZOOKEEPER_INIT_LIMIT: 5 # (default: 10)
+            ZOOKEEPER_SYNC_LIMIT: 2 # (default: 5)
+
+    zookeeper2:
+        image: confluentinc/cp-zookeeper:${CONFLUENT_VERSION}
+        restart: always
+        hostname: zookeeper2
+        volumes:
+            - zookeeper2:/var/lib/zookeeper/data
+        # https://docs.confluent.io/current/zookeeper/deployment.html
+        # https://docs.confluent.io/current/installation/docker/config-reference.html#zk-configuration
+        environment:
+            ZOOKEEPER_SERVER_ID: 2 # (required in cluster mode) Sets the server ID in the myid file, which consists of a single line that contains only the text of that machine’s ID.
+            ZOOKEEPER_CLIENT_PORT: 2181 # (required) This is the port where ZooKeeper clients will listen on. This is where the Brokers will connect to ZooKeeper.
+            ZOOKEEPER_SERVERS: zookeeper1:2888:3888;zookeeper2:2888:3888;zookeeper3:2888:3888
+            ZOOKEEPER_TICK_TIME: 2000 # (default: 3000) The unit of time for ZooKeeper translated to milliseconds. This governs all ZooKeeper time dependent operations. It is used for heartbeats and timeouts especially.
+            # The initLimit and syncLimit are used to govern how long following ZooKeeper servers can take to initialize with the current leader and how long they can be out of sync with the leader.
+            ZOOKEEPER_INIT_LIMIT: 5 # (default: 10)
+            ZOOKEEPER_SYNC_LIMIT: 2 # (default: 5)
+
+    zookeeper3:
+        image: confluentinc/cp-zookeeper:${CONFLUENT_VERSION}
+        restart: always
+        hostname: zookeeper3
+        volumes:
+            - zookeeper3:/var/lib/zookeeper/data
+        # https://docs.confluent.io/current/zookeeper/deployment.html
+        # https://docs.confluent.io/current/installation/docker/config-reference.html#zk-configuration
+        environment:
+            ZOOKEEPER_SERVER_ID: 3 # (required in cluster mode) Sets the server ID in the myid file, which consists of a single line that contains only the text of that machine’s ID.
+            ZOOKEEPER_CLIENT_PORT: 2181 # (required) This is the port where ZooKeeper clients will listen on. This is where the Brokers will connect to ZooKeeper.
+            ZOOKEEPER_SERVERS: zookeeper1:2888:3888;zookeeper2:2888:3888;zookeeper3:2888:3888
+            ZOOKEEPER_TICK_TIME: 2000 # (default: 3000) The unit of time for ZooKeeper translated to milliseconds. This governs all ZooKeeper time dependent operations. It is used for heartbeats and timeouts especially.
+            # The initLimit and syncLimit are used to govern how long following ZooKeeper servers can take to initialize with the current leader and how long they can be out of sync with the leader.
+            ZOOKEEPER_INIT_LIMIT: 5 # (default: 10)
+            ZOOKEEPER_SYNC_LIMIT: 2 # (default: 5)
+
+    #############################################################
+    # Kafka Broker                                              #
+    #############################################################
+    kafka-broker1:
+        image: ueisele/apache-kafka-server:${KAFKA_VERSION}
+        restart: always
+        ports:
+            - 19092:19092
+        networks:
+            default:
+                aliases:
+                    - kafka
+        volumes:
+            - kafka-broker1:/opt/apache/kafka/data
+        environment:
+            #### Server Basics ####
+            KAFKA_NODE_ID: 101 # (default: -1, required in KRaft mode) The node id for this server.
+            KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181 # (required) Instructs Kafka how to get in touch with ZooKeeper.
+            #### Socket Server Settings ###
+            KAFKA_ADVERTISED_LISTENERS: HOST://localhost:19092,PLAINTEXT://kafka-broker1.${DOMAIN_NAME}:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
+            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
+
+    kafka-broker2:
+        image: ueisele/apache-kafka-server:${KAFKA_VERSION}
+        restart: always
+        ports:
+            - 29092:29092
+        networks:
+            default:
+                aliases:
+                    - kafka
+        volumes:
+            - kafka-broker2:/opt/apache/kafka/data
+        environment:
+            #### Server Basics ####
+            KAFKA_NODE_ID: 102 # (default: -1, required in KRaft mode) The node id for this server.
+            KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181 # (required) Instructs Kafka how to get in touch with ZooKeeper.
+            #### Socket Server Settings ###
+            KAFKA_ADVERTISED_LISTENERS: HOST://localhost:29092,PLAINTEXT://kafka-broker2.${DOMAIN_NAME}:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
+            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
+
+    kafka-broker3:
+        image: ueisele/apache-kafka-server:${KAFKA_VERSION}
+        restart: always
+        ports:
+            - 39092:39092
+        networks:
+            default:
+                aliases:
+                    - kafka
+        volumes:
+            - kafka-broker3:/opt/apache/kafka/data
+        environment:
+            #### Server Basics ####
+            KAFKA_NODE_ID: 103 # (default: -1, required in KRaft mode) The node id for this server.
+            KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181 # (required) Instructs Kafka how to get in touch with ZooKeeper.
+            #### Socket Server Settings ###
+            KAFKA_ADVERTISED_LISTENERS: HOST://localhost:39092,PLAINTEXT://kafka-broker3.${DOMAIN_NAME}:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
+            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
+
+volumes:
+    zookeeper1:
+    zookeeper2:
+    zookeeper3:
+    kafka-broker1:
+    kafka-broker2:
+    kafka-broker3:
+
+networks:
+    default:
+        name: ${DOMAIN_NAME}

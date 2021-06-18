@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi-minimal:8.3 as build
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.4 as build
 
 LABEL maintainer="code@uweeisele.eu"
 
@@ -38,7 +38,7 @@ RUN cd kafka/core/build/distributions \
     && cp /home/appuser/kafka/shell/build/dependant-libs*/* /home/appuser/distributions/kafka/libs
 
 
-FROM registry.access.redhat.com/ubi8/ubi-minimal:8.3 as base
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.4 as base
 
 LABEL maintainer="code@uweeisele.eu"
 
@@ -50,7 +50,7 @@ ENV LANG="C.UTF-8"
 ENV ZULU_OPENJDK="zulu11-jre-headless"
 ENV JAVA_HOME="/usr/lib/jvm/zulu11"
 
-ENV PYTHON_VERSION="36-3.6.8"
+ENV PYTHON_VERSION="38-3.8.6"
 
 RUN microdnf install -y dnf \
     && dnf update -y \
@@ -61,7 +61,7 @@ RUN microdnf install -y dnf \
     && dnf -y install ${ZULU_OPENJDK} \
     && alternatives --set python /usr/bin/python3 \
     && python3 -m pip install --upgrade pip setuptools \
-    && python3 -m pip install --prefer-binary --prefix=/usr/local --upgrade 'git+https://github.com/confluentinc/confluent-docker-utils@v0.0.44' \
+    && python3 -m pip install --prefer-binary --prefix=/usr/local --upgrade 'git+https://github.com/confluentinc/confluent-docker-utils@v0.0.45' \
     && dnf remove -y git \
     && dnf clean all \
     && rm -rf /tmp/* \
@@ -77,8 +77,6 @@ ENV PATH=/opt/apache/kafka/bin:${PATH}
 
 COPY --from=build --chown=appuser:appuser /home/appuser/distributions/kafka/config /opt/apache/kafka/config
 COPY --from=build --chown=appuser:appuser /home/appuser/distributions/kafka/libs /opt/apache/kafka/libs
-# Set the classpath for JARs required by `cub`
-ENV CUB_CLASSPATH='"/opt/apache/kafka/libs/*"'
 
 COPY --chown=appuser:appuser include/opt/apache/kafka/docker /opt/apache/kafka/docker
 

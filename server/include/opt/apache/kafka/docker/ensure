@@ -28,14 +28,3 @@ then
         exit 1
     fi
 fi
-
-if [[ -n "${KAFKA_ZOOKEEPER_SSL_CLIENT_ENABLE-}" ]] && [[ $KAFKA_ZOOKEEPER_SSL_CLIENT_ENABLE == "true" ]]
-then
-    echo "===> Skipping Zookeeper health check for SSL connections..."
-elif [[ -n "${KAFKA_PROCESS_ROLES-}" ]]
-then
-    echo "===> Skipping Zookeeper health check in KRaft mode..."
-else
-    echo "===> Check if Zookeeper is healthy ..."
-    cub zk-ready "$KAFKA_ZOOKEEPER_CONNECT" "${KAFKA_CUB_ZK_TIMEOUT:-40}"
-fi
