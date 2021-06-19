@@ -24,8 +24,9 @@ RUN microdnf install -y dnf \
 USER appuser
 WORKDIR /home/appuser
 
+ARG KAFKA_GITREPO=https://github.com/apache/kafka.git
 ARG KAFKA_BRANCH=2.8.0
-RUN git clone https://github.com/apache/kafka.git --branch ${KAFKA_BRANCH}
+RUN git clone ${KAFKA_GITREPO} --branch ${KAFKA_BRANCH} kafka
 
 RUN cd kafka \
     && ./gradlew jar releaseTarGz
@@ -82,3 +83,8 @@ COPY --chown=appuser:appuser include/opt/apache/kafka/docker /opt/apache/kafka/d
 
 RUN mkdir -p /opt/apache/kafka/data /opt/apache/kafka/secrets
 VOLUME ["/opt/apache/kafka/data", "/opt/apache/kafka/secrets"]
+
+ARG KAFKA_GITREPO=https://github.com/apache/kafka.git
+ARG KAFKA_BRANCH=2.8.0
+LABEL kafka.gitrepo="${KAFKA_GITREPO}"
+LABEL kafka.gitref="${KAFKA_BRANCH}"
