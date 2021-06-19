@@ -32,13 +32,17 @@ function build_image () {
         --build-arg KAFKA_VERSION=${KAFKA_VERSION} \
         ${SCRIPT_DIR}/${artifact}
     docker tag "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION}" "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION}-$(resolveBuildTimestamp ${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION})"
+    if [ "${KAFKA_VERSION}" != "${KAFKA_ALT_VERSION}" ]; then
+        docker tag "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION}" "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_ALT_VERSION}-$(resolveBuildTimestamp ${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION})"
+        docker tag "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION}" "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_ALT_VERSION}"
+    fi
     if [ "${RELEASE}" == "true" ]; then
         docker tag "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION}" "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:latest"
     fi
 }
 
 function build () {
-    echo "Building Docker images with Kafka version ${KAFKA_VERSION} using branch ${KAFKA_BRANCH} (release=${RELEASE})"
+    echo "Building Docker images with Kafka version ${KAFKA_VERSION} (${KAFKA_ALT_VERSION}) using branch ${KAFKA_BRANCH} (release=${RELEASE})"
     build_image base
     build_image server
 }
@@ -47,6 +51,10 @@ function push_image () {
     local artifact=${1:?"Missing artifact as first parameter!"}
     docker push "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION}-$(resolveBuildTimestamp ${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION})"
     docker push "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION}"
+    if [ "${KAFKA_VERSION}" != "${KAFKA_ALT_VERSION}" ]; then
+        docker push "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_ALT_VERSION}-$(resolveBuildTimestamp ${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION})"
+        docker push "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_ALT_VERSION}"
+    fi
     if [ "${RELEASE}" == "true" ]; then
         docker push "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:latest"
     fi
@@ -133,6 +141,7 @@ function parseCmd () {
     KAFKA_GITREPO="https://github.com/${KAFKA_GITHUB_REPO}.git"
     KAFKA_IMAGE_NAME="${KAFKA_GITHUB_REPO//\//-}"
     KAFKA_VERSION="$(resolveVersion ${KAFKA_GITREPO} ${KAFKA_BRANCH})"
+    KAFKA_ALT_VERSION="$(curl -s -L https://raw.githubusercontent.com/${KAFKA_GITHUB_REPO}/${KAFKA_BRANCH}/gradle.properties | sed -n 's/^version=\(.\+\)$/\1/p')"
     if [ "${KAFKA_BRANCH}" == "${KAFKA_VERSION}" ]; then RELEASE="true"; else RELEASE="false"; fi
     return 0
 }
