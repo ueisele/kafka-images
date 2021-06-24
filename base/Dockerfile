@@ -24,6 +24,7 @@ RUN microdnf install -y dnf \
 USER appuser
 WORKDIR /home/appuser
 
+ARG BUILD_TIMESTAMP
 ARG KAFKA_GITREPO=https://github.com/apache/kafka.git
 ARG KAFKA_BRANCH=2.8.0
 RUN git clone ${KAFKA_GITREPO} --branch ${KAFKA_BRANCH} kafka

@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 set -e
-pushd . > /dev/null
-cd $(dirname ${BASH_SOURCE[0]})
-SCRIPT_DIR=$(pwd)
-popd > /dev/null
+SCRIPT_DIR=$(dirname ${BASH_SOURCE[0]})
 
 PUSH=false
 BUILD=false
@@ -30,6 +27,7 @@ function build_image () {
         --build-arg KAFKA_GITREPO=${KAFKA_GITREPO} \
         --build-arg KAFKA_BRANCH=${KAFKA_BRANCH} \
         --build-arg KAFKA_VERSION=${KAFKA_VERSION} \
+        --build-arg BUILD_TIMESTAMP=$(date +%s) \
         ${SCRIPT_DIR}/${artifact}
     docker tag "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION}" "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION}-$(resolveBuildTimestamp ${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION})"
     if [ "${KAFKA_VERSION}" != "${KAFKA_ALT_VERSION}" ]; then
