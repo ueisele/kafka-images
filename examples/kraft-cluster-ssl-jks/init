@@ -10,8 +10,8 @@ source "${EXAMPLE_DIR}/btpl"
 export TARGET_DIR="${EXAMPLE_DIR}/target/certs"
 export GROUP=kafka-broker
 export CA_KEY_PASS="cakeypass"
+export CA_TRUSTSTORE_PASS="changeit"
 export CERT_KEY_PASS="certkeypass"
-export TRUSTSTORE_PASS="changeit"
 export KEYSTORE_PASS="changeit"
 generateCA
 NAME=server CERT_SAN="IP:127.0.0.1,DNS:localhost,DNS:kafka,DNS:kafka-broker1,DNS:kafka-broker2,DNS:kafka-broker3,DNS:kafka-broker1.${DOMAIN_NAME},DNS:kafka-broker2.${DOMAIN_NAME},DNS:kafka-broker3.${DOMAIN_NAME}" generateCert

@@ -1,4 +1,4 @@
 security.protocol=SSL
 ssl.truststore.type=JKS
-ssl.truststore.location=${TRUSTSTORE_FULLPATH}
-ssl.truststore.password=${TRUSTSTORE_PASS}
+ssl.truststore.location=${CA_TRUSTSTORE_FULLPATH}
+ssl.truststore.password=${CA_TRUSTSTORE_PASS}

@@ -9,7 +9,7 @@ DEFAULT_CA_KEY_PASS="changeit"
 DEFAULT_CA_ALG="rsa:3086"
 DEFAULT_CA_DNAME="/C=DE/ST=Hessen/L=Frankfurt/O=Uwe Eisele/CN=Uwe Eisele CA"
 DEFAULT_CA_VALIDITY=3650
-DEFAULT_TRUSTSTORE_PASS="changeit"
+DEFAULT_CA_TRUSTSTORE_PASS="changeit"
 
 function usageCA () {
     echo "$0: $1" >&2
@@ -21,7 +21,7 @@ function usageCA () {
     echo "         --ca-alg rsa:3086 \\"
     echo "         --ca-dname \"/C=DE/ST=Hessen/L=Frankfurt/O=Uwe Eisele/CN=Uwe Eisele CA\" \\"
     echo "         --ca-validity 3650 \\"
-    echo "         --truststore-pass changeit"
+    echo "         --ca-truststore-pass changeit"
     echo
     return 1
 }
@@ -111,7 +111,7 @@ function parseCmdCA () {
                         ;;
                 esac
                 ;;
-            --truststore-pass)
+            --ca-truststore-pass)
                 shift
                 case "$1" in
                     ""|--*)
@@ -119,7 +119,7 @@ function parseCmdCA () {
                         return 1
                         ;;
                     *)
-                        TRUSTSTORE_PASS="$1"
+                        CA_TRUSTSTORE_PASS="$1"
                         shift
                         ;;
                 esac
@@ -152,21 +152,21 @@ function initCA () {
   if [ -z "${CA_ALG}" ]; then
       CA_ALG="$DEFAULT_CA_ALG"
   fi
-  if [ -z "${TRUSTSTORE_PASS}" ]; then
-      TRUSTSTORE_PASS="$DEFAULT_TRUSTSTORE_PASS"
+  if [ -z "${CA_TRUSTSTORE_PASS}" ]; then
+      CA_TRUSTSTORE_PASS="$DEFAULT_CA_TRUSTSTORE_PASS"
   fi
   CA_KEY_FULLPATH="${TARGET_DIR}/${GROUP}.ca.key.pem"
   CA_CERT_FULLPATH="${TARGET_DIR}/${GROUP}.ca.cert.pem"
-  TRUSTSTORE_FULLPATH="${TARGET_DIR}/${GROUP}.truststore.jks"
-  TRUSTSTORE_CREDENTIALS_FULLPATH="${TARGET_DIR}/${GROUP}.truststore.credentials"
+  CA_TRUSTSTORE_FULLPATH="${TARGET_DIR}/${GROUP}.ca.truststore.jks"
+  CA_TRUSTSTORE_CREDENTIALS_FULLPATH="${TARGET_DIR}/${GROUP}.ca.truststore.credentials"
 }
 
 function cleanCA () {
   mkdir -p "${TARGET_DIR}"
   rm -f "${CA_KEY_FULLPATH}"
   rm -f "${CA_CERT_FULLPATH}"
-  rm -f "${TRUSTSTORE_FULLPATH}"
-  rm -f "${TRUSTSTORE_CREDENTIALS_FULLPATH}"
+  rm -f "${CA_TRUSTSTORE_FULLPATH}"
+  rm -f "${CA_TRUSTSTORE_CREDENTIALS_FULLPATH}"
 }
 
 function createCA () {
@@ -176,8 +176,8 @@ function createCA () {
 
 function createTruststore () {
   echo "Creating Truststore..."
-  keytool -importcert -file "${CA_CERT_FULLPATH}" -alias "${GROUP}" -keystore "${TRUSTSTORE_FULLPATH}" -storepass "${TRUSTSTORE_PASS}" -noprompt
-  echo "${TRUSTSTORE_PASS}" > "${TRUSTSTORE_CREDENTIALS_FULLPATH}"
+  keytool -importcert -file "${CA_CERT_FULLPATH}" -alias "${GROUP}" -keystore "${CA_TRUSTSTORE_FULLPATH}" -storepass "${CA_TRUSTSTORE_PASS}" -noprompt
+  echo "${CA_TRUSTSTORE_PASS}" > "${CA_TRUSTSTORE_CREDENTIALS_FULLPATH}"
 }
 
 function showCA () {
