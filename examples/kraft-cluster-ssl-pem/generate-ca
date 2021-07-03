@@ -1,0 +1,179 @@
+#!/usr/bin/env bash
+set -e
+SCRIPT_DIR="$(readlink -f "$(dirname ${BASH_SOURCE[0]})")"
+PROJECT_ROOT="$(readlink -f "${SCRIPT_DIR}/..")"
+
+DEFAULT_TARGET_DIR="${PROJECT_ROOT}/target/certs"
+DEFAULT_GROUP="kafka-proxy"
+DEFAULT_CA_KEY_PASS="changeit"
+DEFAULT_CA_ALG="rsa:3086"
+DEFAULT_CA_DNAME="/C=DE/ST=Hessen/L=Frankfurt/O=Uwe Eisele/CN=Uwe Eisele CA"
+DEFAULT_CA_VALIDITY=3650
+
+function usageCA () {
+    echo "$0: $1" >&2
+    echo
+    echo "Usage: $0 \\"
+    echo "         --target-dir \"\$(pwd)/target/certs\" \\"
+    echo "         --group kafka-proxy \\"
+    echo "         --ca-key-pass changeit \\"
+    echo "         --ca-alg rsa:3086 \\"
+    echo "         --ca-dname \"/C=DE/ST=Hessen/L=Frankfurt/O=Uwe Eisele/CN=Uwe Eisele CA\" \\"
+    echo "         --ca-validity 3650"
+    echo
+    return 1
+}
+
+function parseCmdCA () {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --help)
+                usageCA "Help"
+                return $?
+                ;;
+            --target-dir)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usageCA "Requires target directory"
+                        return 1
+                        ;;
+                    *)
+                        TARGET_DIR="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --group)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usageCA "Requires group"
+                        return 1
+                        ;;
+                    *)
+                        GROUP="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --ca-key-pass)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usageCA "Requires key password"
+                        return 1
+                        ;;
+                    *)
+                        CA_KEY_PASS="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --ca-dname)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usageCA "Requires dname"
+                        return 1
+                        ;;
+                    *)
+                        CA_DNAME="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --ca-validity)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usageCA "Requires validity days"
+                        return 1
+                        ;;
+                    *)
+                        CA_VALIDITY="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --ca-alg)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usageCA "Requires algorithm"
+                        return 1
+                        ;;
+                    *)
+                        CA_ALG="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            *)
+                usageCA "Unknown option: $1"
+                return $?
+                ;;
+        esac
+    done
+    return 0
+}
+
+function initCA () {
+  if [ -z "${TARGET_DIR}" ]; then
+      TARGET_DIR="$DEFAULT_TARGET_DIR"
+  fi
+  if [ -z "${GROUP}" ]; then
+      GROUP="$DEFAULT_GROUP"
+  fi
+  if [ -z "${CA_KEY_PASS}" ]; then
+      CA_KEY_PASS="$DEFAULT_CA_KEY_PASS"
+  fi
+  if [ -z "${CA_DNAME}" ]; then
+      CA_DNAME="$DEFAULT_CA_DNAME"
+  fi
+  if [ -z "${CA_VALIDITY}" ]; then
+      CA_VALIDITY="$DEFAULT_CA_VALIDITY"
+  fi
+  if [ -z "${CA_ALG}" ]; then
+      CA_ALG="$DEFAULT_CA_ALG"
+  fi
+  CA_KEY_FULLPATH="${TARGET_DIR}/${GROUP}.ca.key.pem"
+  CA_CERT_FULLPATH="${TARGET_DIR}/${GROUP}.ca.cert.pem"
+}
+
+
+function cleanCA () {
+  mkdir -p "${TARGET_DIR}"
+  rm -f "${CA_KEY_FULLPATH}"
+  rm -f "${CA_CERT_FULLPATH}"
+}
+
+function createCA () {
+  echo "Creating CA..."
+  openssl req -newkey "${CA_ALG}" -x509 -days "${CA_VALIDITY}" -subj "${CA_DNAME}" -keyout "${CA_KEY_FULLPATH}" -out "${CA_CERT_FULLPATH}" -passout "pass:${CA_KEY_PASS}"
+}
+
+function showCA () {
+  openssl x509 -inform pem -noout -text < "${CA_CERT_FULLPATH}"
+  ls -alh "${TARGET_DIR}/${GROUP}"*
+}
+
+function generateCA () {
+  initCA
+  cleanCA
+  createCA
+  showCA
+}
+
+function mainCA () {
+  parseCmdCA "$@"
+  local retval=$?
+  if [ $retval != 0 ]; then
+      exit $retval
+  fi
+  generateCA
+}
+
+if [ "${BASH_SOURCE[0]}" == "$0" ]; then
+  mainCA "$@"
+fi
