@@ -4,7 +4,7 @@ SCRIPT_DIR="$(readlink -f "$(dirname ${BASH_SOURCE[0]})")"
 PROJECT_ROOT="$(readlink -f "${SCRIPT_DIR}/..")"
 
 DEFAULT_TARGET_DIR="${PROJECT_ROOT}/target/certs"
-DEFAULT_GROUP="kafka-proxy"
+DEFAULT_GROUP="kafka-broker"
 DEFAULT_CA_KEY_PASS="changeit"
 DEFAULT_CA_ALG="rsa:3086"
 DEFAULT_CA_DNAME="/C=DE/ST=Hessen/L=Frankfurt/O=Uwe Eisele/CN=Uwe Eisele CA"
@@ -15,7 +15,7 @@ function usageCA () {
     echo
     echo "Usage: $0 \\"
     echo "         --target-dir \"\$(pwd)/target/certs\" \\"
-    echo "         --group kafka-proxy \\"
+    echo "         --group kafka-broker \\"
     echo "         --ca-key-pass changeit \\"
     echo "         --ca-alg rsa:3086 \\"
     echo "         --ca-dname \"/C=DE/ST=Hessen/L=Frankfurt/O=Uwe Eisele/CN=Uwe Eisele CA\" \\"

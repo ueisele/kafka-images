@@ -4,12 +4,12 @@ SCRIPT_DIR="$(readlink -f "$(dirname ${BASH_SOURCE[0]})")"
 PROJECT_ROOT="$(readlink -f "${SCRIPT_DIR}/..")"
 
 DEFAULT_TARGET_DIR="${PROJECT_ROOT}/target/certs"
-DEFAULT_GROUP="kafka-proxy"
+DEFAULT_GROUP="kafka-broker"
 DEFAULT_NAME="server"
 DEFAULT_CA_KEY_PASS="changeit"
 DEFAULT_CERT_KEY_PASS="changeit"
 DEFAULT_CERT_ALG="rsa:3086"
-DEFAULT_CERT_DNAME="/C=DE/ST=Hessen/L=Frankfurt/O=Uwe Eisele/CN=Kafka Proxy"
+DEFAULT_CERT_DNAME="/C=DE/ST=Hessen/L=Frankfurt/O=Uwe Eisele/CN=Kafka Broker"
 DEFAULT_CERT_VALIDITY=365
 
 function usageCert () {
@@ -17,12 +17,12 @@ function usageCert () {
     echo
     echo "Usage: $0 \\"
     echo "         --target-dir \"\$(pwd)/target/certs\" \\"
-    echo "         --group kafka-proxy \\"
+    echo "         --group kafka-broker \\"
     echo "         --name server \\"
     echo "         --ca-key-pass changeit \\"
     echo "         --cert-key-pass changeit \\"
     echo "         --cert-alg rsa:3086 \\"
-    echo "         --cert-dname \"/C=DE/ST=Hessen/L=Frankfurt/O=Uwe Eisele/CN=Kafka Proxy\" \\"
+    echo "         --cert-dname \"/C=DE/ST=Hessen/L=Frankfurt/O=Uwe Eisele/CN=Kafka Broker\" \\"
     echo "         --cert-validity 365 \\"
     echo "         --cert-san \"IP:127.0.0.1,DNS:localhost\""
     echo

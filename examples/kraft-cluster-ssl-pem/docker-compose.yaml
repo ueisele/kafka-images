@@ -104,8 +104,8 @@ services:
             KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER # (required in KRaft mode) A comma-separated list of the names of the listeners used by the controller.
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL_SSL:SSL,CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
             KAFKA_SSL_KEYSTORE_TYPE: PEM
-            KAFKA_SSL_KEYSTORE_FILENAME: kafka-broker.proxy.keystore.pem
-            KAFKA_SSL_KEY_CREDENTIALS: kafka-broker.proxy.key.credentials
+            KAFKA_SSL_KEYSTORE_FILENAME: kafka-broker.server.keystore.pem
+            KAFKA_SSL_KEY_CREDENTIALS: kafka-broker.server.key.credentials
 
     kafka-broker2:
         image: ueisele/apache-kafka-server:${KAFKA_VERSION}
@@ -132,8 +132,8 @@ services:
             KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER # (required in KRaft mode) A comma-separated list of the names of the listeners used by the controller.
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL_SSL:SSL,CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
             KAFKA_SSL_KEYSTORE_TYPE: PEM
-            KAFKA_SSL_KEYSTORE_FILENAME: kafka-broker.proxy.keystore.pem
-            KAFKA_SSL_KEY_CREDENTIALS: kafka-broker.proxy.key.credentials
+            KAFKA_SSL_KEYSTORE_FILENAME: kafka-broker.server.keystore.pem
+            KAFKA_SSL_KEY_CREDENTIALS: kafka-broker.server.key.credentials
 
     kafka-broker3:
         image: ueisele/apache-kafka-server:${KAFKA_VERSION}
@@ -160,8 +160,8 @@ services:
             KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER # (required in KRaft mode) A comma-separated list of the names of the listeners used by the controller.
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL_SSL:SSL,CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
             KAFKA_SSL_KEYSTORE_TYPE: PEM
-            KAFKA_SSL_KEYSTORE_FILENAME: kafka-broker.proxy.keystore.pem
-            KAFKA_SSL_KEY_CREDENTIALS: kafka-broker.proxy.key.credentials
+            KAFKA_SSL_KEYSTORE_FILENAME: kafka-broker.server.keystore.pem
+            KAFKA_SSL_KEY_CREDENTIALS: kafka-broker.server.key.credentials
 
 volumes:
     kafka-controller1:
