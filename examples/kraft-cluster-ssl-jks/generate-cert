@@ -1,0 +1,275 @@
+#!/usr/bin/env bash
+set -e
+SCRIPT_DIR="$(readlink -f "$(dirname ${BASH_SOURCE[0]})")"
+PROJECT_ROOT="$(readlink -f "${SCRIPT_DIR}/..")"
+
+DEFAULT_TARGET_DIR="${PROJECT_ROOT}/target/certs"
+DEFAULT_GROUP="kafka-broker"
+DEFAULT_NAME="server"
+DEFAULT_CA_KEY_PASS="changeit"
+DEFAULT_CERT_KEY_PASS="changeit"
+DEFAULT_CERT_ALG="rsa:3086"
+DEFAULT_CERT_DNAME="/C=DE/ST=Hessen/L=Frankfurt/O=Uwe Eisele/CN=Kafka Broker"
+DEFAULT_CERT_VALIDITY=365
+DEFAULT_KEYSTORE_PASS="changeit"
+
+function usageCert () {
+    echo "$0: $1" >&2
+    echo
+    echo "Usage: $0 \\"
+    echo "         --target-dir \"\$(pwd)/target/certs\" \\"
+    echo "         --group kafka-broker \\"
+    echo "         --name server \\"
+    echo "         --ca-key-pass changeit \\"
+    echo "         --cert-key-pass changeit \\"
+    echo "         --cert-alg rsa:3086 \\"
+    echo "         --cert-dname \"/C=DE/ST=Hessen/L=Frankfurt/O=Uwe Eisele/CN=Kafka Broker\" \\"
+    echo "         --cert-validity 365 \\"
+    echo "         --cert-san \"IP:127.0.0.1,DNS:localhost\" \\"
+    echo "         --keystore-pass changeit"
+    echo
+    return 1
+}
+
+function parseCmdCert () {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --help)
+                usageCert "Help"
+                return $?
+                ;;
+            --target-dir)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usage "Requires target directory"
+                        return 1
+                        ;;
+                    *)
+                        TARGET_DIR="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --group)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usageCert "Requires grouo"
+                        return 1
+                        ;;
+                    *)
+                        GROUP="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --name)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usageCert "Requires name"
+                        return 1
+                        ;;
+                    *)
+                        NAME="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --ca-key-pass)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usageCert "Requires ca key password"
+                        return 1
+                        ;;
+                    *)
+                        CA_KEY_PASS="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --cert-key-pass)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usageCert "Requires key password"
+                        return 1
+                        ;;
+                    *)
+                        CERT_KEY_PASS="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --cert-dname)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usageCert "Requires dname"
+                        return 1
+                        ;;
+                    *)
+                        CERT_DNAME="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --cert-san)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usageCert "Requires SAN"
+                        return 1
+                        ;;
+                    *)
+                        CERT_SAN="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --cert-validity)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usageCert "Requires validity days"
+                        return 1
+                        ;;
+                    *)
+                        CERT_VALIDITY="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --cert-alg)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usageCert "Requires algorithm"
+                        return 1
+                        ;;
+                    *)
+                        CERT_ALG="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --keystore-pass)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usageCert "Requires keystore password"
+                        return 1
+                        ;;
+                    *)
+                        KEYSTORE_PASS="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            *)
+                usageCert "Unknown option: $1"
+                return $?
+                ;;
+        esac
+    done
+    return 0
+}
+
+function initCert () {
+    if [ -z "${TARGET_DIR}" ]; then
+        TARGET_DIR="$DEFAULT_TARGET_DIR"
+    fi
+    if [ -z "${GROUP}" ]; then
+        GROUP="$DEFAULT_GROUP"
+    fi
+    if [ -z "${NAME}" ]; then
+        NAME="$DEFAULT_NAME"
+    fi
+    if [ -z "${CA_KEY_PASS}" ]; then
+        CA_KEY_PASS="$DEFAULT_CA_KEY_PASS"
+    fi
+    if [ -z "${CERT_KEY_PASS}" ]; then
+        CERT_KEY_PASS="$DEFAULT_CERT_KEY_PASS"
+    fi
+    if [ -z "${CERT_ALG}" ]; then
+        CERT_ALG="$DEFAULT_CERT_ALG"
+    fi
+    if [ -z "${CERT_DNAME}" ]; then
+        CERT_DNAME="$DEFAULT_CERT_DNAME"
+    fi
+    if [ -z "${CERT_VALIDITY}" ]; then
+        CERT_VALIDITY="$DEFAULT_CERT_VALIDITY"
+    fi
+    if [ -z "${KEYSTORE_PASS}" ]; then
+        KEYSTORE_PASS="$DEFAULT_KEYSTORE_PASS"
+    fi
+    CA_KEY_FULLPATH="${TARGET_DIR}/${GROUP}.ca.key.pem"
+    CA_CERT_FULLPATH="${TARGET_DIR}/${GROUP}.ca.cert.pem"
+    KEY_FULLPATH="${TARGET_DIR}/${GROUP}.${NAME}.key.pem"
+    KEY_CREDENTIALS_FULLPATH="${TARGET_DIR}/${GROUP}.${NAME}.key.credentials"
+    CERT_FULLPATH="${TARGET_DIR}/${GROUP}.${NAME}.cert.pem"
+    KEYSTORE_JKS_FULLPATH="${TARGET_DIR}/${GROUP}.${NAME}.keystore.jks"
+    KEYSTORE_CREDENTIALS_FULLPATH="${TARGET_DIR}/${GROUP}.${NAME}.keystore.credentials"
+}
+
+function cleanCert () {
+  mkdir -p "${TARGET_DIR}"
+  rm -f "${KEY_FULLPATH}"
+  rm -f "${KEY_CREDENTIALS_FULLPATH}"
+  rm -f "${CERT_FULLPATH}"
+  rm -f "${KEYSTORE_JKS_FULLPATH}"
+  rm -f "${KEYSTORE_CREDENTIALS_FULLPATH}"
+}
+
+function createAndSignCert () {
+  echo "Creating Certificate..."
+  local tmpreq
+  tmpreq=$(mktemp)
+  openssl req -newkey "${CERT_ALG}" -subj "${CERT_DNAME}" -keyout "${KEY_FULLPATH}" -out "${tmpreq}" -passout "pass:${CERT_KEY_PASS}"
+  echo "${CERT_KEY_PASS}" > "${KEY_CREDENTIALS_FULLPATH}"
+  echo "Signing Certificate..."
+  if [ -n "${CERT_SAN}" ]; then
+    openssl x509 -req -CAkey "${CA_KEY_FULLPATH}" -passin "pass:${CA_KEY_PASS}" -CA "${CA_CERT_FULLPATH}" -in "${tmpreq}" -out "${CERT_FULLPATH}" -days "${CERT_VALIDITY}" -CAcreateserial -extfile <(printf "subjectAltName=%s" "${CERT_SAN}")
+  else
+    openssl x509 -req -CAkey "${CA_KEY_FULLPATH}" -passin "pass:${CA_KEY_PASS}" -CA "${CA_CERT_FULLPATH}" -in "${tmpreq}" -out "${CERT_FULLPATH}" -days "${CERT_VALIDITY}" -CAcreateserial
+  fi
+  rm -f "${tmpreq}"
+}
+
+function createKeystoreJks () {
+  echo "Creating JKS Keystore..."
+  local tmpstore
+  tmpstore=$(mktemp)
+  openssl pkcs12 -export -inkey "${KEY_FULLPATH}" -in "${CERT_FULLPATH}" -CAfile "${CA_CERT_FULLPATH}" -chain -name "${GROUP}" -out "${tmpstore}" -passin "pass:${CERT_KEY_PASS}" -passout "pass:${KEYSTORE_PASS}"
+  keytool -importkeystore -srckeystore "${tmpstore}" -srcstoretype pkcs12 -srcstorepass "${KEYSTORE_PASS}" -destkeystore "${KEYSTORE_JKS_FULLPATH}" -deststoretype JKS -destkeypass "${CERT_KEY_PASS}" -deststorepass "${KEYSTORE_PASS}" -alias "${GROUP}" -noprompt
+  rm -f "${tmpstore}"
+  echo "${KEYSTORE_PASS}" > "${KEYSTORE_CREDENTIALS_FULLPATH}"
+}
+
+function showCert () {
+  openssl x509 -inform pem -noout -text < "${CERT_FULLPATH}"
+  ls -alh "${TARGET_DIR}/${GROUP}"*
+}
+
+function generateCert () {
+  initCert
+  cleanCert
+  createAndSignCert
+  createKeystoreJks
+  showCert
+}
+
+function mainCert () {
+  parseCmdCert "$@"
+  local retval=$?
+  if [ $retval != 0 ]; then
+      exit $retval
+  fi
+  generateCert
+}
+
+if [ "${BASH_SOURCE[0]}" == "$0" ]; then
+  mainCert "$@"
+fi
