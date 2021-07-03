@@ -12,7 +12,7 @@ ENV JAVA_HOME="/usr/lib/jvm/zulu11"
 
 RUN microdnf install -y dnf \
     && dnf update -y \
-    && dnf install -y git openssl wget tar procps krb5-workstation iputils hostname \
+    && dnf install -y git openssl wget tar findutils procps krb5-workstation iputils hostname \
     # https://docs.azul.com/zulu/zuludocs/ZuluUserGuide/PrepareZuluPlatform/AttachYumRepositoryRHEL-SLES-OracleLinuxSys.htm
     && rpm --import https://www.azul.com/files/0xB1998361219BD9C9.txt \
     && dnf -y install https://cdn.azul.com/zulu/bin/zulu-repo-1.0.0-1.noarch.rpm \
@@ -36,8 +36,10 @@ RUN cd kafka/core/build/distributions \
     && dist_file=kafka_*-$(sed -n 's/^version=\(.\+\)$/\1/p' /home/appuser/kafka/gradle.properties).tgz \
     && mkdir -p /home/appuser/distributions/kafka \
     && tar -xzf ${dist_file} --strip-components 1 -C /home/appuser/distributions/kafka \
-    && cp /home/appuser/kafka/shell/build/libs/* /home/appuser/distributions/kafka/libs \
-    && cp /home/appuser/kafka/shell/build/dependant-libs*/* /home/appuser/distributions/kafka/libs
+    && cp /home/appuser/kafka/shell/build/libs/* /home/appuser/distributions/kafka/libs/ \
+    && cp /home/appuser/kafka/shell/build/dependant-libs*/* /home/appuser/distributions/kafka/libs/ \
+    && mkdir -p /home/appuser/distributions/kafka/libs-kafka \
+    && find /home/appuser/distributions/kafka/libs -regextype posix-extended -regex "^.*/(kafka|connect|trogdor)[^/]*" -exec mv {} /home/appuser/distributions/kafka/libs-kafka/ \;
 
 
 FROM registry.access.redhat.com/ubi8/ubi-minimal:8.4 as base
@@ -52,7 +54,7 @@ ENV LANG="C.UTF-8"
 ENV ZULU_OPENJDK="zulu11-jre-headless"
 ENV JAVA_HOME="/usr/lib/jvm/zulu11"
 
-ENV PYTHON_VERSION="38-3.8.6"
+ENV PYTHON_VERSION="39-3.9.2"
 
 RUN microdnf install -y dnf \
     && dnf update -y \
@@ -74,16 +76,17 @@ RUN microdnf install -y dnf \
 USER appuser
 WORKDIR /home/appuser
 
+RUN mkdir -p /opt/apache/kafka/data /opt/apache/kafka/secrets
+VOLUME ["/opt/apache/kafka/data", "/opt/apache/kafka/secrets"]
+
+COPY --chown=appuser:appuser include/opt/apache/kafka/docker /opt/apache/kafka/docker
+
 COPY --from=build --chown=appuser:appuser /home/appuser/distributions/kafka/bin /opt/apache/kafka/bin
 ENV PATH=/opt/apache/kafka/bin:${PATH}
 
 COPY --from=build --chown=appuser:appuser /home/appuser/distributions/kafka/config /opt/apache/kafka/config
 COPY --from=build --chown=appuser:appuser /home/appuser/distributions/kafka/libs /opt/apache/kafka/libs
-
-COPY --chown=appuser:appuser include/opt/apache/kafka/docker /opt/apache/kafka/docker
-
-RUN mkdir -p /opt/apache/kafka/data /opt/apache/kafka/secrets
-VOLUME ["/opt/apache/kafka/data", "/opt/apache/kafka/secrets"]
+COPY --from=build --chown=appuser:appuser /home/appuser/distributions/kafka/libs-kafka /opt/apache/kafka/libs
 
 ARG KAFKA_GITREPO=https://github.com/apache/kafka.git
 ARG KAFKA_BRANCH=2.8.0

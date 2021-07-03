@@ -18,10 +18,6 @@ function usage () {
     return 1
 }
 
-function pull_base_image () {
-    docker pull registry.access.redhat.com/ubi8/ubi-minimal:8.4
-}
-
 function build_image () {  
     local artifact=${1:?"Missing artifact as first parameter!"}
     docker build \
@@ -45,7 +41,6 @@ function build_image () {
 
 function build () {
     echo "Building Docker images with Kafka version ${KAFKA_VERSION} (${KAFKA_ALT_VERSION}) using branch ${KAFKA_BRANCH} (release=${RELEASE})"
-    pull_base_image
     build_image base
     build_image server
 }
