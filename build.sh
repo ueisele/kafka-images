@@ -25,7 +25,7 @@ function build_image () {
         --build-arg DOCKERREGISTRY_USER=${DOCKERREGISTRY_USER} \
         --build-arg KAFKA_IMAGE_NAME=${KAFKA_IMAGE_NAME} \
         --build-arg KAFKA_GITREPO=${KAFKA_GITREPO} \
-        --build-arg KAFKA_BRANCH=${KAFKA_BRANCH} \
+        --build-arg KAFKA_BRANCH=${KAFKA_VERSION} \
         --build-arg KAFKA_VERSION=${KAFKA_VERSION} \
         --build-arg BUILD_TIMESTAMP=$(date +%s) \
         ${SCRIPT_DIR}/${artifact}
@@ -41,8 +41,8 @@ function build_image () {
 
 function build () {
     echo "Building Docker images with Kafka version ${KAFKA_VERSION} (${KAFKA_ALT_VERSION}) using branch ${KAFKA_BRANCH} (release=${RELEASE})"
-    build_image base
-    build_image server
+    #build_image base
+    build_image server-minimal
 }
 
 function push_image () {

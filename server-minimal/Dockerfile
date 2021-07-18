@@ -1,0 +1,115 @@
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.4 as build
+
+LABEL maintainer="code@uweeisele.eu"
+
+# This affects how strings in Java class files are interpreted. 
+# We want UTF-8 and this is the only locale in the base image that supports it
+ENV LANG="C.UTF-8"
+
+# Zulu openJDK
+ENV ZULU_OPENJDK="zulu11-jdk-headless"
+ENV JAVA_HOME="/usr/lib/jvm/zulu11"
+
+RUN microdnf install -y dnf \
+    && dnf update -y \
+    && dnf install -y git openssl wget tar findutils procps krb5-workstation iputils hostname \
+    # https://docs.azul.com/zulu/zuludocs/ZuluUserGuide/PrepareZuluPlatform/AttachYumRepositoryRHEL-SLES-OracleLinuxSys.htm
+    && rpm --import https://www.azul.com/files/0xB1998361219BD9C9.txt \
+    && dnf -y install https://cdn.azul.com/zulu/bin/zulu-repo-1.0.0-1.noarch.rpm \
+    && dnf -y install ${ZULU_OPENJDK} \
+    && dnf clean all \
+    && rm -rf /tmp/* \
+    && useradd --no-log-init --create-home --shell /bin/bash appuser
+
+USER appuser
+WORKDIR /home/appuser
+
+ARG KAFKA_GITREPO=https://github.com/apache/kafka.git
+ARG KAFKA_BRANCH=2.8.0
+RUN git clone ${KAFKA_GITREPO} kafka && cd kafka && git checkout ${KAFKA_BRANCH} 
+
+RUN cd kafka \
+    && ./gradlew client:jar core:jar --profile --no-daemon
+
+RUN mkdir -p /home/appuser/dist/kafka \
+    && mkdir -p /home/appuser/dist/kafka/licenses \
+    && mkdir -p /home/appuser/dist/kafka/libs \
+    && mkdir -p /home/appuser/dist/kafka/dependant-libs \
+    && mkdir -p /home/appuser/dist/kafka/bin \
+    && cp /home/appuser/kafka/licenses/* /home/appuser/dist/kafka/licenses/ \
+    && mv /home/appuser/kafka/core/build/libs/* /home/appuser/dist/kafka/libs/ \
+    && find /home/appuser/kafka/core/build/dependant-libs* -regextype posix-extended -regex "^.*/(kafka)[^/]*" -exec mv {} /home/appuser/dist/kafka/libs/ \; \
+    && mv /home/appuser/kafka/core/build/dependant-libs*/* /home/appuser/dist/kafka/dependant-libs/ \
+    && mv /home/appuser/kafka/clients/build/libs/* /home/appuser/dist/kafka/libs/ \
+    && cp /home/appuser/kafka/bin/kafka-*.sh /home/appuser/dist/kafka/bin/ \
+    && (rm /home/appuser/dist/kafka/bin/kafka-metadata-shell.sh || true) \
+    && (rm /home/appuser/dist/kafka/bin/kafka-mirror-maker.sh || true) \
+    && (rm /home/appuser/dist/kafka/bin/kafka-producer-perf-test.sh || true) \
+    && (rm /home/appuser/dist/kafka/bin/kafka-consumer-perf-test.sh || true) \
+    && (rm /home/appuser/dist/kafka/bin/kafka-streams-application-reset.sh || true) \
+    && (rm /home/appuser/dist/kafka/bin/kafka-verifiable-consumer.sh || true) \
+    && (rm /home/appuser/dist/kafka/bin/kafka-verifiable-producer.sh || true)
+
+RUN cd kafka \
+    && if [ -d shell ]; then \
+        ./gradlew shell:jar --profile --no-daemon \
+        && cp /home/appuser/kafka/shell/build/libs/* /home/appuser/dist/kafka/libs/ \
+        && cp /home/appuser/kafka/shell/build/dependant-libs*/* /home/appuser/dist/kafka/dependant-libs/ \
+        && cp /home/appuser/kafka/bin/kafka-metadata-shell.sh /home/appuser/dist/kafka/bin/ ;\
+    fi
+
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.4 as base
+
+LABEL maintainer="code@uweeisele.eu"
+
+# This affects how strings in Java class files are interpreted.  We want UTF-8 and this is the only locale in the
+# base image that supports it
+ENV LANG="C.UTF-8"
+
+# Zulu openJDK
+ENV ZULU_OPENJDK="zulu11-jre-headless"
+ENV JAVA_HOME="/usr/lib/jvm/zulu11"
+
+ENV PYTHON_VERSION="39-3.9.2"
+
+RUN microdnf install -y dnf \
+    && dnf update -y \
+    && dnf install -y git python${PYTHON_VERSION} openssl krb5-workstation iputils hostname \
+    # https://docs.azul.com/zulu/zuludocs/ZuluUserGuide/PrepareZuluPlatform/AttachYumRepositoryRHEL-SLES-OracleLinuxSys.htm
+    && rpm --import https://www.azul.com/files/0xB1998361219BD9C9.txt \
+    && dnf -y install https://cdn.azul.com/zulu/bin/zulu-repo-1.0.0-1.noarch.rpm \
+    && dnf -y install ${ZULU_OPENJDK} \
+    && alternatives --set python /usr/bin/python3 \
+    && python3 -m pip install --upgrade pip setuptools \
+    && python3 -m pip install --prefer-binary --prefix=/usr/local --upgrade 'git+https://github.com/confluentinc/confluent-docker-utils@v0.0.45' \
+    && dnf remove -y git \
+    && dnf clean all \
+    && rm -rf /tmp/* \
+    && useradd --no-log-init --create-home --shell /bin/bash appuser \
+    && mkdir -p /opt/apache/kafka /usr/logs \
+    && chown appuser:appuser -R /opt/apache/kafka /usr/logs
+
+USER appuser
+WORKDIR /home/appuser
+
+RUN mkdir -p /opt/apache/kafka/data /opt/apache/kafka/secrets /opt/apache/kafka/config
+VOLUME ["/opt/apache/kafka/data", "/opt/apache/kafka/secrets", "/opt/apache/kafka/config"]
+
+COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/licenses /opt/apache/kafka/licenses
+
+COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/bin /opt/apache/kafka/bin
+ENV PATH=/opt/apache/kafka/bin:${PATH}
+
+COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/dependant-libs /opt/apache/kafka/libs
+COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/libs /opt/apache/kafka/libs
+
+COPY --chown=appuser:appuser include/opt/apache/kafka/docker /opt/apache/kafka/docker
+
+EXPOSE 9092 9093
+
+CMD ["/opt/apache/kafka/docker/run"]
+
+ARG KAFKA_GITREPO=https://github.com/apache/kafka.git
+ARG KAFKA_BRANCH=2.8.0
+LABEL kafka.gitrepo="${KAFKA_GITREPO}"
+LABEL kafka.gitref="${KAFKA_BRANCH}"

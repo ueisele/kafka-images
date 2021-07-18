@@ -1,0 +1,23 @@
+. /opt/apache/kafka/docker/bash-config
+
+if [[ -n "${KAFKA_PROCESS_ROLES-}" ]]
+then
+    if [[ -n "${AUTO_FORMAT_KAFKA_STORAGE_DIR-}" ]] && [[ $AUTO_FORMAT_KAFKA_STORAGE_DIR == "true" ]]
+    then
+        # Only format storage directory, if in KRaft mode, auto format is enabled and directory is not formatted
+        if ! kafka-storage.sh info -c /opt/apache/kafka/config/server.properties
+        then
+            # The first step is to generate an ID for your new cluster, using the kafka-storage tool
+            if [[ -n "${AUTO_GENERATE_CLUSTER_ID-}" ]] && [[ $AUTO_GENERATE_CLUSTER_ID == "true" ]]
+            then
+                export CLUSTER_ID
+                CLUSTER_ID=$(kafka-storage.sh random-uuid)
+            fi
+            dub ensure CLUSTER_ID
+
+            # The next step is to format your storage directories
+            echo "Initializing storage dir for cluster id ${CLUSTER_ID}"
+            kafka-storage.sh format -t $CLUSTER_ID -c /opt/apache/kafka/config/server.properties
+        fi
+    fi
+fi

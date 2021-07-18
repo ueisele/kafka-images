@@ -10,61 +10,85 @@ services:
     # Zookeeper                                                 #
     #############################################################
     zookeeper1:
-        image: confluentinc/cp-zookeeper:${CONFLUENT_VERSION}
+        image: zookeeper:${ZOOKEEPER_VERSION}
         restart: always
         hostname: zookeeper1
+        ports:
+            - 12181:2181
+            - 18080:8080
+            - 17070:7070
         volumes:
-            - zookeeper1:/var/lib/zookeeper/data
-        # https://docs.confluent.io/current/zookeeper/deployment.html
-        # https://docs.confluent.io/current/installation/docker/config-reference.html#zk-configuration
+            - zookeeper1_data:/data
+            - zookeeper1_datalog:/datalog
+        # https://hub.docker.com/_/zookeeper
         environment:
-            ZOOKEEPER_SERVER_ID: 1 # (required in cluster mode) Sets the server ID in the myid file, which consists of a single line that contains only the text of that machine’s ID.
-            ZOOKEEPER_CLIENT_PORT: 2181 # (required) This is the port where ZooKeeper clients will listen on. This is where the Brokers will connect to ZooKeeper.
-            ZOOKEEPER_SERVERS: zookeeper1:2888:3888;zookeeper2:2888:3888;zookeeper3:2888:3888
-            ZOOKEEPER_TICK_TIME: 2000 # (default: 3000) The unit of time for ZooKeeper translated to milliseconds. This governs all ZooKeeper time dependent operations. It is used for heartbeats and timeouts especially.
+            ZOO_MY_ID: 1 # (required in cluster mode) Sets the server ID in the myid file, which consists of a single line that contains only the text of that machine’s ID.
+            ZOO_SERVERS: server.1=zookeeper1:2888:3888;2181 server.2=zookeeper2:2888:3888;2181 server.3=zookeeper3:2888:3888;2181
+            ZOO_TICK_TIME: 2000 # (default: 3000) The unit of time for ZooKeeper translated to milliseconds. This governs all ZooKeeper time dependent operations. It is used for heartbeats and timeouts especially.
             # The initLimit and syncLimit are used to govern how long following ZooKeeper servers can take to initialize with the current leader and how long they can be out of sync with the leader.
-            ZOOKEEPER_INIT_LIMIT: 5 # (default: 10)
-            ZOOKEEPER_SYNC_LIMIT: 2 # (default: 5)
+            ZOO_INIT_LIMIT: 5 # (default: 10)
+            ZOO_SYNC_LIMIT: 2 # (default: 5)
+            # Four letter words
+            ZOO_4LW_COMMANDS_WHITELIST: "*" #(default: srvr) A list of comma separated Four Letter Words commands that user wants to use.
+            ZOO_ADMINSERVER_ENABLED: "true" #(default: true) The server is started on port 8080, and commands are issued by going to the URL "/commands/[command name]"
+            # Metrics
+            ZOO_CFG_EXTRA: "metricsProvider.className=org.apache.zookeeper.metrics.prometheus.PrometheusMetricsProvider metricsProvider.httpPort=7070 metricsProvider.exportJvmInfo=true"
 
     zookeeper2:
-        image: confluentinc/cp-zookeeper:${CONFLUENT_VERSION}
+        image: zookeeper:${ZOOKEEPER_VERSION}
         restart: always
         hostname: zookeeper2
+        ports:
+            - 22181:2181
+            - 28080:8080
+            - 27070:7070
         volumes:
-            - zookeeper2:/var/lib/zookeeper/data
-        # https://docs.confluent.io/current/zookeeper/deployment.html
-        # https://docs.confluent.io/current/installation/docker/config-reference.html#zk-configuration
+            - zookeeper2_data:/data
+            - zookeeper2_datalog:/datalog
+        # https://hub.docker.com/_/zookeeper
         environment:
-            ZOOKEEPER_SERVER_ID: 2 # (required in cluster mode) Sets the server ID in the myid file, which consists of a single line that contains only the text of that machine’s ID.
-            ZOOKEEPER_CLIENT_PORT: 2181 # (required) This is the port where ZooKeeper clients will listen on. This is where the Brokers will connect to ZooKeeper.
-            ZOOKEEPER_SERVERS: zookeeper1:2888:3888;zookeeper2:2888:3888;zookeeper3:2888:3888
-            ZOOKEEPER_TICK_TIME: 2000 # (default: 3000) The unit of time for ZooKeeper translated to milliseconds. This governs all ZooKeeper time dependent operations. It is used for heartbeats and timeouts especially.
-            # The initLimit and syncLimit are used to govern how long following ZooKeeper servers can take to initialize with the current leader and how long they can be out of sync with the leader.
-            ZOOKEEPER_INIT_LIMIT: 5 # (default: 10)
-            ZOOKEEPER_SYNC_LIMIT: 2 # (default: 5)
+            ZOO_MY_ID: 2 # (required in cluster mode) Sets the server ID in the myid file, which consists of a single line that contains only the text of that machine’s ID.
+            ZOO_SERVERS: server.1=zookeeper1:2888:3888;2181 server.2=zookeeper2:2888:3888;2181 server.3=zookeeper3:2888:3888;2181
+            ZOO_INIT_LIMIT: 5 # (default: 10)
+            ZOO_SYNC_LIMIT: 2 # (default: 5)
+            # Four letter words
+            ZOO_4LW_COMMANDS_WHITELIST: "*" #(default: srvr) A list of comma separated Four Letter Words commands that user wants to use.
+            ZOO_ADMINSERVER_ENABLED: "true" #(default: true) The server is started on port 8080, and commands are issued by going to the URL "/commands/[command name]"
+            # Metrics
+            ZOO_CFG_EXTRA: "metricsProvider.className=org.apache.zookeeper.metrics.prometheus.PrometheusMetricsProvider metricsProvider.httpPort=7070 metricsProvider.exportJvmInfo=true"
+
 
     zookeeper3:
-        image: confluentinc/cp-zookeeper:${CONFLUENT_VERSION}
+        image: zookeeper:${ZOOKEEPER_VERSION}
         restart: always
         hostname: zookeeper3
+        ports:
+            - 32181:2181
+            - 38080:8080
+            - 37070:7070
         volumes:
-            - zookeeper3:/var/lib/zookeeper/data
-        # https://docs.confluent.io/current/zookeeper/deployment.html
-        # https://docs.confluent.io/current/installation/docker/config-reference.html#zk-configuration
+            - zookeeper3_data:/data
+            - zookeeper3_datalog:/datalog
+        # https://hub.docker.com/_/zookeeper
         environment:
-            ZOOKEEPER_SERVER_ID: 3 # (required in cluster mode) Sets the server ID in the myid file, which consists of a single line that contains only the text of that machine’s ID.
-            ZOOKEEPER_CLIENT_PORT: 2181 # (required) This is the port where ZooKeeper clients will listen on. This is where the Brokers will connect to ZooKeeper.
-            ZOOKEEPER_SERVERS: zookeeper1:2888:3888;zookeeper2:2888:3888;zookeeper3:2888:3888
+            ZOO_MY_ID: 3 # (required in cluster mode) Sets the server ID in the myid file, which consists of a single line that contains only the text of that machine’s ID.
+            ZOO_SERVERS: server.1=zookeeper1:2888:3888;2181 server.2=zookeeper2:2888:3888;2181 server.3=zookeeper3:2888:3888;2181
             ZOOKEEPER_TICK_TIME: 2000 # (default: 3000) The unit of time for ZooKeeper translated to milliseconds. This governs all ZooKeeper time dependent operations. It is used for heartbeats and timeouts especially.
             # The initLimit and syncLimit are used to govern how long following ZooKeeper servers can take to initialize with the current leader and how long they can be out of sync with the leader.
-            ZOOKEEPER_INIT_LIMIT: 5 # (default: 10)
-            ZOOKEEPER_SYNC_LIMIT: 2 # (default: 5)
+            ZOO_INIT_LIMIT: 5 # (default: 10)
+            ZOO_SYNC_LIMIT: 2 # (default: 5)
+            # Four letter words
+            ZOO_4LW_COMMANDS_WHITELIST: "*" #(default: srvr) A list of comma separated Four Letter Words commands that user wants to use.
+            ZOO_ADMINSERVER_ENABLED: "true" #(default: true) The server is started on port 8080, and commands are issued by going to the URL "/commands/[command name]"
+            # Metrics
+            ZOO_CFG_EXTRA: "metricsProvider.className=org.apache.zookeeper.metrics.prometheus.PrometheusMetricsProvider metricsProvider.httpPort=7070 metricsProvider.exportJvmInfo=true"
+
 
     #############################################################
     # Kafka Broker                                              #
     #############################################################
     kafka-broker1:
-        image: ueisele/apache-kafka-server:${KAFKA_VERSION}
+        image: ueisele/apache-kafka-server-minimal:${KAFKA_VERSION}
         restart: always
         ports:
             - 19092:19092
@@ -83,7 +107,7 @@ services:
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
 
     kafka-broker2:
-        image: ueisele/apache-kafka-server:${KAFKA_VERSION}
+        image: ueisele/apache-kafka-server-minimal:${KAFKA_VERSION}
         restart: always
         ports:
             - 29092:29092
@@ -102,7 +126,7 @@ services:
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
 
     kafka-broker3:
-        image: ueisele/apache-kafka-server:${KAFKA_VERSION}
+        image: ueisele/apache-kafka-server-minimal:${KAFKA_VERSION}
         restart: always
         ports:
             - 39092:39092
@@ -121,9 +145,12 @@ services:
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
 
 volumes:
-    zookeeper1:
-    zookeeper2:
-    zookeeper3:
+    zookeeper1_data:
+    zookeeper1_datalog:
+    zookeeper2_data:
+    zookeeper2_datalog:
+    zookeeper3_data:
+    zookeeper3_datalog:
     kafka-broker1:
     kafka-broker2:
     kafka-broker3:
