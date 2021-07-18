@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+KAFKA_IMAGE_TAGS=("${ZULU_OPENJDK_VERSION}-zulu-ubi${UBI8_VERSION}" "${ZULU_OPENJDK_VERSION}-zulu" "${ZULU_OPENJDK_VERSION}" "latest")
+
+function kafka_server_image_name () {
+    local user=${1:?"Missing Docker registry user as first parameter!"}
+    local gitrepo=${2:?"Missing Git repo as second parameter!"}
+    echo "${user}/${gitrepo//\//-}-server"
+}
+
+function kafka_server_image_tags () {
+    local kafka_version=${1:?"Missing Kafka version as first parameter!"}
+    local kafka_git_tag=${2:?"Missing Kafka Git tag as second parameter!"}
+    local base_image_tags="${3:-""}"
+    if [ "${kafka_version}" == "${kafka_git_tag}" ]; then 
+        echo $(combine "${kafka_version}" "${base_image_tags}") "${kafka_version}" "latest"
+    else
+        echo "${kafka_version//-SNAPSHOT/}-${kafka_git_tag}"
+    fi
+}
+
+function combine () {
+    local array1="${1:-""}"
+    local array2="${2:-""}"
+    for e1 in ${array1}; do
+        for e2 in ${array2}; do
+            printf "${e1}-${e2} "
+        done
+    done
+}
+
+function openjdk_image_name_and_tag () {
+    local user=${1:?"Missing Docker registry user as first parameter!"}
+    local package=${2:?"Missing package as second parameter!"}
+    echo "$(openjdk_image_name ${user} ${package}):${OPENJDK_IMAGE_TAGS[0]}"
+}
+
+kafka_server_image_tags "2.8.0" "2.8.0" "openjdk11.0.11-1-zulu-ubi8.4-205 openjdk11.0.11-1-zulu openjdk11.0.11-1 openjdk11"
