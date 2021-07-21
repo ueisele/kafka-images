@@ -1,82 +1,59 @@
 #!/usr/bin/env bash
 set -e
 SCRIPT_DIR=$(dirname ${BASH_SOURCE[0]})
+source ${SCRIPT_DIR}/env
+source ${SCRIPT_DIR}/../openjdk/env
 
 PUSH=false
 BUILD=false
 
-DOCKERREGISTRY_USER="ueisele"
+DOCKERFILE=Dockerfile.ubi8
 
+DOCKERREGISTRY_USER="ueisele"
 KAFKA_GITHUB_REPO="apache/kafka"
-KAFKA_BRANCH="2.8.0"
 
 function usage () {
     echo "$0: $1" >&2
     echo
-    echo "Usage: $0 [--build] [--push] [--user ueisele] [--github-repo apache/kafka] --branch 2.8.0"
+    echo "Usage: $0 [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [[--commit-sha 7f7dc35] [--tag 2.8.0] [--branch trunk] [--pull-request 9999]}"
     echo
     return 1
 }
 
 function build_image () {  
-    local artifact=${1:?"Missing artifact as first parameter!"}
     docker build \
-        -t "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION}" \
-        --build-arg DOCKERREGISTRY_USER=${DOCKERREGISTRY_USER} \
-        --build-arg KAFKA_IMAGE_NAME=${KAFKA_IMAGE_NAME} \
-        --build-arg KAFKA_GITREPO=${KAFKA_GITREPO} \
-        --build-arg KAFKA_BRANCH=${KAFKA_VERSION} \
+        $(for tag in $(kafka_server_image_tags ${KAFKA_TAG_VERSION} $(echo ${KAFKA_GIT_COMMIT_SHA} | cut -c 1-7) ${OPENJDK_IMAGE_TAGS[@]}); do
+        echo -t "$(kafka_server_image_name ${DOCKERREGISTRY_USER} ${KAFKA_GITHUB_REPO}):${tag}"
+        done) \
+        --build-arg OPENJDK_JDK_IMAGE=$(openjdk_image_name_and_tag ${DOCKERREGISTRY_USER} jdk) \
+        --build-arg OPENJDK_JRE_IMAGE=$(openjdk_image_name_and_tag ${DOCKERREGISTRY_USER} jre) \
+        --build-arg KAFKA_GIT_REPO=${KAFKA_GIT_REPO} \
+        --build-arg KAFKA_GIT_REFSPEC=${KAFKA_GIT_COMMIT_SHA} \
+        --build-arg KAFKA_BUILD_GIT_REFSPEC=${KAFKA_BUILD_GIT_REFSPEC} \
         --build-arg KAFKA_VERSION=${KAFKA_VERSION} \
-        ${SCRIPT_DIR}/${artifact}
-    docker tag "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION}" "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION}-$(resolveBuildTimestamp ${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION})"
-    if [ "${KAFKA_VERSION}" != "${KAFKA_ALT_VERSION}" ]; then
-        docker tag "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION}" "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_ALT_VERSION}-$(resolveBuildTimestamp ${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION})"
-        docker tag "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION}" "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_ALT_VERSION}"
-    fi
-    if [ "${RELEASE}" == "true" ]; then
-        docker tag "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION}" "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:latest"
-    fi
+        -f ${SCRIPT_DIR}/${DOCKERFILE} ${SCRIPT_DIR}
 }
 
 function build () {
-    echo "Building Docker images with Kafka version ${KAFKA_VERSION} (${KAFKA_ALT_VERSION}) using branch ${KAFKA_BRANCH} (release=${RELEASE})"
-    #build_image base
-    build_image server-minimal
+    echo "Building Docker images with Kafka version ${KAFKA_VERSION} (${KAFKA_GIT_COMMIT_SHA}) from ${KAFKA_BUILD_GIT_REFSPEC}."
+    build_image
 }
 
 function push_image () {
-    local artifact=${1:?"Missing artifact as first parameter!"}
-    docker push "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION}-$(resolveBuildTimestamp ${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION})"
-    docker push "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION}"
-    if [ "${KAFKA_VERSION}" != "${KAFKA_ALT_VERSION}" ]; then
-        docker push "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_ALT_VERSION}-$(resolveBuildTimestamp ${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_VERSION})"
-        docker push "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:${KAFKA_ALT_VERSION}"
-    fi
-    if [ "${RELEASE}" == "true" ]; then
-        docker push "${DOCKERREGISTRY_USER}/${KAFKA_IMAGE_NAME}-${artifact}:latest"
-    fi
+    for tag in $(kafka_server_image_tags ${KAFKA_TAG_VERSION} $(echo ${KAFKA_GIT_COMMIT_SHA} | cut -c 1-7) ${OPENJDK_IMAGE_TAGS[@]}); do
+        docker push "$(kafka_server_image_name ${DOCKERREGISTRY_USER} ${KAFKA_GITHUB_REPO}):${tag}"
+    done
 }
 
 function push () {
-    echo "Pushing Docker images with Kafka version ${KAFKA_VERSION} to user repository ${DOCKERREGISTRY_USER}"
-    push_image base
-    push_image server
+    echo "Pushing Docker images with Kafka version ${KAFKA_VERSION} (${KAFKA_GIT_COMMIT_SHA}) from ${KAFKA_BUILD_GIT_REFSPEC}."
+    push_image
 }
 
-function resolveVersion () {
-    local gitrepo=${1:?"Missing git repo as first parameter!"}
-    local branch=${2:?"Missing branch as first parameter!"}
-    local tmpdir="$(mktemp -d)"
-    git clone ${gitrepo} --branch ${branch} "${tmpdir}/kafka" > /dev/null 2>&1
-    local version="$(cd "${tmpdir}/kafka" && git describe --tags --abbrev=7)"
-    rm -rf ${tmpdir} > /dev/null 2>&1
-    echo "$version"
-}
-
-function resolveBuildTimestamp () {
-    local imageName=${1:?"Missing image name as first parameter!"}
-    local created=$(docker inspect --format "{{ index .Created }}" "${imageName}")
-    date --utc -d "${created}" +'%Y%m%dT%H%M%Z'
+function resolveKafkaVersion () {
+    local git_repo=${1:?"Missing Kafka Git repo as first parameter!"}
+    local kafka_git_commit_sha=${2:-""}
+    curl -s -L https://raw.githubusercontent.com/${git_repo}/${kafka_git_commit_sha}/gradle.properties | sed -n 's/^version=\(.\+\)$/\1/p'
 }
 
 function parseCmd () {
@@ -116,15 +93,54 @@ function parseCmd () {
                         ;;
                 esac
                 ;;
+            --commit-sha)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usage "Requires Kafka Git Commit-Sha"
+                        return 1
+                        ;;
+                    *)
+                        KAFKA_GIT_COMMIT_SHA="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --tag)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usage "Requires Kafka Git Tag"
+                        return 1
+                        ;;
+                    *)
+                        KAFKA_GIT_TAG="$1"
+                        shift
+                        ;;
+                esac
+                ;;
             --branch)
                 shift
                 case "$1" in
                     ""|--*)
-                        usage "Requires Kafka branch"
+                        usage "Requires Kafka Git Branch"
                         return 1
                         ;;
                     *)
-                        KAFKA_BRANCH="$1"
+                        KAFKA_GIT_BRANCH="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --pull-request)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usage "Requires Kafka Git pull request number"
+                        return 1
+                        ;;
+                    *)
+                        KAFKA_GIT_PULL_REQUEST="$1"
                         shift
                         ;;
                 esac
@@ -135,11 +151,39 @@ function parseCmd () {
                 ;;
         esac
     done
-    KAFKA_GITREPO="https://github.com/${KAFKA_GITHUB_REPO}.git"
-    KAFKA_IMAGE_NAME="${KAFKA_GITHUB_REPO//\//-}"
-    KAFKA_VERSION="$(resolveVersion ${KAFKA_GITREPO} ${KAFKA_BRANCH})"
-    KAFKA_ALT_VERSION="$(curl -s -L https://raw.githubusercontent.com/${KAFKA_GITHUB_REPO}/${KAFKA_BRANCH}/gradle.properties | sed -n 's/^version=\(.\+\)$/\1/p')"
-    if [ "${KAFKA_BRANCH}" == "${KAFKA_VERSION}" ]; then RELEASE="true"; else RELEASE="false"; fi
+    
+    KAFKA_GIT_REPO="https://github.com/${KAFKA_GITHUB_REPO}.git"
+
+    if [ -n "${KAFKA_GIT_COMMIT_SHA}" ]; then
+        KAFKA_BUILD_GIT_REFSPEC="commit/${KAFKA_GIT_COMMIT_SHA}"
+        KAFKA_VERSION="$(resolveKafkaVersion ${KAFKA_GITHUB_REPO} ${KAFKA_GIT_COMMIT_SHA})"
+        KAFKA_TAG_VERSION="${KAFKA_VERSION}-g$(echo ${KAFKA_GIT_COMMIT_SHA} | cut -c 1-7)"
+    elif [ -n "${KAFKA_GIT_TAG}" ]; then
+        KAFKA_GIT_COMMIT_SHA=$(git ls-remote --tags ${KAFKA_GIT_REPO} "refs/tags/${KAFKA_GIT_TAG}^{}" | awk '{ print $1}')
+        KAFKA_BUILD_GIT_REFSPEC="tags/${KAFKA_GIT_TAG}"
+        KAFKA_VERSION=${KAFKA_GIT_TAG}
+        KAFKA_TAG_VERSION=${KAFKA_GIT_TAG}
+    elif [ -n "${KAFKA_GIT_BRANCH}" ]; then
+        KAFKA_GIT_COMMIT_SHA=$(git ls-remote --heads ${KAFKA_GIT_REPO} refs/heads/${KAFKA_GIT_BRANCH} | awk '{ print $1}')
+        KAFKA_BUILD_GIT_REFSPEC="heads/${KAFKA_GIT_BRANCH}"
+        KAFKA_VERSION="$(resolveKafkaVersion ${KAFKA_GITHUB_REPO} ${KAFKA_GIT_COMMIT_SHA})"
+        if [ "${KAFKA_GIT_BRANCH}" == "trunk" ] || [[ "${KAFKA_VERSION}" =~ ^${KAFKA_GIT_BRANCH} ]]; then
+            KAFKA_TAG_VERSION="${KAFKA_VERSION}"
+        else 
+            KAFKA_TAG_VERSION="${KAFKA_GIT_BRANCH}"
+        fi
+    elif [ -n "${KAFKA_GIT_PULL_REQUEST}" ]; then
+        KAFKA_GIT_COMMIT_SHA=$(git ls-remote --refs ${KAFKA_GIT_REPO} refs/pull/${KAFKA_GIT_PULL_REQUEST}/head | awk '{ print $1}')
+        KAFKA_BUILD_GIT_REFSPEC="pull/${KAFKA_GIT_PULL_REQUEST}"
+        KAFKA_VERSION="$(resolveKafkaVersion ${KAFKA_GITHUB_REPO} ${KAFKA_GIT_COMMIT_SHA})"
+        KAFKA_TAG_VERSION="${KAFKA_BUILD_GIT_REFSPEC//\//}"
+    fi
+
+    if [ -z "${KAFKA_VERSION}" ] || [ -z "${KAFKA_GIT_COMMIT_SHA}" ]; then
+        usage "commit-sha, tag, branch or pull-request is invalid"
+        return 1
+    fi
+    
     return 0
 }
 

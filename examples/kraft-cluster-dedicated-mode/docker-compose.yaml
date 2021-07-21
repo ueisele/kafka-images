@@ -20,7 +20,7 @@ services:
     # Kafka Controller                                          #
     #############################################################
     kafka-controller1:
-        image: ueisele/apache-kafka-server-minimal:${KAFKA_VERSION}
+        image: ueisele/apache-kafka-server:${KAFKA_VERSION}
         restart: always
         ports:
             - 19093:9093
@@ -39,7 +39,7 @@ services:
             KAFKA_CONTROLLER_LISTENER_NAMES: PLAINTEXT # (required in KRaft mode) A comma-separated list of the names of the listeners used by the controller.
 
     kafka-controller2:
-        image: ueisele/apache-kafka-server-minimal:${KAFKA_VERSION}
+        image: ueisele/apache-kafka-server:${KAFKA_VERSION}
         restart: always
         ports:
             - 29093:9093
@@ -58,7 +58,7 @@ services:
             KAFKA_CONTROLLER_LISTENER_NAMES: PLAINTEXT # (required in KRaft mode) A comma-separated list of the names of the listeners used by the controller.
 
     kafka-controller3:
-        image: ueisele/apache-kafka-server-minimal:${KAFKA_VERSION}
+        image: ueisele/apache-kafka-server:${KAFKA_VERSION}
         restart: always
         ports:
             - 39093:9093
@@ -80,7 +80,7 @@ services:
     # Kafka Broker                                              #
     #############################################################
     kafka-broker1:
-        image: ueisele/apache-kafka-server-minimal:${KAFKA_VERSION}
+        image: ueisele/apache-kafka-server:${KAFKA_VERSION}
         restart: always
         ports:
             - 19092:19092
@@ -104,7 +104,7 @@ services:
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: HOST:PLAINTEXT,CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
 
     kafka-broker2:
-        image: ueisele/apache-kafka-server-minimal:${KAFKA_VERSION}
+        image: ueisele/apache-kafka-server:${KAFKA_VERSION}
         restart: always
         ports:
             - 29092:29092
@@ -128,7 +128,7 @@ services:
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: HOST:PLAINTEXT,CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
 
     kafka-broker3:
-        image: ueisele/apache-kafka-server-minimal:${KAFKA_VERSION}
+        image: ueisele/apache-kafka-server:${KAFKA_VERSION}
         restart: always
         ports:
             - 39092:39092

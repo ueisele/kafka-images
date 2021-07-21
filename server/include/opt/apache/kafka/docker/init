@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 . /opt/apache/kafka/docker/bash-config
 
 if [[ -n "${KAFKA_PROCESS_ROLES-}" ]]
@@ -13,7 +15,7 @@ then
                 export CLUSTER_ID
                 CLUSTER_ID=$(kafka-storage.sh random-uuid)
             fi
-            dub ensure CLUSTER_ID
+            godub ensure CLUSTER_ID
 
             # The next step is to format your storage directories
             echo "Initializing storage dir for cluster id ${CLUSTER_ID}"

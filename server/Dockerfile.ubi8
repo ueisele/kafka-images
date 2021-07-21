@@ -13,9 +13,14 @@ RUN microdnf install -y git findutils \
 USER appuser
 WORKDIR /home/appuser
 
-ARG KAFKA_GITREPO=https://github.com/apache/kafka.git
-ARG KAFKA_BRANCH=2.8.0
-RUN git clone ${KAFKA_GITREPO} kafka && cd kafka && git checkout ${KAFKA_BRANCH} 
+ARG KAFKA_GIT_REPO=https://github.com/apache/kafka.git
+ARG KAFKA_GIT_REFSPEC
+RUN mkdir kafka \
+    && cd kafka \
+    && git init \
+    && git remote add origin ${KAFKA_GIT_REPO} \
+    && git fetch --depth 1 origin ${KAFKA_GIT_REFSPEC} \
+    && git reset --hard FETCH_HEAD
 
 RUN cd kafka \
     && ./gradlew client:jar core:jar --profile --no-daemon
@@ -51,31 +56,29 @@ FROM ${OPENJDK_JRE_IMAGE}
 LABEL maintainer="code@uweeisele.eu"
 
 USER root
-
-ENV PYTHON_VERSION="39-3.9.2"
-RUN microdnf install -y git python${PYTHON_VERSION} openssl krb5-workstation iputils hostname \
-    && alternatives --set python /usr/bin/python3 \
-    && python3 -m pip install --upgrade pip setuptools \
-    && python3 -m pip install --prefer-binary --prefix=/usr/local --upgrade 'git+https://github.com/confluentinc/confluent-docker-utils@v0.0.45' \
-    && microdnf remove -y git \
-    && microdnf clean all \
-    && rm -rf /tmp/* \
-    && mkdir -p /opt/apache/kafka /usr/logs \
+RUN mkdir -p /opt/apache/kafka /usr/logs \
     && chown appuser:appuser -R /opt/apache/kafka /usr/logs
 
 USER appuser
 WORKDIR /home/appuser
 
 RUN mkdir -p /opt/apache/kafka/data /opt/apache/kafka/secrets /opt/apache/kafka/config
-VOLUME ["/opt/apache/kafka/data", "/opt/apache/kafka/secrets", "/opt/apache/kafka/config"]
+VOLUME ["/opt/apache/kafka/data", "/opt/apache/kafka/secrets"]
+
+COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/dependant-libs /opt/apache/kafka/libs
+COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/libs /opt/apache/kafka/libs
 
 COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/licenses /opt/apache/kafka/licenses
 
 COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/bin /opt/apache/kafka/bin
 ENV PATH=/opt/apache/kafka/bin:${PATH}
 
-COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/dependant-libs /opt/apache/kafka/libs
-COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/libs /opt/apache/kafka/libs
+USER root
+ARG GODUB_VERSION=0.0.0
+LABEL godub.version=${GODUB_VERSION}
+RUN curl -s -L https://github.com/ueisele/go-docker-utils/releases/download/${GODUB_VERSION}/godub-${GODUB_VERSION}-linux-amd64.tar.gz \
+    | tar xvz -C /usr/local/bin
+USER appuser
 
 COPY --chown=appuser:appuser include/opt/apache/kafka/docker /opt/apache/kafka/docker
 
@@ -83,7 +86,11 @@ EXPOSE 9092 9093
 
 CMD ["/opt/apache/kafka/docker/run"]
 
-ARG KAFKA_GITREPO=https://github.com/apache/kafka.git
-ARG KAFKA_BRANCH=2.8.0
-LABEL kafka.gitrepo="${KAFKA_GITREPO}"
-LABEL kafka.gitref="${KAFKA_BRANCH}"
+ARG KAFKA_GIT_REPO=https://github.com/apache/kafka.git \
+    KAFKA_GIT_REFSPEC \
+    KAFKA_BUILD_GIT_REFSPEC=${KAFKA_GIT_REFSPEC} \
+    KAFKA_VERSION=${KAFKA_GIT_REFSPEC}
+LABEL kafka.git.repo="${KAFKA_GIT_REPO}" \
+    kafka.git.refspec="${KAFKA_GIT_REFSPEC}" \
+    kafka.build.git.refspec="${KAFKA_BUILD_GIT_REFSPEC}" \
+    kafka.version="${KAFKA_VERSION}"

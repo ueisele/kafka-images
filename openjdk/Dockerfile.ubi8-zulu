@@ -12,11 +12,11 @@ ENV JAVA_HOME="/usr/lib/jvm/zulu${ZULU_OPENJDK_RELEASE}"
 
 RUN rpm --import https://www.azul.com/files/0xB1998361219BD9C9.txt \
     && rpm --install https://cdn.azul.com/zulu/bin/zulu-repo-1.0.0-1.noarch.rpm \
-    && microdnf -y install ${ZULU_OPENJDK} \
-    && microdnf -y install shadow-utils \
+    && microdnf -y install ${ZULU_OPENJDK} openssl tar gzip hostname shadow-utils \
     && useradd --no-log-init --create-home --shell /bin/bash appuser \
     && microdnf remove shadow-utils \
     && microdnf clean all \
+    && rm -rf /var/lib/rpm \
     && rm -rf /tmp/*
 
 USER appuser

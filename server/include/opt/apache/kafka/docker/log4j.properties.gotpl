@@ -1,0 +1,24 @@
+log4j.rootLogger={{ env "KAFKA_LOG4J_ROOT_LOGLEVEL" | default "INFO" }}, stdout
+
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=[%d] %p %m (%c)%n
+
+{{- $loggers := dict
+  "kafka" "INFO"
+  "kafka.network.RequestChannel$" "WARN"
+  "kafka.producer.async.DefaultEventHandler" "DEBUG"
+  "kafka.request.logger" "WARN"
+  "kafka.controller" "TRACE"
+  "kafka.log.LogCleaner" "INFO"
+  "state.change.logger" "TRACE"
+  "kafka.authorizer.logger" "WARN"
+-}}
+
+{{- if hasEnv "KAFKA_LOG4J_LOGGERS" }}
+{{- $loggers = env "KAFKA_LOG4J_LOGGERS" | parseKvCsvList | mergeOverwrite $loggers }}
+{{- end }}
+
+{{ range $logger, $level := $loggers -}}
+log4j.logger.{{ $logger }}={{ $level }}
+{{ end }}

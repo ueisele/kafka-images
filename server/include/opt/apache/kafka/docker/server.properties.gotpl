@@ -1,0 +1,28 @@
+{{- $excluded_props := list
+    "KAFKA_VERSION" 
+    "KAFKA_HEAP_OPTS" 
+    "KAFKA_LOG4J_OPTS"
+    "KAFKA_OPTS"
+    "KAFKA_JMX_OPTS"
+    "KAFKA_JVM_PERFORMANCE_OPTS"
+    "KAFKA_GC_LOG_OPTS"
+    "KAFKA_LOG4J_ROOT_LOGLEVEL"
+    "KAFKA_LOG4J_LOGGERS"
+    "KAFKA_TOOLS_LOG4J_LOGLEVEL"
+    "KAFKA_ZOOKEEPER_CLIENT_CNXN_SOCKET"
+-}}
+
+{{/* properties that don't fit the standard format */}}
+{{- $other_props := dict 
+    "KAFKA_ZOOKEEPER_CLIENT_CNXN_SOCKET" "zookeeper.clientCnxnSocket"
+-}}
+ 
+{{- range $key, $value := envToProp "KAFKA_" "" $excluded_props -}}
+{{ $key }}={{ tpl $value }}
+{{ end }}
+
+{{- range $key, $property := $other_props -}}
+{{- if hasEnv $key -}}
+{{ $property }}={{ env $key | tpl }}
+{{- end }}
+{{ end }}

@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 
-UBI8_VERSION=8.4-205
+UBI8_RELEASE=8.4
+UBI8_VERSION=${UBI8_RELEASE}-205
 ZULU_OPENJDK_RELEASE=11
-ZULU_OPENJDK_VERSION=11.0.11-1
+ZULU_OPENJDK_VERSION=${ZULU_OPENJDK_RELEASE}.0.12-1
 ZULU_OPENJDK_PACKAGES=(jre jdk)
 
-OPENJDK_IMAGE_TAGS=("${ZULU_OPENJDK_VERSION}-zulu-ubi${UBI8_VERSION}" "${ZULU_OPENJDK_VERSION}-zulu" "${ZULU_OPENJDK_VERSION}" "latest")
+OPENJDK_IMAGE_TAGS=("zulu${ZULU_OPENJDK_VERSION}-ubi${UBI8_VERSION}" "zulu${ZULU_OPENJDK_RELEASE}-ubi${UBI8_RELEASE}" "zulu${ZULU_OPENJDK_VERSION}" "zulu${ZULU_OPENJDK_RELEASE}")
 
 function openjdk_image_name () {
     local user=${1:?"Missing Docker registry user as first parameter!"}
     local package=${2:?"Missing package as second parameter!"}
-    echo "${user}/openjdk-${package}-${ZULU_OPENJDK_RELEASE}"
+    echo "${user}/openjdk-${package}"
 }
 
 function openjdk_image_name_and_tag () {

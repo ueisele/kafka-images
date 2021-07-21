@@ -14,8 +14,7 @@ gpgkey = https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public\n\
 gpgcheck = 1\n\
 enabled = 1\n" > /etc/yum.repos.d/adoptopenjdk.repo
 
-RUN microdnf -y install ${OPENJDK_PACKAGE} \
-    && microdnf -y install shadow-utils \
+RUN microdnf -y install ${OPENJDK_PACKAGE} openssl tar gzip hostname shadow-utils \
     && useradd --no-log-init --create-home --shell /bin/bash appuser \
     && microdnf remove shadow-utils \
     && microdnf clean all \

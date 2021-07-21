@@ -30,6 +30,7 @@ services:
             KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 # (default: 3) The replication factor for the offsets topic. Must be 1, because we only have a single broker.
             KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1 # (default: 3) The replication factor for the transaction topic. Must be 1, because we only have a single broker.
             KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1 # (default: 2) Overridden min.insync.replicas config for the transaction topic. Must be 1, because we only have a single broker.
-
+            #### Advanced Request Logging ####
+            # KAFKA_LOG4J_LOGGERS: kafka.server.KafkaApis=TRACE
 volumes:
     kafka-server-1:
