@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 SCRIPT_DIR="$(readlink -f "$(dirname ${BASH_SOURCE[0]})")"
-PROJECT_ROOT="$(readlink -f "${SCRIPT_DIR}/..")"
+PROJECT_ROOT="$(readlink -f "${SCRIPT_DIR}")"
 
 DEFAULT_TARGET_DIR="${PROJECT_ROOT}/target/certs"
 DEFAULT_GROUP="kafka-broker"
