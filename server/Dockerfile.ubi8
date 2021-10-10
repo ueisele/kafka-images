@@ -22,35 +22,40 @@ RUN mkdir kafka \
     && git fetch --depth 1 origin ${KAFKA_GIT_REFSPEC} \
     && git reset --hard FETCH_HEAD
 
-RUN cd kafka \
-    && ./gradlew client:jar core:jar --profile --no-daemon
-
 RUN mkdir -p /home/appuser/dist/kafka \
-    && mkdir -p /home/appuser/dist/kafka/licenses \
     && mkdir -p /home/appuser/dist/kafka/libs \
     && mkdir -p /home/appuser/dist/kafka/dependant-libs \
-    && mkdir -p /home/appuser/dist/kafka/bin \
-    && cp /home/appuser/kafka/licenses/* /home/appuser/dist/kafka/licenses/ \
-    && mv /home/appuser/kafka/core/build/libs/* /home/appuser/dist/kafka/libs/ \
+    && mkdir -p /home/appuser/dist/kafka/licenses \
+    && mkdir -p /home/appuser/dist/kafka/bin
+
+RUN cd kafka \
+    && ./gradlew core:jar --profile --no-daemon \
+    && cp /home/appuser/kafka/core/build/libs/* /home/appuser/dist/kafka/libs/ \
     && find /home/appuser/kafka/core/build/dependant-libs* -regextype posix-extended -regex "^.*/(kafka)[^/]*" -exec mv {} /home/appuser/dist/kafka/libs/ \; \
-    && mv /home/appuser/kafka/core/build/dependant-libs*/* /home/appuser/dist/kafka/dependant-libs/ \
-    && mv /home/appuser/kafka/clients/build/libs/* /home/appuser/dist/kafka/libs/ \
-    && cp /home/appuser/kafka/bin/kafka-*.sh /home/appuser/dist/kafka/bin/ \
-    && (rm /home/appuser/dist/kafka/bin/kafka-metadata-shell.sh || true) \
-    && (rm /home/appuser/dist/kafka/bin/kafka-mirror-maker.sh || true) \
-    && (rm /home/appuser/dist/kafka/bin/kafka-producer-perf-test.sh || true) \
-    && (rm /home/appuser/dist/kafka/bin/kafka-consumer-perf-test.sh || true) \
-    && (rm /home/appuser/dist/kafka/bin/kafka-streams-application-reset.sh || true) \
-    && (rm /home/appuser/dist/kafka/bin/kafka-verifiable-consumer.sh || true) \
-    && (rm /home/appuser/dist/kafka/bin/kafka-verifiable-producer.sh || true)
+    && mv /home/appuser/kafka/core/build/dependant-libs*/* /home/appuser/dist/kafka/dependant-libs/
+    
+RUN cd kafka \
+    && ./gradlew client:jar --profile --no-daemon \
+    && cp /home/appuser/kafka/clients/build/libs/* /home/appuser/dist/kafka/libs/
+
+RUN cd kafka \
+    && ./gradlew tools:jar --profile --no-daemon \
+    && cp /home/appuser/kafka/tools/build/libs/* /home/appuser/dist/kafka/libs/ \
+    && find /home/appuser/kafka/tools/build/dependant-libs* -regextype posix-extended -regex "^.*/(kafka)[^/]*" -exec mv {} /home/appuser/dist/kafka/libs/ \; \
+    && mv /home/appuser/kafka/tools/build/dependant-libs*/* /home/appuser/dist/kafka/dependant-libs/
 
 RUN cd kafka \
     && if [ -d shell ]; then \
         ./gradlew shell:jar --profile --no-daemon \
         && cp /home/appuser/kafka/shell/build/libs/* /home/appuser/dist/kafka/libs/ \
-        && cp /home/appuser/kafka/shell/build/dependant-libs*/* /home/appuser/dist/kafka/dependant-libs/ \
-        && cp /home/appuser/kafka/bin/kafka-metadata-shell.sh /home/appuser/dist/kafka/bin/ ;\
+        && cp /home/appuser/kafka/shell/build/dependant-libs*/* /home/appuser/dist/kafka/dependant-libs/ ;\
     fi
+
+RUN cp /home/appuser/kafka/licenses/* /home/appuser/dist/kafka/licenses/
+
+RUN cp /home/appuser/kafka/bin/zookeeper-*.sh /home/appuser/dist/kafka/bin/ \
+    && cp /home/appuser/kafka/bin/kafka-*.sh /home/appuser/dist/kafka/bin/
+
 
 FROM ${OPENJDK_JRE_IMAGE}
 LABEL maintainer="code@uweeisele.eu"

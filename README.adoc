@@ -3,14 +3,14 @@
 Kafka Docker image which supports KRaft mode.
 
 Kafka 2.8 is the first release wich contains KRaft as an operation mode which requires no ZooKeeper.
-KRaft mode in Kafka 2.8 is provided for testing only, NOT for production. 
+KRaft mode in Kafka 2.8 and 3.0 is provided for testing only, NOT for production. 
 It is not yet supported to upgrade existing ZooKeeper-based Kafka clusters into this mode. 
-In fact, when Kafka 3.0 is released, it will not be possible to upgrade your KRaft clusters from 2.8 to 3.0. 
+In fact, when Kafka 3.1 is released, it will not be possible to upgrade your KRaft clusters from 3.0 to 3.1. 
 There may be bugs, including serious ones. You should assume that your data could be lost at any time if you try the early access release of KRaft mode.
 
 You find mor information on this sites:
 
-* https://github.com/apache/kafka/blob/2.8.0/config/kraft/README.md
+* https://github.com/apache/kafka/blob/3.0.0/config/kraft/README.md
 * https://www.confluent.io/blog/kafka-without-zookeeper-a-sneak-peek/
 
 .To start Kafka in KRaft single mode just run: 
@@ -26,7 +26,26 @@ You find all examples in link:examples/[]:
 * link:examples/kraft-cluster-shared-mode/docker-compose.yaml[]
 * link:examples/kraft-cluster-dedicated-mode/docker-compose.yaml[]
 * link:examples/kraft-cluster-mixed-mode/docker-compose.yaml[]
+* link:examples/kraft-cluster-ssl-pem/docker-compose.yaml[]
+* link:examples/kraft-cluster-ssl-jks/docker-compose.yaml[]
+* link:examples/kraft-cluster-ssl-pkcs12/docker-compose.yaml[]
 
-The Docker image `ueisele/apache-kafka-server:2.8.0` is available on Docker Hub.
+The Docker image `ueisele/apache-kafka-server:3.0.0` is available on Docker Hub.
 The configuration is basically the same than for Confluent Docker images (see link:https://docs.confluent.io/platform/current/installation/docker/config-reference.html#confluent-ak-configuration[Confluent Kafka configuration]).
 In addition this image supports configuration for KRaft mode (without the need to configure ZooKeeper connect, ...).
+
+== Build
+
+The Apache Kafka images are based on a custom OpenJDK image. 
+
+.Build OpenJDK base image
+[source,bash]
+----
+openjdk/build.sh --build
+----
+
+.Build the Kafka image
+[source,bash]
+----
+server/build.sh --build --tag 3.0.0
+----
