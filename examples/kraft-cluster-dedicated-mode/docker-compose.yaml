@@ -83,6 +83,7 @@ services:
         image: ueisele/apache-kafka-server:${KAFKA_VERSION}
         restart: always
         ports:
+            - 9092:19092
             - 19092:19092
         networks:
             default:

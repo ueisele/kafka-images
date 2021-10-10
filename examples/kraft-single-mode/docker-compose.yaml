@@ -23,7 +23,7 @@ services:
             KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093 # (required in KRaft mode) The connect string for the controller quorum
             #### Socket Server Settings ###
             KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093 # (by default derived from advertised listeners) List of URIs we will listen on and the listener names. In this case, Kafka listens in both ports on all interfaces.
-            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://127.0.0.1:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
             KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER # (default: required in KRaft mode) A comma-separated list of the names of the listeners used by the controller.
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
             #### Internal Topic Settings ####
