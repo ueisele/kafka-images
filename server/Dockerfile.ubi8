@@ -74,7 +74,7 @@ COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/bin /opt/apac
 ENV PATH=/opt/apache/kafka/bin:${PATH}
 
 USER root
-ARG GODUB_VERSION=0.0.0
+ARG GODUB_VERSION=0.1.0
 LABEL godub.version=${GODUB_VERSION}
 RUN curl -s -L https://github.com/ueisele/go-docker-utils/releases/download/${GODUB_VERSION}/godub-${GODUB_VERSION}-linux-amd64.tar.gz \
     | tar xvz -C /usr/local/bin

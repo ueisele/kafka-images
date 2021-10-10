@@ -18,11 +18,11 @@
 -}}
  
 {{- range $key, $value := envToProp "KAFKA_" "" $excluded_props -}}
-{{ $key }}={{ tpl $value }}
+{{ $key }}={{ tpl $value $ }}
 {{ end }}
 
 {{- range $key, $property := $other_props -}}
 {{- if hasEnv $key -}}
-{{ $property }}={{ env $key | tpl }}
+{{ $property }}={{ tpl (env $key) $ }}
 {{- end }}
 {{ end }}

@@ -119,6 +119,4 @@ then
   fi
 fi
 
-godub template < "/opt/apache/kafka/docker/server.properties.gotpl" > "/opt/apache/kafka/config/server.properties"
-godub template < "/opt/apache/kafka/docker/log4j.properties.gotpl" > "/opt/apache/kafka/config/log4j.properties"
-godub template < "/opt/apache/kafka/docker/tools-log4j.properties.gotpl" > "/opt/apache/kafka/config/tools-log4j.properties"
+godub template -i "/opt/apache/kafka/docker/*.gotpl" -o "/opt/apache/kafka/config/"

@@ -8,7 +8,7 @@ version: '2.4'
 services:
     
     kafka-server:
-        image: ueisele/apache-kafka-server:2.8.0
+        image: ueisele/apache-kafka-server:3.0.0
         restart: always
         network_mode: host
         volumes:

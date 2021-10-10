@@ -15,7 +15,7 @@ KAFKA_GITHUB_REPO="apache/kafka"
 function usage () {
     echo "$0: $1" >&2
     echo
-    echo "Usage: $0 [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [[--commit-sha 7f7dc35] [--tag 2.8.0] [--branch trunk] [--pull-request 9999]}"
+    echo "Usage: $0 [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [[--commit-sha 7f7dc35] [--tag 3.0.0] [--branch trunk] [--pull-request 9999]}"
     echo
     return 1
 }
