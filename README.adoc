@@ -13,6 +13,28 @@ You find mor information on this sites:
 * https://github.com/apache/kafka/blob/3.0.0/config/kraft/README.md
 * https://www.confluent.io/blog/kafka-without-zookeeper-a-sneak-peek/
 
+== Quick Start
+
+.To start Kafka in KRaft single mode just run: 
+[source,bash]
+----
+docker run --rm -p 9092:9092 ueisele/apache-kafka-server-standalone:3.0.0
+----
+
+.To start Kafka in KRaft single mode with Ipv6 just run: 
+[source,bash]
+----
+docker network create --ipv6 --subnet fd01::/80 kafka-standalone
+docker run --rm -p 9092:9092 --net kafka-standalone -e STANDALONE_BROKER_IP_VERSION=ipv6 ueisele/apache-kafka-server-standalone:3.0.0
+----
+
+The standalone image is based on the Kafka server image `ueisele/apache-kafka-server:3.0.0`.
+The image just defines environment variables which are required for a standalone execution (see link:server-standalone/Dockerfile.ubi8[]). 
+
+The standalone Kafka opens a listener on port 9092 on all interfaces and advertises the first found Ip address.
+
+== Docker Compose Examples
+
 .To start Kafka in KRaft single mode just run: 
 [source,bash]
 ----
