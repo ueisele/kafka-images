@@ -114,6 +114,15 @@ For the Apahce Kafka ([ueisele/apache-kafka-server](https://hub.docker.com/repos
 
 The configuration is fully compatible with the [Confluent Docker images](https://docs.confluent.io/platform/current/installation/docker/config-reference.html#confluent-ak-configuration).
 
+The configuration mechanism supports [`Go Template`](https://pkg.go.dev/text/template) for environment variable values.
+The templating is done by [`godub`](https://github.com/ueisele/go-docker-utils) and therefore provides its [template functions](https://github.com/ueisele/go-docker-utils#template-functions). 
+
+Example which uses `ipAddress` function to determin the IPv4 address of the first network interface:
+
+```properties
+KAFKA_ADVERTISED_LISTENERS="PLAINTEXT://[{{ ipAddress \"prefer\" \"ipv4\" 0 }}]:{{ .PORT }}"
+```
+
 ### Important Configuration in KRaft Mode
 
 In the following section you find important configuration, required to operate Apache Kafka in `Kraft` mode. 
