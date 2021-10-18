@@ -1,17 +1,13 @@
 = Apache Kafka Images
 
-Kafka Docker image which supports KRaft mode.
+Docker image for running the link:https://github.com/apache/kafka/[Open Source version of Apache Kafka]. It offers support for running Kafka in link:https://github.com/apache/kafka/blob/3.0.0/config/kraft/README.md[KRaft] mode as well as in ZooKeeper mode.
 
-Kafka 2.8 is the first release wich contains KRaft as an operation mode which requires no ZooKeeper.
-KRaft mode in Kafka 2.8 and 3.0 is provided for testing only, NOT for production. 
-It is not yet supported to upgrade existing ZooKeeper-based Kafka clusters into this mode. 
-In fact, when Kafka 3.1 is released, it will not be possible to upgrade your KRaft clusters from 3.0 to 3.1. 
-There may be bugs, including serious ones. You should assume that your data could be lost at any time if you try the early access release of KRaft mode.
+The Kafka distribution included in the Docker image is built directly from link:https://github.com/apache/kafka/[source].
 
-You find mor information on this sites:
+The Docker images are available on the following DockerHub repositories:
 
-* https://github.com/apache/kafka/blob/3.0.0/config/kraft/README.md
-* https://www.confluent.io/blog/kafka-without-zookeeper-a-sneak-peek/
+* link:https://hub.docker.com/repository/docker/ueisele/apache-kafka-server[ueisele/apache-kafka-server]
+* link:https://hub.docker.com/repository/docker/ueisele/apache-kafka-server-standalone[ueisele/apache-kafka-server-standalone]
 
 == Quick Start
 
@@ -27,11 +23,6 @@ docker run --rm -p 9092:9092 ueisele/apache-kafka-server-standalone:3.0.0
 docker network create --ipv6 --subnet fd01::/80 kafka-standalone
 docker run --rm -p 9092:9092 --net kafka-standalone -e STANDALONE_BROKER_IP_VERSION=ipv6 ueisele/apache-kafka-server-standalone:3.0.0
 ----
-
-The standalone image is based on the Kafka server image `ueisele/apache-kafka-server:3.0.0`.
-The image just defines environment variables which are required for a standalone execution (see link:server-standalone/Dockerfile.ubi8[]). 
-
-The standalone Kafka opens a listener on port 9092 on all interfaces and advertises the first found Ip address.
 
 == Docker Compose Examples
 
@@ -52,12 +43,21 @@ You find all examples in link:examples/kraft/[]:
 * link:examples/kraft/cluster-ssl-jks/docker-compose.yaml[]
 * link:examples/kraft/cluster-ssl-pkcs12/docker-compose.yaml[]
 
-The Docker image `ueisele/apache-kafka-server:3.0.0` is available on Docker Hub.
-The configuration is basically the same than for Confluent Docker images (see link:https://docs.confluent.io/platform/current/installation/docker/config-reference.html#confluent-ak-configuration[Confluent Kafka configuration]).
-In addition this image supports configuration for KRaft mode (without the need to configure ZooKeeper connect, ...).
-
 == Build and Configuration
 
 * OpenJDK base image: link:openjdk/[]
 * Apache Kafka server image: link:server/[]
 * Apache Kafka server standalone image: link:server-standalone/[]
+
+== KRaft Mode
+
+Kafka 2.8 is the first release wich contains KRaft as an operation mode which requires no ZooKeeper.
+KRaft mode in Kafka 2.8 and 3.0 is provided for testing only, NOT for production. 
+It is not yet supported to upgrade existing ZooKeeper-based Kafka clusters into this mode. 
+In fact, when Kafka 3.1 is released, it will not be possible to upgrade your KRaft clusters from 3.0 to 3.1. 
+There may be bugs, including serious ones. You should assume that your data could be lost at any time if you try the early access release of KRaft mode.
+
+You find mor information on this sites:
+
+* https://github.com/apache/kafka/blob/3.0.0/config/kraft/README.md
+* https://www.confluent.io/blog/kafka-without-zookeeper-a-sneak-peek/
