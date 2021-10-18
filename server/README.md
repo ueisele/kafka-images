@@ -197,6 +197,31 @@ For example `KAFKA_LISTENERS=PLAINTEXT://127.0.0.1:9092`
 If you specify a listener name which is not equal to a security protocol, like `CONTROLLER`, 
 `KAFKA_LISTENER_SECURITY_PROTOCOL_MAP` must also be set. It is a map between listener names and security protocols.
 
+### Storage
+
+By default `KAFKA_LOG_DIRS` is set to `/opt/apache/kafka/data`.
+
+In order to make the storage independent of the Docker container, you can explicitly create an volume:
+
+```bash
+docker volume create kafka-data
+docker run -d --name kafka-kraft -p 9092:9092 \
+    -v kafka-data:/opt/apache/kafka/data \
+    -e AUTO_GENERATE_CLUSTER_ID=true \
+    -e AUTO_FORMAT_KAFKA_STORAGE_DIR=true \
+    -e KAFKA_PROCESS_ROLES=broker,controller \
+    -e KAFKA_NODE_ID=1 \
+    -e KAFKA_CONTROLLER_QUORUM_VOTERS=1@localhost:9093 \
+    -e KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093 \
+    -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092 \
+    -e KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER \
+    -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT \
+    -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 \
+    -e KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1 \
+    -e KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1 \
+    ueisele/apache-kafka-server:3.0.0
+```
+
 ## Build
 
 In order to create your own Docker image for Apache Kafka clone the [ueisele/kafka-image](https://github.com/ueisele/kafka-images) Git repository and run the build command for the OpenJDK image:
