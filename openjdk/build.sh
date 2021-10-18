@@ -9,22 +9,21 @@ BUILD=false
 DOCKERFILE=Dockerfile.ubi8-zulu
 
 DOCKERREGISTRY_USER="ueisele"
-IMAGE_NAME="openjdk${ZULU_OPENJDK_RELEASE}-${ZULU_OPENJDK_PACKAGE}"
-IMAGE_TAG="${ZULU_OPENJDK_VERSION}-zulu-ubi${UBI8_VERSION}"
-IMAGE_TAGS=("${ZULU_OPENJDK_VERSION}-zulu-ubi${UBI8_VERSION}" "${ZULU_OPENJDK_VERSION}-zulu" "${ZULU_OPENJDK_VERSION}" "${ZULU_OPENJDK_RELEASE}")
+ZULU_OPENJDK_RELEASE=11
 
 function usage () {
     echo "$0: $1" >&2
     echo
-    echo "Usage: $0 [--build] [--push] [--user ueisele]"
+    echo "Usage: $0 [--build] [--push] [--user ueisele] [--openjdk-release 17] [--openjdk-version 17]"
     echo
     return 1
 }
 
 function build_image () {  
     local package=${1:?"Missing package as first parameter!"}
+    local tags=($(openjdk_image_tags "${ZULU_OPENJDK_RELEASE}" "${ZULU_OPENJDK_VERSION}"))
     docker build \
-        $(for tag in "${OPENJDK_IMAGE_TAGS[@]}"; do
+        $(for tag in "${tags[@]}"; do
         echo -t "$(openjdk_image_name ${DOCKERREGISTRY_USER} ${package}):${tag}"
         done) \
         --build-arg UBI8_VERSION=${UBI8_VERSION} \
@@ -43,7 +42,8 @@ function build () {
 
 function push_image () {
     local package=${1:?"Missing package as first parameter!"}
-    for tag in "${OPENJDK_IMAGE_TAGS[@]}"; do
+    local tags=($(openjdk_image_tags "${ZULU_OPENJDK_RELEASE}" "${ZULU_OPENJDK_VERSION}"))
+    for tag in "${tags[@]}"; do
         docker push "$(openjdk_image_name ${DOCKERREGISTRY_USER} ${package}):${tag}"
     done
 }
@@ -79,12 +79,47 @@ function parseCmd () {
                         ;;
                 esac
                 ;;
+            --openjdk-release)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usage "Requires OpenJDK release"
+                        return 1
+                        ;;
+                    *)
+                        ZULU_OPENJDK_RELEASE="$1"
+                        shift
+                        ;;
+                esac
+                ;;   
+            --openjdk-version)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usage "Requires OpenJDK version"
+                        return 1
+                        ;;
+                    *)
+                        ZULU_OPENJDK_VERSION="$1"
+                        shift
+                        ;;
+                esac
+                ;;                                
             *)
                 usage "Unknown option: $1"
                 return $?
                 ;;
         esac
     done
+
+    if [ -z "${ZULU_OPENJDK_VERSION}" ]; then
+        ZULU_OPENJDK_VERSION="$(openjdk_version_by_release "${ZULU_OPENJDK_RELEASE}")"
+        if [ -z "${ZULU_OPENJDK_VERSION}" ]; then
+            usage "requires OpenJDK version"
+            return 1
+        fi
+    fi
+
     return 0
 }
 

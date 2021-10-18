@@ -16,18 +16,19 @@ KAFKA_GITHUB_REPO="apache/kafka"
 function usage () {
     echo "$0: $1" >&2
     echo
-    echo "Usage: $0 [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [[--commit-sha 7f7dc35] [--tag 3.0.0] [--branch trunk] [--pull-request 9999]}"
+    echo "Usage: $0 [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha 8cb0a5e] [--tag 3.0.0] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17]"
     echo
     return 1
 }
 
 function build_image () {
-    local tags=($(kafka_server_image_tags ${KAFKA_TAG_VERSION} $(echo ${KAFKA_GIT_COMMIT_SHA} | cut -c 1-7) ${OPENJDK_IMAGE_TAGS[@]}))
+    local openjdk_tags=($(openjdk_image_tags "${ZULU_OPENJDK_RELEASE}" "${ZULU_OPENJDK_VERSION}"))
+    local kafka_tags=($(kafka_server_image_tags ${KAFKA_TAG_VERSION} $(echo ${KAFKA_GIT_COMMIT_SHA} | cut -c 1-7) ${openjdk_tags[@]}))
     docker build \
-        $(for tag in ${tags[@]}; do
+        $(for tag in ${kafka_tags[@]}; do
         echo -t "$(kafka_server_standalone_image_name ${DOCKERREGISTRY_USER} ${KAFKA_GITHUB_REPO}):${tag}"
         done) \
-        --build-arg KAFKA_SERVER_IMAGE="$(kafka_server_image_name ${DOCKERREGISTRY_USER} ${KAFKA_GITHUB_REPO}):${tags[0]}" \
+        --build-arg KAFKA_SERVER_IMAGE="$(kafka_server_image_name ${DOCKERREGISTRY_USER} ${KAFKA_GITHUB_REPO}):${kafka_tags[0]}" \
         -f ${SCRIPT_DIR}/${DOCKERFILE} ${SCRIPT_DIR}
 }
 
@@ -37,7 +38,9 @@ function build () {
 }
 
 function push_image () {
-    for tag in $(kafka_server_image_tags ${KAFKA_TAG_VERSION} $(echo ${KAFKA_GIT_COMMIT_SHA} | cut -c 1-7) ${OPENJDK_IMAGE_TAGS[@]}); do
+    local openjdk_tags=($(openjdk_image_tags "${ZULU_OPENJDK_RELEASE}" "${ZULU_OPENJDK_VERSION}"))
+    local kafka_tags=($(kafka_server_image_tags ${KAFKA_TAG_VERSION} $(echo ${KAFKA_GIT_COMMIT_SHA} | cut -c 1-7) ${openjdk_tags[@]}))
+    for tag in ${kafka_tags[@]}; do
         docker push "$(kafka_server_standalone_image_name ${DOCKERREGISTRY_USER} ${KAFKA_GITHUB_REPO}):${tag}"
     done
 }
@@ -142,6 +145,32 @@ function parseCmd () {
                         ;;
                 esac
                 ;;
+            --openjdk-release)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usage "Requires OpenJDK release"
+                        return 1
+                        ;;
+                    *)
+                        ZULU_OPENJDK_RELEASE="$1"
+                        shift
+                        ;;
+                esac
+                ;;   
+            --openjdk-version)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usage "Requires OpenJDK version"
+                        return 1
+                        ;;
+                    *)
+                        ZULU_OPENJDK_VERSION="$1"
+                        shift
+                        ;;
+                esac
+                ;;                   
             *)
                 usage "Unknown option: $1"
                 return $?
@@ -179,6 +208,14 @@ function parseCmd () {
     if [ -z "${KAFKA_VERSION}" ] || [ -z "${KAFKA_GIT_COMMIT_SHA}" ]; then
         usage "commit-sha, tag, branch or pull-request is invalid"
         return 1
+    fi
+
+    if [ -z "${ZULU_OPENJDK_VERSION}" ]; then
+        ZULU_OPENJDK_VERSION="$(openjdk_version_by_release "${ZULU_OPENJDK_RELEASE}")"
+        if [ -z "${ZULU_OPENJDK_VERSION}" ]; then
+            usage "requires OpenJDK version"
+            return 1
+        fi
     fi
     
     return 0

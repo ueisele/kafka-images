@@ -42,32 +42,22 @@ cd example/kraft-single-mode
 docker-compose up
 ----
 
-You find all examples in link:examples/[]:
+You find all examples in link:examples/kraft/[]:
 
-* link:examples/kraft-single-mode/docker-compose.yaml[]
-* link:examples/kraft-cluster-shared-mode/docker-compose.yaml[]
-* link:examples/kraft-cluster-dedicated-mode/docker-compose.yaml[]
-* link:examples/kraft-cluster-mixed-mode/docker-compose.yaml[]
-* link:examples/kraft-cluster-ssl-pem/docker-compose.yaml[]
-* link:examples/kraft-cluster-ssl-jks/docker-compose.yaml[]
-* link:examples/kraft-cluster-ssl-pkcs12/docker-compose.yaml[]
+* link:examples/kraft/single-mode/docker-compose.yaml[]
+* link:examples/kraft/cluster-shared-mode/docker-compose.yaml[]
+* link:examples/kraft/cluster-dedicated-mode/docker-compose.yaml[]
+* link:examples/kraft/cluster-mixed-mode/docker-compose.yaml[]
+* link:examples/kraft/cluster-ssl-pem/docker-compose.yaml[]
+* link:examples/kraft/cluster-ssl-jks/docker-compose.yaml[]
+* link:examples/kraft/cluster-ssl-pkcs12/docker-compose.yaml[]
 
 The Docker image `ueisele/apache-kafka-server:3.0.0` is available on Docker Hub.
 The configuration is basically the same than for Confluent Docker images (see link:https://docs.confluent.io/platform/current/installation/docker/config-reference.html#confluent-ak-configuration[Confluent Kafka configuration]).
 In addition this image supports configuration for KRaft mode (without the need to configure ZooKeeper connect, ...).
 
-== Build
+== Build and Configuration
 
-The Apache Kafka images are based on a custom OpenJDK image. 
-
-.Build OpenJDK base image
-[source,bash]
-----
-openjdk/build.sh --build
-----
-
-.Build the Kafka image
-[source,bash]
-----
-server/build.sh --build --tag 3.0.0
-----
+* OpenJDK base image: link:openjdk/[]
+* Apache Kafka server image: link:server/[]
+* Apache Kafka server standalone image: link:server-standalone/[]

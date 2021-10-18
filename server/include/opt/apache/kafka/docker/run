@@ -25,6 +25,12 @@ if [ $# -ne 0 ]; then
   done
 fi
 
+echo "===> OS"
+cat /etc/os-release
+
+echo "===> Java"
+java -version
+
 echo "===> User"
 id
 

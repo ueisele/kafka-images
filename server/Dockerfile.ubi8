@@ -6,7 +6,7 @@ LABEL maintainer="code@uweeisele.eu"
 
 USER root
 
-RUN microdnf install -y git findutils \
+RUN microdnf install -y git findutils patch \
     && microdnf clean all \
     && rm -rf /tmp/*
 
@@ -21,6 +21,13 @@ RUN mkdir kafka \
     && git remote add origin ${KAFKA_GIT_REPO} \
     && git fetch --depth 1 origin ${KAFKA_GIT_REFSPEC} \
     && git reset --hard FETCH_HEAD
+
+COPY --chown=appuser:appuser patch/ patch/
+ARG KAFKA_PATCH=""
+RUN cd kafka \
+    && if [ -n "${KAFKA_PATCH}" ]; then \
+       patch -p1 < "/home/appuser/patch/${KAFKA_PATCH}" ;\
+    fi
 
 RUN mkdir -p /home/appuser/dist/kafka \
     && mkdir -p /home/appuser/dist/kafka/libs \
