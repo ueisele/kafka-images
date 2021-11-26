@@ -10,16 +10,18 @@ The Docker images are available on DockerHub repository [ueisele/apache-kafka-se
 ## Most Recent Tags
 
 Most recent tags for `RELEASE` builds:
+Most recent tags for `RELEASE` builds:
 
-* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17-ubi8.4`, `3.0.0-zulu17-ubi8.4-210`
-* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.12`, `2.8.1-zulu11-ubi8.4`, `2.8.1-zulu11.0.12-ubi8.4-210`
-* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.12`, `2.8.0-zulu11-ubi8.4`, `2.8.0-zulu11.0.12-ubi8.4-210`
+* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17.0.1`, `3.0.0-zulu17-ubi8.5`, `3.0.0-zulu17.0.1-ubi8.5-204`
+* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.13`, `2.8.1-zulu11-ubi8.5`, `2.8.1-zulu11.0.13-ubi8.5-204`
+* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.13`, `2.8.0-zulu11-ubi8.5`, `2.8.0-zulu11.0.13-ubi8.5-204`
 
 Most recent tags for `SNAPSHOT` builds:
 
-* `3.1.0-SNAPSHOT`, `3.1.0-SNAPSHOT-zulu17`, `3.1.0-SNAPSHOT-zulu17-ubi8.4`, `3.1.0-SNAPSHOT-zulu17-ubi8.4-210`
+* `3.2.0-SNAPSHOT`, `3.2.0-SNAPSHOT-zulu17`, `3.2.0-SNAPSHOT-zulu17.0.1`, `3.2.0-SNAPSHOT-zulu17-ubi8.5`, `3.2.0-SNAPSHOT-zulu17.0.1-ubi8.5-204`
+* `3.1.0-SNAPSHOT`, `3.1.0-SNAPSHOT-zulu17`, `3.1.0-SNAPSHOT-zulu17.0.1`, `3.1.0-SNAPSHOT-zulu17-ubi8.5`, `3.1.0-SNAPSHOT-zulu17.0.1-ubi8.5-204`
 
-Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-server-standalone:3.0.0-g8cb0a5e`.
+Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-server-standalone:3.1.0-SNAPSHOT-g836210a`.
 
 ## Quick Start
 

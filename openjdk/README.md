@@ -11,9 +11,9 @@ The Docker images are available in the following repositories on DockerHub:
 
 ## Most Recent Tags
 
-* `zulu17`, `zulu17-ubi8.4`, `zulu17-ubi8.4-210`
-* `zulu11`, `zulu11.0.12`, `zulu11-ubi8.4`, `zulu11.0.12-ubi8.4-210`
-* `zulu8`, `zulu8.0.302`, `zulu8-ubi8.4`, `zulu8.0.302-ubi8.4-210` 
+* `zulu17`, `zulu17-ubi8.5`, `zulu17-ubi8.5-204`
+* `zulu11`, `zulu11.0.13`, `zulu11-ubi8.5`, `zulu11.0.13-ubi8.5-204`
+* `zulu8`, `zulu8.0.312`, `zulu8-ubi8.5`, `zulu8.0.312-ubi8.5-204` 
 
 ## Image
 
@@ -48,7 +48,7 @@ openjdk/build.sh --build --user ueisele --openjdk-release 17
 To create an image with a specific OpenJDK version use the following command:
 
 ```bash
-openjdk/build.sh --build --user ueisele --openjdk-release 11 --openjdk-version 11.0.12
+openjdk/build.sh --build --user ueisele --openjdk-release 11 --openjdk-version 11.0.13
 ```
 
 ## License 

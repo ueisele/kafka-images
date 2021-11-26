@@ -11,16 +11,15 @@ The Docker images are available on DockerHub repository [ueisele/apache-kafka-se
 
 Most recent tags for `RELEASE` builds:
 
-* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17.0.1`, `3.0.0-zulu17-ubi8.5`, `3.0.0-zulu17.0.1-ubi8.5-204`
-* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.13`, `2.8.1-zulu11-ubi8.5`, `2.8.1-zulu11.0.13-ubi8.5-204`
-* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.13`, `2.8.0-zulu11-ubi8.5`, `2.8.0-zulu11.0.13-ubi8.5-204`
+* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17-ubi8.4`, `3.0.0-zulu17-ubi8.4-210`
+* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.12`, `2.8.1-zulu11-ubi8.4`, `2.8.1-zulu11.0.12-ubi8.4-210`
+* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.12`, `2.8.0-zulu11-ubi8.4`, `2.8.0-zulu11.0.12-ubi8.4-210`
 
 Most recent tags for `SNAPSHOT` builds:
 
-* `3.2.0-SNAPSHOT`, `3.2.0-SNAPSHOT-zulu17`, `3.2.0-SNAPSHOT-zulu17.0.1`, `3.2.0-SNAPSHOT-zulu17-ubi8.5`, `3.2.0-SNAPSHOT-zulu17.0.1-ubi8.5-204`
-* `3.1.0-SNAPSHOT`, `3.1.0-SNAPSHOT-zulu17`, `3.1.0-SNAPSHOT-zulu17.0.1`, `3.1.0-SNAPSHOT-zulu17-ubi8.5`, `3.1.0-SNAPSHOT-zulu17.0.1-ubi8.5-204`
+* `3.1.0-SNAPSHOT`, `3.1.0-SNAPSHOT-zulu17`, `3.1.0-SNAPSHOT-zulu17-ubi8.4`, `3.1.0-SNAPSHOT-zulu17-ubi8.4-210`
 
-Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-server:3.1.0-SNAPSHOT-g836210a`.
+Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-server:3.0.0-g8cb0a5e`.
 
 ## Image
 
@@ -114,15 +113,6 @@ For the Apahce Kafka ([ueisele/apache-kafka-server](https://hub.docker.com/repos
 * Replace an underscore (_) with triple underscores (___).
 
 The configuration is fully compatible with the [Confluent Docker images](https://docs.confluent.io/platform/current/installation/docker/config-reference.html#confluent-ak-configuration).
-
-The configuration mechanism supports [`Go Template`](https://pkg.go.dev/text/template) for environment variable values.
-The templating is done by [`godub`](https://github.com/ueisele/go-docker-utils) and therefore provides its [template functions](https://github.com/ueisele/go-docker-utils#template-functions). 
-
-Example which uses `ipAddress` function to determin the IPv4 address of the first network interface:
-
-```properties
-KAFKA_ADVERTISED_LISTENERS="PLAINTEXT://[{{ ipAddress \"prefer\" \"ipv4\" 0 }}]:{{ .PORT }}"
-```
 
 ### Important Configuration in KRaft Mode
 

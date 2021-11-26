@@ -1,0 +1,98 @@
+ARG OPENJDK_JDK_IMAGE
+ARG OPENJDK_JRE_IMAGE
+
+FROM ${OPENJDK_JDK_IMAGE} as build
+LABEL maintainer="code@uweeisele.eu"
+
+USER root
+
+RUN microdnf install -y git findutils patch \
+    && microdnf clean all \
+    && rm -rf /tmp/*
+
+USER appuser
+WORKDIR /home/appuser
+
+ARG KAFKA_GIT_REPO=https://github.com/apache/kafka.git
+ARG KAFKA_GIT_REFSPEC
+RUN mkdir kafka \
+    && cd kafka \
+    && git init \
+    && git remote add origin ${KAFKA_GIT_REPO} \
+    && git fetch --depth 1 origin ${KAFKA_GIT_REFSPEC} \
+    && git reset --hard FETCH_HEAD
+
+COPY --chown=appuser:appuser patch/ patch/
+ARG KAFKA_PATCH=""
+RUN cd kafka \
+    && if [ -n "${KAFKA_PATCH}" ]; then \
+       patch -p1 < "/home/appuser/patch/${KAFKA_PATCH}" ;\
+    fi
+
+RUN mkdir -p /home/appuser/dist/kafka \
+    && mkdir -p /home/appuser/dist/kafka/libs \
+    && mkdir -p /home/appuser/dist/kafka/dependant-libs \
+    && mkdir -p /home/appuser/dist/kafka/licenses \
+    && mkdir -p /home/appuser/dist/kafka/bin
+
+RUN cd kafka \
+    && ./gradlew core:jar --profile --no-daemon \
+    && cp /home/appuser/kafka/core/build/libs/* /home/appuser/dist/kafka/libs/ \
+    && find /home/appuser/kafka/core/build/dependant-libs* -regextype posix-extended -regex "^.*/(kafka)[^/]*" -exec mv {} /home/appuser/dist/kafka/libs/ \; \
+    && mv /home/appuser/kafka/core/build/dependant-libs*/* /home/appuser/dist/kafka/dependant-libs/
+    
+RUN cd kafka \
+    && ./gradlew client:jar --profile --no-daemon \
+    && cp /home/appuser/kafka/clients/build/libs/* /home/appuser/dist/kafka/libs/
+
+RUN cd kafka \
+    && ./gradlew tools:jar --profile --no-daemon \
+    && cp /home/appuser/kafka/tools/build/libs/* /home/appuser/dist/kafka/libs/ \
+    && find /home/appuser/kafka/tools/build/dependant-libs* -regextype posix-extended -regex "^.*/(kafka)[^/]*" -exec mv {} /home/appuser/dist/kafka/libs/ \; \
+    && mv /home/appuser/kafka/tools/build/dependant-libs*/* /home/appuser/dist/kafka/dependant-libs/
+
+RUN cd kafka \
+    && if [ -d shell ]; then \
+        ./gradlew shell:jar --profile --no-daemon \
+        && cp /home/appuser/kafka/shell/build/libs/* /home/appuser/dist/kafka/libs/ \
+        && cp /home/appuser/kafka/shell/build/dependant-libs*/* /home/appuser/dist/kafka/dependant-libs/ ;\
+    fi
+
+RUN cp /home/appuser/kafka/licenses/* /home/appuser/dist/kafka/licenses/
+
+RUN cp /home/appuser/kafka/bin/zookeeper-*.sh /home/appuser/dist/kafka/bin/ \
+    && cp /home/appuser/kafka/bin/kafka-*.sh /home/appuser/dist/kafka/bin/
+
+
+FROM ${OPENJDK_JRE_IMAGE}
+LABEL maintainer="code@uweeisele.eu"
+
+USER root
+
+ARG GODUB_VERSION=0.1.0
+LABEL godub.version=${GODUB_VERSION}
+RUN curl -s -L https://github.com/ueisele/go-docker-utils/releases/download/${GODUB_VERSION}/godub-${GODUB_VERSION}-linux-amd64.tar.gz \
+    | tar xvz -C /usr/local/bin
+
+RUN mkdir -p /opt/apache/kafka /usr/logs \
+    && chown appuser:appuser -R /opt/apache/kafka /usr/logs
+
+USER appuser
+WORKDIR /home/appuser
+
+COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/dependant-libs /opt/apache/kafka/libs
+COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/libs /opt/apache/kafka/libs
+
+COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/licenses /opt/apache/kafka/licenses
+
+COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/bin /opt/apache/kafka/bin
+ENV PATH=/opt/apache/kafka/bin:${PATH}
+
+ARG KAFKA_GIT_REPO=https://github.com/apache/kafka.git \
+    KAFKA_GIT_REFSPEC \
+    KAFKA_BUILD_GIT_REFSPEC=${KAFKA_GIT_REFSPEC} \
+    KAFKA_VERSION=${KAFKA_GIT_REFSPEC}
+LABEL kafka.git.repo="${KAFKA_GIT_REPO}" \
+    kafka.git.refspec="${KAFKA_GIT_REFSPEC}" \
+    kafka.build.git.refspec="${KAFKA_BUILD_GIT_REFSPEC}" \
+    kafka.version="${KAFKA_VERSION}"
