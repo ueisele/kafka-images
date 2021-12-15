@@ -1,0 +1,108 @@
+ARG OPENJDK_JDK_IMAGE
+ARG OPENJDK_JRE_IMAGE
+
+FROM ${OPENJDK_JDK_IMAGE} as build
+LABEL maintainer="code@uweeisele.eu"
+
+USER root
+
+RUN microdnf install -y git findutils patch \
+    && microdnf clean all \
+    && rm -rf /tmp/*
+
+USER appuser
+WORKDIR /home/appuser
+
+ARG KAFKA_GIT_REPO=https://github.com/apache/kafka.git
+ARG KAFKA_GIT_REFSPEC
+RUN mkdir kafka \
+    && cd kafka \
+    && git init \
+    && git remote add origin ${KAFKA_GIT_REPO} \
+    && git fetch --depth 1 origin ${KAFKA_GIT_REFSPEC} \
+    && git reset --hard FETCH_HEAD
+
+COPY --chown=appuser:appuser patch/ patch/
+ARG KAFKA_PATCH=""
+RUN cd kafka \
+    && if [ -n "${KAFKA_PATCH}" ]; then \
+       patch -p1 < "/home/appuser/patch/${KAFKA_PATCH}" ;\
+    fi
+
+RUN mkdir -p /home/appuser/dist/kafka \
+    && mkdir -p /home/appuser/dist/kafka/libs \
+    && mkdir -p /home/appuser/dist/kafka/dependant-libs \
+    && mkdir -p /home/appuser/dist/kafka/licenses \
+    && mkdir -p /home/appuser/dist/kafka/bin
+
+RUN cd kafka \
+    && ./gradlew jarConnect \
+        -x compileTestJava -x compileTestScala -x :core:jar -x :metadata:jar -x :raft:jar \
+        --profile --no-daemon \
+    && find /home/appuser/kafka/connect -type f -regextype posix-extended -regex "^.*/.*libs/(kafka|connect).*$" -exec mv {} /home/appuser/dist/kafka/libs/ \; \
+    && find /home/appuser/kafka/connect -type f -regextype posix-extended -regex "^.*/.*libs/.*$" ! -name 'kafka*' ! -name 'connect*' -exec mv {} /home/appuser/dist/kafka/dependant-libs/ \;
+    
+RUN cd kafka \
+    && ./gradlew client:jar --profile --no-daemon \
+    && cp /home/appuser/kafka/clients/build/libs/* /home/appuser/dist/kafka/libs/
+
+RUN cp /home/appuser/kafka/licenses/* /home/appuser/dist/kafka/licenses/
+
+RUN cp /home/appuser/kafka/bin/connect-*.sh /home/appuser/dist/kafka/bin/ \
+    && cp /home/appuser/kafka/bin/kafka-run-class.sh /home/appuser/dist/kafka/bin/
+
+
+FROM ${OPENJDK_JRE_IMAGE}
+LABEL maintainer="code@uweeisele.eu"
+
+USER root
+
+ARG GODUB_VERSION=0.1.0
+LABEL godub.version=${GODUB_VERSION}
+RUN curl -s -L https://github.com/ueisele/go-docker-utils/releases/download/${GODUB_VERSION}/godub-${GODUB_VERSION}-linux-amd64.tar.gz \
+    | tar xvz -C /usr/local/bin
+
+RUN mkdir -p /opt/apache/kafka /usr/logs \
+    && chown appuser:appuser -R /opt/apache/kafka /usr/logs
+RUN mkdir -p /opt/confluent /usr/share/confluent-hub-components \
+    && chown appuser:appuser -R /opt/confluent /usr/share/confluent-hub-components
+
+RUN microdnf -y install unzip \
+    && microdnf clean all \
+    && rm -rf /var/lib/rpm \
+    && rm -rf /tmp/*
+
+USER appuser
+WORKDIR /home/appuser
+
+RUN mkdir -p /opt/confluent/confluent-hub-client \
+    && curl -s -L http://client.hub.confluent.io/confluent-hub-client-latest.tar.gz | tar -xvz -C /opt/confluent/confluent-hub-client
+ENV PATH=/opt/confluent/confluent-hub-client/bin:${PATH}
+
+ENV CONNECT_PLUGIN_INSTALL_DIR=/opt/apache/kafka/connectors_install
+ENV CONNECT_PLUGIN_PATH=/usr/share/java,/usr/share/confluent-hub-components,/opt/apache/kafka/connectors,${CONNECT_PLUGIN_INSTALL_DIR}
+RUN mkdir -p /opt/apache/kafka/secrets /opt/apache/kafka/config /opt/apache/kafka/connectors ${CONNECT_PLUGIN_INSTALL_DIR}
+VOLUME ["/opt/apache/kafka/secrets","/opt/apache/kafka/connectors"]
+
+COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/dependant-libs /opt/apache/kafka/libs
+COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/libs /opt/apache/kafka/libs
+
+COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/licenses /opt/apache/kafka/licenses
+
+COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/bin /opt/apache/kafka/bin
+ENV PATH=/opt/apache/kafka/bin:${PATH}
+
+COPY --chown=appuser:appuser include/opt/apache/kafka/docker /opt/apache/kafka/docker
+
+EXPOSE 8083
+
+CMD ["/opt/apache/kafka/docker/run"]
+
+ARG KAFKA_GIT_REPO=https://github.com/apache/kafka.git \
+    KAFKA_GIT_REFSPEC \
+    KAFKA_BUILD_GIT_REFSPEC=${KAFKA_GIT_REFSPEC} \
+    KAFKA_VERSION=${KAFKA_GIT_REFSPEC}
+LABEL kafka.git.repo="${KAFKA_GIT_REPO}" \
+    kafka.git.refspec="${KAFKA_GIT_REFSPEC}" \
+    kafka.build.git.refspec="${KAFKA_BUILD_GIT_REFSPEC}" \
+    kafka.version="${KAFKA_VERSION}"

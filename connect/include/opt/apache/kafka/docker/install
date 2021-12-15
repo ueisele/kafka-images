@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+export CONNECT_PLUGIN_INSTALL_DIR="${CONNECT_PLUGIN_INSTALL_DIR:-"/opt/apache/kafka/connectors_install"}"
+
+if [ ! -z "${CONNECT_PLUGIN_INSTALL_CONFLUENT_HUB_CONNECTOR_IDS:-}" ]; then
+  for connector in $(sed "s/,/ /g" <<< ${CONNECT_PLUGIN_INSTALL_CONFLUENT_HUB_CONNECTOR_IDS}); do 
+    confluent-hub install --no-prompt \
+      --component-dir ${CONNECT_PLUGIN_INSTALL_DIR} --worker-configs /opt/apache/kafka/config/kafka-connect-worker.properties \
+      ${connector}; 
+  done
+fi
+
+if [ ! -z "${CONNECT_PLUGIN_INSTALL_EXTENSION_URLS:-}" ]; then
+  for url in $(sed "s/,/ /g" <<< ${CONNECT_PLUGIN_INSTALL_EXTENSION_URLS}); do 
+    filename="$(basename "${url}")"
+    name="$(sed 's/\(-v\?[0-9]\+\)\?\..*$//' <<< "${filename}")"
+    [[ -d "${CONNECT_PLUGIN_INSTALL_DIR}/${name}" ]] && rm -r "${CONNECT_PLUGIN_INSTALL_DIR}/${name}"
+    mkdir -p "${CONNECT_PLUGIN_INSTALL_DIR}/${name}"
+    if [[ ${filename} == *.zip ]]; then
+      (
+        cd "${CONNECT_PLUGIN_INSTALL_DIR}/${name}"
+        wget "${url}"
+        unzip -o "${filename}"
+        rm "${filename}"
+      )
+    elif [[ ${filename} == *.tar* ]] || [[ ${filename} == *.tgz ]]; then
+      curl -L "${url}" | tar -zx -C "${CONNECT_PLUGIN_INSTALL_DIR}/${name}/"
+    elif [[ ${filename} == *.jar ]]; then
+      curl -L -o "${CONNECT_PLUGIN_INSTALL_DIR}/${name}/${filename}" "${url}"     
+    else
+      echo "Could not install ${filename} because extension is not supported!"
+    fi
+  done
+fi
+
+if [ ! -z "${CONNECT_PLUGIN_INSTALL_CMDS:-}" ]; then
+  eval ${CONNECT_PLUGIN_INSTALL_CMDS}
+fi

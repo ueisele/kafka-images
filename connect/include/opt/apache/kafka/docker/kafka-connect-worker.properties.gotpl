@@ -1,0 +1,10 @@
+{{- $excluded_props := list
+    "CONNECT_PLUGIN_INSTALL_DIR" 
+    "CONNECT_PLUGIN_INSTALL_CONFLUENT_HUB_CONNECTOR_IDS" 
+    "CONNECT_PLUGIN_INSTALL_EXTENSION_URLS"
+    "CONNECT_PLUGIN_INSTALL_CMDS"
+-}}
+
+{{- range $key, $value := envToProp "CONNECT_" "" $excluded_props -}}
+{{ $key }}={{ tpl $value $ }}
+{{ end }}
