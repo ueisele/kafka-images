@@ -1,0 +1,11 @@
+ARG KAFKA_CONNECT_IMAGE
+
+FROM ${KAFKA_CONNECT_IMAGE}
+LABEL maintainer="code@uweeisele.eu"
+
+ENV \
+CONNECT_STANDALONE_OFFSET_STORAGE_FILE_DIRNAME="/opt/apache/kafka/data" \
+CONNECT_STANDALONE_OFFSET_STORAGE_FILE_FILENAME="connect.offsets" \
+CONNECT_OFFSET_STORAGE_FILE_FILENAME="{{ tpl .CONNECT_STANDALONE_OFFSET_STORAGE_FILE_DIRNAME $ }}/{{ tpl .CONNECT_STANDALONE_OFFSET_STORAGE_FILE_FILENAME $ }}"
+
+COPY --chown=appuser:appuser include/opt/apache/kafka/docker /opt/apache/kafka/docker

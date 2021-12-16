@@ -1,0 +1,6 @@
+{{- range $key, $value := envToProp "CONNECTOR_" "" "" -}}
+{{ $key }}={{ tpl $value $ }}
+{{ end }}
+{{- range $key, $value := envToProp "CONNECTORPROPERTIES_" "" "" -}}
+{{ tpl $value $ }}
+{{ end }}
