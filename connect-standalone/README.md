@@ -6,6 +6,8 @@ The Kafka distribution included in the Docker image is built directly from [sour
 
 The Docker images are available on DockerHub repository [ueisele/apache-kafka-connect-standalone](https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect-standalone), and the source files for the images are available on GitHub repository [ueisele/kafka-images](https://github.com/ueisele/kafka-images).
 
+**IMPORTANT**: Kafka Connect Standalone is not suited for most productive uses cases. It does not support scaling and offsets of external systems are just stored on a file. See also: https://rmoff.net/2019/11/22/common-mistakes-made-when-configuring-multiple-kafka-connect-workers/
+
 ## Most Recent Tags
 
 Most recent tags for `RELEASE` builds:
@@ -84,6 +86,7 @@ You find additional examples in [examples/connect-standalone/]():
 
 * [examples/connect-standalone/file-source/docker-compose.yaml]()
 * [examples/connect-standalone/datagen-plugin-install/docker-compose.yaml]()
+* [examples/connect-standalone/http-source-plugin-install/docker-compose.yaml]()
 
 ## Configuration
 

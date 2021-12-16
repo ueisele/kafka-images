@@ -1,0 +1,12 @@
+[
+  {
+    "httpRequest" : {
+      "method" : "GET",
+      "path" : "/api/task"
+  },
+    "httpResponse" : {
+      "body" : "{\"items\":[{\"id\":\"1111\",\"createdAt\":\"2021-12-16T14:55:18.397Z\",\"updatedAt\":\"2021-12-16T14:55:18.397Z\",\"assignees\":[\"tom\",\"joe\"],\"status\":{\"user\":\"tom\",\"type\":\"CREATED\"}},{\"id\":\"2222\",\"createdAt\":\"2021-12-16T14:55:18.404Z\",\"updatedAt\":\"2021-12-16T14:55:18.404Z\",\"assignee\":\"bob\"}]}",
+      "statusCode": 200
+    }
+  }
+]

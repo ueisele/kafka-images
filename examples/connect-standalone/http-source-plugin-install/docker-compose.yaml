@@ -1,0 +1,91 @@
+#############################################################
+# Connect Standalone with File Source Example               #
+#############################################################
+---
+version: '2.4'
+services:
+
+  #############################################################
+  # Connector HTTP Source                                     #
+  #############################################################
+  connector:
+    image: ueisele/apache-kafka-connect-standalone:${KAFKA_VERSION}
+    restart: always
+    ports:
+      - 8083:8083
+    volumes:
+      - connector-offsets:/opt/apache/kafka/data
+    environment:
+      ## Worker Configuration
+      CONNECT_BOOTSTRAP_SERVERS: kafka:9092
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+      CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+      CONNECT_PLUGIN_INSTALL_EXTENSION_URLS: |
+        https://github.com/castorm/kafka-connect-http/releases/download/v0.8.11/castorm-kafka-connect-http-0.8.11.zip
+        https://github.com/RedHatInsights/expandjsonsmt/releases/download/0.0.7/kafka-connect-smt-expandjsonsmt-0.0.7.tar.gz
+      ## Connector Configuration
+      CONNECTOR_NAME: http-source
+      CONNECTOR_CONNECTOR_CLASS: com.github.castorm.kafka.connect.http.HttpSourceConnector
+      CONNECTOR_TASKS_MAX: 1
+      CONNECTOR_HTTP_REQUEST_URL: http://mock-server:1080/api/task
+      CONNECTOR_HTTP_RESPONSE_LIST_POINTER: /items
+      CONNECTOR_HTTP_RESPONSE_RECORD_OFFSET_POINTER: "key=/id"
+      CONNECTOR_HTTP_TIMER_INTERVAL_MILLIS: 5000
+      CONNECTOR_HTTP_TIMER_CATCHUP_INTERVAL_MILLIS: 5000
+      CONNECTOR_KAFKA_TOPIC: connect-http-source
+      CONNECTOR_TRANSFORMS: "expandvalue,extractvalue,extractkey"
+      CONNECTOR_TRANSFORMS_EXPANDVALUE_TYPE: "com.redhat.insights.expandjsonsmt.ExpandJSON$$Value"
+      CONNECTORPROPERTIES_TRANSFORMS: transforms.expandvalue.sourceFields=value
+      CONNECTOR_TRANSFORMS_EXTRACTVALUE_TYPE: "org.apache.kafka.connect.transforms.ExtractField$$Value"
+      CONNECTOR_TRANSFORMS_EXTRACTVALUE_FIELD: "value"
+      CONNECTOR_TRANSFORMS_EXTRACTKEY_TYPE: "org.apache.kafka.connect.transforms.ExtractField$$Key"
+      CONNECTOR_TRANSFORMS_EXTRACTKEY_FIELD: "key"
+
+  #############################################################
+  # Kafka                                                     #
+  #############################################################
+  kafka:
+    image: ueisele/apache-kafka-server-standalone:${KAFKA_VERSION}
+    restart: always
+    ports:
+      - 9092:9092
+    volumes:
+      - kafka:/opt/apache/kafka/data
+    environment:
+      KAFKA_NUM_PARTITIONS: 2  
+
+  #############################################################
+  # Logger Source Topic                                       #
+  #############################################################
+  topic-logger:
+    image: ueisele/apache-kafka-server-standalone:${KAFKA_VERSION}
+    restart: always
+    command: |
+      kafka-console-consumer.sh \
+        --bootstrap-server kafka:9092 \
+        --topic connect-http-source \
+        --group connect-http-source-logger \
+        --from-beginning \
+        --property print.key=true
+
+  #############################################################
+  # Mock HTTP Server                                          #
+  #############################################################
+  mock-server:
+      image: mockserver/mockserver:latest
+      restart: always
+      environment:
+        MOCKSERVER_WATCH_INITIALIZATION_JSON: "true"
+        MOCKSERVER_PROPERTY_FILE: /config/mockserver.properties
+        MOCKSERVER_INITIALIZATION_JSON_PATH: /config/mock-server.initializer.json
+      volumes:
+        - ./mock-server.initializer.json:/config/mock-server.initializer.json
+
+volumes:
+  kafka:
+  connector-offsets:
+
+networks:
+  default:
+    name: ${DOMAIN_NAME}

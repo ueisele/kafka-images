@@ -67,7 +67,7 @@ RUN mkdir -p /opt/apache/kafka /usr/logs \
 RUN mkdir -p /opt/confluent /usr/share/confluent-hub-components /var/lib/kafka-connect \
     && chown appuser:appuser -R /opt/confluent /usr/share/confluent-hub-components /var/lib/kafka-connect
 
-RUN microdnf -y install unzip \
+RUN microdnf -y install unzip wget curl \
     && microdnf clean all \
     && rm -rf /var/lib/rpm \
     && rm -rf /tmp/*
