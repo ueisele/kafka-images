@@ -1,0 +1,81 @@
+#############################################################
+# Connect Standalone with File Source Example               #
+#############################################################
+---
+version: '2.4'
+services:
+
+  #############################################################
+  # Connector File Source                                     #
+  #############################################################
+  connector:
+    image: ueisele/apache-kafka-connect-standalone:${KAFKA_VERSION}
+    restart: always
+    ports:
+      - 8083:8083
+    volumes:
+      - connector-offsets:/opt/apache/kafka/data
+      - file-source:/var/lib/kafka-connect
+    environment:
+      ## Worker Configuration
+      CONNECT_BOOTSTRAP_SERVERS: kafka:9092
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+      CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+      CONNECT_OFFSET_FLUSH_INTERVAL_MS: 5000
+      ## Connector Configuration
+      CONNECTOR_NAME: file-source
+      CONNECTOR_CONNECTOR_CLASS: FileStreamSource
+      CONNECTOR_TASKS_MAX: 1
+      CONNECTOR_FILE: /var/lib/kafka-connect/input.txt
+      CONNECTOR_TOPIC: connect-file-source
+
+  #############################################################
+  # Kafka                                                     #
+  #############################################################
+  kafka:
+    image: ueisele/apache-kafka-server-standalone:${KAFKA_VERSION}
+    restart: always
+    ports:
+      - 9092:9092
+    volumes:
+      - kafka:/opt/apache/kafka/data
+    environment:
+      KAFKA_NUM_PARTITIONS: 2  
+
+  #############################################################
+  # File Generator                                            #
+  #############################################################
+  file-generator:
+    image: alpine:3.15
+    restart: always
+    volumes:
+      - file-source:/work
+    command:
+    - sh
+    - -c
+    - |
+      apk add bash
+      bash -c 'for i in {1..600}; do echo "log line $$i"; sleep 1; done > /work/input.txt'
+
+  #############################################################
+  # Logger Source Topic                                       #
+  #############################################################
+  topic-logger:
+    image: ueisele/apache-kafka-server-standalone:${KAFKA_VERSION}
+    restart: always
+    command: |
+      kafka-console-consumer.sh \
+        --bootstrap-server kafka:9092 \
+        --topic connect-file-source \
+        --group connect-file-source-logger \
+        --from-beginning \
+        --property print.key=true
+
+volumes:
+  kafka:
+  connector-offsets:
+  file-source:
+
+networks:
+  default:
+    name: ${DOMAIN_NAME}
