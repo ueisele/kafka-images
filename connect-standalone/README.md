@@ -11,6 +11,8 @@ The Docker images are available on DockerHub repository [ueisele/apache-kafka-co
 Most recent tags for `RELEASE` builds:
 
 * `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17.0.1`, `3.0.0-zulu17-ubi8.5`, `3.0.0-zulu17.0.1-ubi8.5-204`
+* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.13`, `2.8.1-zulu11-ubi8.5`, `2.8.1-zulu11.0.13-ubi8.5-204`
+* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.13`, `2.8.0-zulu11-ubi8.5`, `2.8.0-zulu11.0.13-ubi8.5-204`
 
 Most recent tags for `SNAPSHOT` builds:
 
@@ -81,6 +83,7 @@ for i in {1..3}; do echo "additional log line $i"; done >> source.txt
 You find additional examples in [examples/connect-standalone/]():
 
 * [examples/connect-standalone/file-source/docker-compose.yaml]()
+* [examples/connect-standalone/datagen-plugin-install/docker-compose.yaml]()
 
 ## Configuration
 

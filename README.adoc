@@ -74,6 +74,7 @@ docker-compose up
 You find additional examples in link:examples/connect-standalone/[]:
 
 * link:examples/connect-standalone/file-source/docker-compose.yaml[]
+* link:examples/connect-standalone/datagen-plugin-install/docker-compose.yaml[]
 
 == Build and Configuration
 

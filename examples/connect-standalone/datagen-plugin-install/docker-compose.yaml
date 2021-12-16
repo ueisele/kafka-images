@@ -1,0 +1,66 @@
+#############################################################
+# Connect Standalone with File Source Example               #
+#############################################################
+---
+version: '2.4'
+services:
+
+  #############################################################
+  # Connector Datagen Source                                  #
+  #############################################################
+  connector:
+    image: ueisele/apache-kafka-connect-standalone:${KAFKA_VERSION}
+    restart: always
+    ports:
+      - 8083:8083
+    volumes:
+      - connector-offsets:/opt/apache/kafka/data
+    environment:
+      ## Worker Configuration
+      CONNECT_BOOTSTRAP_SERVERS: kafka:9092
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+      CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+      CONNECT_OFFSET_FLUSH_INTERVAL_MS: 5000
+      CONNECT_PLUGIN_INSTALL_CONFLUENT_HUB_CONNECTOR_IDS: confluentinc/kafka-connect-datagen:latest
+      ## Connector Configuration
+      CONNECTOR_NAME: datagen-source
+      CONNECTOR_CONNECTOR_CLASS: io.confluent.kafka.connect.datagen.DatagenConnector
+      CONNECTOR_TASKS_MAX: 1
+      CONNECTOR_KAFKA_TOPIC: connect-datagen-source
+      CONNECTOR_QUICKSTART: users
+
+  #############################################################
+  # Kafka                                                     #
+  #############################################################
+  kafka:
+    image: ueisele/apache-kafka-server-standalone:${KAFKA_VERSION}
+    restart: always
+    ports:
+      - 9092:9092
+    volumes:
+      - kafka:/opt/apache/kafka/data
+    environment:
+      KAFKA_NUM_PARTITIONS: 2  
+
+  #############################################################
+  # Logger Source Topic                                       #
+  #############################################################
+  topic-logger:
+    image: ueisele/apache-kafka-server-standalone:${KAFKA_VERSION}
+    restart: always
+    command: |
+      kafka-console-consumer.sh \
+        --bootstrap-server kafka:9092 \
+        --topic connect-datagen-source \
+        --group connect-datagen-source-logger \
+        --from-beginning \
+        --property print.key=true
+
+volumes:
+  kafka:
+  connector-offsets:
+
+networks:
+  default:
+    name: ${DOMAIN_NAME}
