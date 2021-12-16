@@ -92,7 +92,8 @@ You find additional examples in [examples/connect-standalone/]():
 
 For the Apache Kafka Connect ([ueisele/apache-kafka-connect-standalone](https://hub.docker.com/repository/registry-1.docker.io/ueisele/apache-kafka-connect/)) image, convert the [Apache Kafka Connect configuration properties](https://kafka.apache.org/documentation/#connectconfigs) as below and use them as environment variables:
 
-* Prefix with CONNECT_.
+* Prefix with CONNECT_ for worker configuration.
+* Prefix with CONNECTOR_ for connector configuration.
 * Convert to upper-case.
 * Replace a period (.) with a single underscore (_).
 * Replace a dash (-) with double underscores (__).
@@ -165,6 +166,23 @@ Specify a bash command to download a file to a specific directory, for example t
 CONNECT_PLUGIN_INSTALL_CMDS: |
     wget -qP $${CONNECT_PLUGIN_INSTALL_DIR}/confluentinc-kafka-connect-jdbc/lib https://dlm.mariadb.com/1496775/Connectors/java/connector-java-2.7.2/mariadb-java-client-2.7.2.jar
 ```
+
+### Verbatim Connector Configuration
+
+Some configurations cannot be converted to the environment variable key/value schema. This is the case for example, if camel-case has been used for configuration variables, e.g. `transforms.expandvalue.sourceFields=value`.
+
+To support configurations like this, you can define environment variable with `CONNECTORPROPERTIES_` as name prefix.
+Any content is added to the connector configuration as is.
+
+The following shows an example for a SMT configuration.
+
+```yaml
+CONNECTORPROPERTIES_TRANSFORMS: |
+    transforms.expandvalue.type=com.redhat.insights.expandjsonsmt.ExpandJSON$$Value
+    transforms.expandvalue.sourceFields=value
+```
+
+You can find the entire example setup at [examples/connect-standalone/http-source-plugin-install/docker-compose.yaml]().
 
 ## Build
 

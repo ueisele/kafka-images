@@ -35,12 +35,13 @@ services:
       CONNECTOR_HTTP_TIMER_CATCHUP_INTERVAL_MILLIS: 5000
       CONNECTOR_KAFKA_TOPIC: connect-http-source
       CONNECTOR_TRANSFORMS: "expandvalue,extractvalue,extractkey"
-      CONNECTOR_TRANSFORMS_EXPANDVALUE_TYPE: "com.redhat.insights.expandjsonsmt.ExpandJSON$$Value"
-      CONNECTORPROPERTIES_TRANSFORMS: transforms.expandvalue.sourceFields=value
-      CONNECTOR_TRANSFORMS_EXTRACTVALUE_TYPE: "org.apache.kafka.connect.transforms.ExtractField$$Value"
-      CONNECTOR_TRANSFORMS_EXTRACTVALUE_FIELD: "value"
-      CONNECTOR_TRANSFORMS_EXTRACTKEY_TYPE: "org.apache.kafka.connect.transforms.ExtractField$$Key"
-      CONNECTOR_TRANSFORMS_EXTRACTKEY_FIELD: "key"
+      CONNECTORPROPERTIES_TRANSFORMS: |
+        transforms.expandvalue.type=com.redhat.insights.expandjsonsmt.ExpandJSON$$Value
+        transforms.expandvalue.sourceFields=value
+        transforms.extractvalue.type=org.apache.kafka.connect.transforms.ExtractField$$Value
+        transforms.extractvalue.field=value
+        transforms.extractkey.type=org.apache.kafka.connect.transforms.ExtractField$$Key
+        transforms.extractkey.field=key
 
   #############################################################
   # Kafka                                                     #
