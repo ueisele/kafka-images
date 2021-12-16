@@ -128,9 +128,9 @@ CONNECT_PLUGIN_INSTALL_CMDS: |
 
 This Kafka Connect image has the Confluent converters for Avro, Protobuf and JSON Schema already pre-installed to simplify usage of Confluent Schema Registry.
 
-* [https://www.confluent.io/hub/confluentinc/kafka-connect-avro-converter](confluentinc/kafka-connect-avro-converter:7.0.1)
-* [https://www.confluent.io/hub/confluentinc/kafka-connect-protobuf-converter](confluentinc/kafka-connect-protobuf-converter:7.0.1)
-* [https://www.confluent.io/hub/confluentinc/kafka-connect-json-schema-converter](confluentinc/kafka-connect-json-schema-converter:7.0.1)
+* [confluentinc/kafka-connect-avro-converter:7.0.1](https://www.confluent.io/hub/confluentinc/kafka-connect-avro-converter)
+* [confluentinc/kafka-connect-protobuf-converter:7.0.1](https://www.confluent.io/hub/confluentinc/kafka-connect-protobuf-converter)
+* [confluentinc/kafka-connect-json-schema-converter:7.0.1](https://www.confluent.io/hub/confluentinc/kafka-connect-json-schema-converter)
 
 ## Build
 
