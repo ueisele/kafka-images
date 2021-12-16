@@ -31,9 +31,7 @@ RUN cd kafka \
 
 RUN mkdir -p /home/appuser/dist/kafka \
     && mkdir -p /home/appuser/dist/kafka/libs \
-    && mkdir -p /home/appuser/dist/kafka/dependant-libs \
-    && mkdir -p /home/appuser/dist/kafka/licenses \
-    && mkdir -p /home/appuser/dist/kafka/bin
+    && mkdir -p /home/appuser/dist/kafka/dependant-libs
 
 RUN cd kafka \
     && ./gradlew jarConnect \
@@ -46,9 +44,11 @@ RUN cd kafka \
     && ./gradlew client:jar --profile --no-daemon \
     && cp /home/appuser/kafka/clients/build/libs/* /home/appuser/dist/kafka/libs/
 
-RUN cp /home/appuser/kafka/licenses/* /home/appuser/dist/kafka/licenses/
+RUN mkdir -p /home/appuser/dist/kafka/licenses \
+    && cp /home/appuser/kafka/licenses/* /home/appuser/dist/kafka/licenses/
 
-RUN cp /home/appuser/kafka/bin/connect-*.sh /home/appuser/dist/kafka/bin/ \
+RUN mkdir -p /home/appuser/dist/kafka/bin \
+    && cp /home/appuser/kafka/bin/connect-*.sh /home/appuser/dist/kafka/bin/ \
     && cp /home/appuser/kafka/bin/kafka-run-class.sh /home/appuser/dist/kafka/bin/
 
 
@@ -64,8 +64,8 @@ RUN curl -s -L https://github.com/ueisele/go-docker-utils/releases/download/${GO
 
 RUN mkdir -p /opt/apache/kafka /usr/logs \
     && chown appuser:appuser -R /opt/apache/kafka /usr/logs
-RUN mkdir -p /opt/confluent /usr/share/confluent-hub-components \
-    && chown appuser:appuser -R /opt/confluent /usr/share/confluent-hub-components
+RUN mkdir -p /opt/confluent /usr/share/confluent-hub-components /var/lib/kafka-connect \
+    && chown appuser:appuser -R /opt/confluent /usr/share/confluent-hub-components /var/lib/kafka-connect
 
 RUN microdnf -y install unzip \
     && microdnf clean all \
@@ -81,8 +81,8 @@ ENV PATH=/opt/confluent/confluent-hub-client/bin:${PATH}
 
 ENV CONNECT_PLUGIN_INSTALL_DIR=/opt/apache/kafka/connectors_install
 ENV CONNECT_PLUGIN_PATH=/usr/share/java,/usr/share/confluent-hub-components,/opt/apache/kafka/connectors,${CONNECT_PLUGIN_INSTALL_DIR}
-RUN mkdir -p /opt/apache/kafka/secrets /opt/apache/kafka/config /opt/apache/kafka/connectors ${CONNECT_PLUGIN_INSTALL_DIR}
-VOLUME ["/opt/apache/kafka/secrets","/opt/apache/kafka/connectors"]
+RUN mkdir -p /opt/apache/kafka/data /opt/apache/kafka/secrets /opt/apache/kafka/config /opt/apache/kafka/connectors ${CONNECT_PLUGIN_INSTALL_DIR}
+VOLUME ["/opt/apache/kafka/data","/opt/apache/kafka/secrets","/opt/apache/kafka/connectors","/var/lib/kafka-connect"]
 
 COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/dependant-libs /opt/apache/kafka/libs
 COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/libs /opt/apache/kafka/libs

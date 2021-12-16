@@ -27,8 +27,7 @@ godub ensure CONNECT_VALUE_CONVERTER
 # resolvable by all containers.
 godub ensure CONNECT_REST_ADVERTISED_HOST_NAME
 
-# Default to 8083, which matches the mesos-overrides. This is here in case we extend the containers to remove the mesos overrides.
-if [ -z "$CONNECT_REST_PORT" ]; then
+if [ -z "${CONNECT_REST_PORT:-}" ]; then
   export CONNECT_REST_PORT=8083
 fi
 

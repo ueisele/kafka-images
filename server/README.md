@@ -105,7 +105,7 @@ You find additional examples in [examples/zk/]():
 
 ## Configuration
 
-For the Apahce Kafka ([ueisele/apache-kafka-server](https://hub.docker.com/repository/registry-1.docker.io/ueisele/apache-kafka-server/)) image, convert the [Apache Kafka broker configuration properties](https://kafka.apache.org/documentation/#brokerconfigs) as below and use them as environment variables:
+For the Apache Kafka ([ueisele/apache-kafka-server](https://hub.docker.com/repository/registry-1.docker.io/ueisele/apache-kafka-server/)) image, convert the [Apache Kafka broker configuration properties](https://kafka.apache.org/documentation/#brokerconfigs) as below and use them as environment variables:
 
 * Prefix with KAFKA_.
 * Convert to upper-case.
@@ -234,7 +234,7 @@ docker run -d --name kafka-kraft -p 9092:9092 \
 
 ## Build
 
-In order to create your own Docker image for Apache Kafka clone the [ueisele/kafka-image](https://github.com/ueisele/kafka-images) Git repository and run the build command for the OpenJDK image:
+In order to create your own Docker image for Apache Kafka clone the [ueisele/kafka-image](https://github.com/ueisele/kafka-images) Git repository and run the build command:
 
 ```bash
 git clone https://github.com/ueisele/kafka-images.git

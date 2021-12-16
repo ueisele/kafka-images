@@ -71,7 +71,7 @@ In addition to the `STANDALONE_BROKER_` variables, you can also directly specify
 
 ## Build
 
-In order to create your own Docker image for Apache Kafka clone the [ueisele/kafka-image](https://github.com/ueisele/kafka-images) Git repository and run the build command for the OpenJDK image:
+In order to create your own Docker image for Apache Kafka clone the [ueisele/kafka-image](https://github.com/ueisele/kafka-images) Git repository and run the build command:
 
 ```bash
 git clone https://github.com/ueisele/kafka-images.git
@@ -93,7 +93,7 @@ server-standalone/build.sh --build --branch trunk --openjdk-release 17
 
 ### Build Options
 
-The `server/build.sh` script provides the following options:
+The `server-standalone/build.sh` script provides the following options:
 
 `Usage: server-standalone/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha 8cb0a5e] [--tag 3.0.0] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17]`
 

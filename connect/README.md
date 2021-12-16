@@ -1,6 +1,6 @@
 # Docker Image for Apache Kafka Connect
 
-Docker image for running the [Open Source version of Apache Kafka Konnect](https://github.com/apache/kafka/).
+Docker image for running the [Open Source version of Apache Kafka Connect](https://github.com/apache/kafka/) in distributed mode.
 
 The Kafka distribution included in the Docker image is built directly from [source](https://github.com/apache/kafka/).
 
@@ -48,26 +48,28 @@ In order to run Apache Kafka Connect with a single instance run the following co
 ```bash
 docker run -d --name kafka-connect --net quickstart-kafka-connect -p 8083:8083 \
     -e CONNECT_BOOTSTRAP_SERVERS=kafka:9092 \
-    -e CONNECT_REST_ADVERTISED_HOST_NAME="localhost" \
+    -e CONNECT_REST_ADVERTISED_HOST_NAME=localhost \
     -e CONNECT_REST_PORT=8083 \
-    -e CONNECT_GROUP_ID="quickstart-kafka-connect" \
-    -e CONNECT_CONFIG_STORAGE_TOPIC="quickstart-kafka-connect-config" \
-    -e CONNECT_OFFSET_STORAGE_TOPIC="quickstart-kafka-connect-offsets" \
-    -e CONNECT_STATUS_STORAGE_TOPIC="quickstart-kafka-connect-status" \
+    -e CONNECT_GROUP_ID=quickstart-kafka-connect \
+    -e CONNECT_CONFIG_STORAGE_TOPIC=quickstart-kafka-connect-config \
+    -e CONNECT_OFFSET_STORAGE_TOPIC=quickstart-kafka-connect-offsets \
+    -e CONNECT_STATUS_STORAGE_TOPIC=quickstart-kafka-connect-status \
     -e CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR=1 \
     -e CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR=1 \
     -e CONNECT_STATUS_STORAGE_REPLICATION_FACTOR=1 \
-    -e CONNECT_KEY_CONVERTER="org.apache.kafka.connect.json.JsonConverter" \
-    -e CONNECT_VALUE_CONVERTER="org.apache.kafka.connect.json.JsonConverter" \
+    -e CONNECT_KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter \
+    -e CONNECT_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter \
     -e CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE=false \
     -e CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE=true \
-    -e CONNECT_LOG4J_LOGGERS: "org.reflections=ERROR,org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR" \
+    -e CONNECT_LOG4J_LOGGERS: org.reflections=ERROR,org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR \
     ueisele/apache-kafka-connect:3.0.0
 ```
 
+For additional examples see: https://docs.confluent.io/platform/current/connect/quickstart.html
+
 ## Configuration
 
-For the Apahce Kafka Connect ([ueisele/apache-kafka-connect](https://hub.docker.com/repository/registry-1.docker.io/ueisele/apache-kafka-connect/)) image, convert the [Apache Kafka Connect configuration properties](https://kafka.apache.org/documentation/#connectconfigs) as below and use them as environment variables:
+For the Apache Kafka Connect ([ueisele/apache-kafka-connect](https://hub.docker.com/repository/registry-1.docker.io/ueisele/apache-kafka-connect/)) image, convert the [Apache Kafka Connect configuration properties](https://kafka.apache.org/documentation/#connectconfigs) as below and use them as environment variables:
 
 * Prefix with CONNECT_.
 * Convert to upper-case.
@@ -85,6 +87,15 @@ Example which uses `ipAddress` function to determin the IPv4 address of the firs
 ```properties
 CONNECT_REST_ADVERTISED_HOST_NAME="{{ ipAddress \"prefer\" \"ipv4\" 0 }}"
 ```
+### Required Configuration
+
+The minimum required worker configuration is:
+
+* `CONNECT_BOOTSTRAP_SERVERS` which defines the the Kafka bootstrap servers
+* `CONNECT_KEY_CONVERTER` and `CONNECT_VALUE_CONVERTER` which define the converters used for key and value.
+* `CONNECT_GROUP_ID` which identifies the Connect cluster group this Worker belongs to.
+* `CONNECT_CONFIG_STORAGE_TOPIC`, `CONNECT_OFFSET_STORAGE_TOPIC` and `CONNECT_STATUS_STORAGE_TOPIC` which define the names of the topics where connector tasks, configuration, offsets and status updates are stored. This names must be unique per Connect cluster.
+* `CONNECT_REST_ADVERTISED_HOST_NAME` which defines the hostname that will be given out to other Workers to connect to. You should set this to a value that is resolvable by all containers.
 
 ### Connector Installation
 
@@ -113,7 +124,7 @@ CONNECT_PLUGIN_INSTALL_CMDS: |
 
 ## Build
 
-In order to create your own Docker image for Apache Kafka Connect clone the [ueisele/kafka-image](https://github.com/ueisele/kafka-images) Git repository and run the build command for the OpenJDK image:
+In order to create your own Docker image for Apache Kafka Connect clone the [ueisele/kafka-image](https://github.com/ueisele/kafka-images) Git repository and run the build command:
 
 ```bash
 git clone https://github.com/ueisele/kafka-images.git
