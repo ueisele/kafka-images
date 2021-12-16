@@ -75,15 +75,35 @@ RUN microdnf -y install unzip wget curl \
 USER appuser
 WORKDIR /home/appuser
 
+## Installation of Confluent Hub Client
 RUN mkdir -p /opt/confluent/confluent-hub-client \
     && curl -s -L http://client.hub.confluent.io/confluent-hub-client-latest.tar.gz | tar -xvz -C /opt/confluent/confluent-hub-client
 ENV PATH=/opt/confluent/confluent-hub-client/bin:${PATH}
 
+## Common Configuraton and Base Directory Structure
 ENV CONNECT_PLUGIN_INSTALL_DIR=/opt/apache/kafka/connectors_install
 ENV CONNECT_PLUGIN_PATH=/usr/share/java,/usr/share/confluent-hub-components,/opt/apache/kafka/connectors,${CONNECT_PLUGIN_INSTALL_DIR}
 RUN mkdir -p /opt/apache/kafka/data /opt/apache/kafka/secrets /opt/apache/kafka/config /opt/apache/kafka/connectors ${CONNECT_PLUGIN_INSTALL_DIR}
 VOLUME ["/opt/apache/kafka/data","/opt/apache/kafka/secrets","/opt/apache/kafka/connectors","/var/lib/kafka-connect"]
 
+## Installation of the base Kafka Connect plugins to be delivered with the image
+ARG CONFLUENT_VERSION=7.0.1
+ARG PLUGINS="\
+    confluentinc/kafka-connect-avro-converter:${CONFLUENT_VERSION} \
+    confluentinc/kafka-connect-protobuf-converter:${CONFLUENT_VERSION} \
+    confluentinc/kafka-connect-json-schema-converter:${CONFLUENT_VERSION}"
+RUN set -e; \
+    touch /tmp/connetc-worker-dummy.properties; \
+    for c in ${PLUGINS}; do \
+        confluent-hub install --no-prompt \
+        --component-dir ${CONNECT_PLUGIN_INSTALL_DIR} --worker-configs /tmp/connetc-worker-dummy.properties \
+        $c; \
+    done; \
+    rm /tmp/connetc-worker-dummy.properties
+# Fix for missing Guava dependency in Confluent Avro converter (https://github.com/confluentinc/schema-registry/pull/2115)
+RUN wget -qP ${CONNECT_PLUGIN_INSTALL_DIR}/confluentinc-kafka-connect-avro-converter/lib https://repo1.maven.org/maven2/com/google/guava/guava/30.1.1-jre/guava-30.1.1-jre.jar
+
+## Copy Kafka Connect Dependencies
 COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/dependant-libs /opt/apache/kafka/libs
 COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/libs /opt/apache/kafka/libs
 
@@ -106,20 +126,3 @@ LABEL kafka.git.repo="${KAFKA_GIT_REPO}" \
     kafka.git.refspec="${KAFKA_GIT_REFSPEC}" \
     kafka.build.git.refspec="${KAFKA_BUILD_GIT_REFSPEC}" \
     kafka.version="${KAFKA_VERSION}"
-
-## Installation of the base Kafka Connect plugins to be delivered with the image
-ARG CONFLUENT_VERSION=7.0.1
-ARG PLUGINS="\
-    confluentinc/kafka-connect-avro-converter:${CONFLUENT_VERSION} \
-    confluentinc/kafka-connect-protobuf-converter:${CONFLUENT_VERSION} \
-    confluentinc/kafka-connect-json-schema-converter:${CONFLUENT_VERSION}"
-RUN set -e; \
-    touch /tmp/connetc-worker-dummy.properties; \
-    for c in ${PLUGINS}; do \
-        confluent-hub install --no-prompt \
-        --component-dir ${CONNECT_PLUGIN_INSTALL_DIR} --worker-configs /tmp/connetc-worker-dummy.properties \
-        $c; \
-    done; \
-    rm /tmp/connetc-worker-dummy.properties
-# Fix for missing Guava dependency in Confluent Avro converter (https://github.com/confluentinc/schema-registry/pull/2115)
-RUN wget -qP ${CONNECT_PLUGIN_INSTALL_DIR}/confluentinc-kafka-connect-avro-converter/lib https://repo1.maven.org/maven2/com/google/guava/guava/30.1.1-jre/guava-30.1.1-jre.jar
