@@ -117,7 +117,7 @@ RUN set -e; \
     touch /tmp/connect-worker-dummy.properties; \
     for c in ${PLUGINS}; do \
         confluent-hub install --no-prompt \
-        --component-dir ${CONNECT_PLUGIN_INSTALL_DIR} --worker-configs /tmp/connetc-worker-dummy.properties \
+        --component-dir ${CONNECT_PLUGIN_INSTALL_DIR} --worker-configs /tmp/connect-worker-dummy.properties \
         $c; \
     done; \
     rm /tmp/connect-worker-dummy.properties
