@@ -58,9 +58,9 @@ cd example/zk/cluster
 docker-compose up
 ----
 
-You find additional examples in [examples/zk/]():
+You find additional examples in link:examples/zk/[]:
 
-* [examples/zk/cluster/docker-compose.yaml]()
+* link:examples/zk/cluster/docker-compose.yaml[]
 
 === Connect Examples
 
@@ -71,9 +71,9 @@ cd example/connect-standalone/file-source
 docker-compose up
 ----
 
-You find additional examples in [examples/connect-standalone/]():
+You find additional examples in link:examples/connect-standalone/[]:
 
-* [examples/connect-standalone/file-source/docker-compose.yaml]()
+* link:examples/connect-standalone/file-source/docker-compose.yaml[]
 
 == Build and Configuration
 
