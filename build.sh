@@ -1,0 +1,195 @@
+#!/usr/bin/env bash
+set -e
+SCRIPT_DIR=$(dirname ${BASH_SOURCE[0]})
+
+PUSH=false
+BUILD=false
+
+DOCKERREGISTRY_USER="ueisele"
+KAFKA_GITHUB_REPO="apache/kafka"
+ZULU_OPENJDK_RELEASE=11
+
+function usage () {
+    echo "$0: $1" >&2
+    echo
+    echo "Usage: $0 [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha 8cb0a5e] [--tag 3.0.0] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17] [--patch 3.0.0-openjdk17.patch]"
+    echo
+    return 1
+}
+
+function doAction () {
+    local mode=${1:?"Requires build or push as first parameter!"}
+    local module=${2:?"Requires module as second parameter!"}
+    ${SCRIPT_DIR}/${module}/build.sh --${mode} \
+        --user "${DOCKERREGISTRY_USER}" --github-repo "${KAFKA_GITHUB_REPO}" \
+        $([[ -n "${KAFKA_GIT_COMMIT_SHA}" ]] && echo --commit-sha "${KAFKA_GIT_COMMIT_SHA}") \
+        $([[ -n "${KAFKA_GIT_TAG}" ]] && echo --tag "${KAFKA_GIT_TAG}") \
+        $([[ -n "${KAFKA_GIT_BRANCH}" ]] && echo --branch "${KAFKA_GIT_BRANCH}") \
+        $([[ -n "${KAFKA_GIT_PULL_REQUEST}" ]] && echo --pull-request "${KAFKA_GIT_PULL_REQUEST}") \
+        --openjdk-release "${ZULU_OPENJDK_RELEASE}" \
+        $([[ -n "${ZULU_OPENJDK_VERSION}" ]] && echo --openjdk-version "${ZULU_OPENJDK_VERSION}") \
+        $([[ -n "${KAFKA_PATCH}" ]] && echo --patch "${KAFKA_PATCH}")
+}
+
+function doActionAll () {
+    local mode=${1:?"Requires build or push as first parameter!"}
+    doAction "${mode}" "server"
+    doAction "${mode}" "server-standalone"
+    doAction "${mode}" "connect"
+    doAction "${mode}" "connect-standalone"
+}
+
+function parseCmd () {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --build)
+                BUILD=true
+                shift
+                ;;
+            --push)
+                PUSH=true
+                shift
+                ;;
+            --user)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usage "Requires Docker registry user name"
+                        return 1
+                        ;;
+                    *)
+                        DOCKERREGISTRY_USER="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --github-repo)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usage "Requires Kafka GitHub Repo"
+                        return 1
+                        ;;
+                    *)
+                        KAFKA_GITHUB_REPO="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --commit-sha)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usage "Requires Kafka Git Commit-Sha"
+                        return 1
+                        ;;
+                    *)
+                        KAFKA_GIT_COMMIT_SHA="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --tag)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usage "Requires Kafka Git Tag"
+                        return 1
+                        ;;
+                    *)
+                        KAFKA_GIT_TAG="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --branch)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usage "Requires Kafka Git Branch"
+                        return 1
+                        ;;
+                    *)
+                        KAFKA_GIT_BRANCH="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --pull-request)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usage "Requires Kafka Git pull request number"
+                        return 1
+                        ;;
+                    *)
+                        KAFKA_GIT_PULL_REQUEST="$1"
+                        shift
+                        ;;
+                esac
+                ;;
+            --openjdk-release)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usage "Requires OpenJDK release"
+                        return 1
+                        ;;
+                    *)
+                        ZULU_OPENJDK_RELEASE="$1"
+                        shift
+                        ;;
+                esac
+                ;;   
+            --openjdk-version)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usage "Requires OpenJDK version"
+                        return 1
+                        ;;
+                    *)
+                        ZULU_OPENJDK_VERSION="$1"
+                        shift
+                        ;;
+                esac
+                ;;   
+            --patch)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usage "Requires Kafka patch name"
+                        return 1
+                        ;;
+                    *)
+                        KAFKA_PATCH="$1"
+                        shift
+                        ;;
+                esac
+                ;;                                    
+            *)
+                usage "Unknown option: $1"
+                return $?
+                ;;
+        esac
+    done
+      
+    return 0
+}
+
+function main () {
+    parseCmd "$@"
+    local retval=$?
+    if [ $retval != 0 ]; then
+        exit $retval
+    fi
+
+    if [ "$BUILD" = true ]; then
+        doActionAll "build"
+    fi
+    if [ "$PUSH" = true ]; then
+        doActionAll "push"
+    fi
+}
+
+main "$@"

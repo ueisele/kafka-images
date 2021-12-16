@@ -172,8 +172,17 @@ function parseCmd () {
                 esac
                 ;;                   
             *)
-                usage "Unknown option: $1"
-                return $?
+                local param="$1"
+                shift
+                case "$1" in
+                    ""|--*)
+                        echo "WARN: Unknown option: ${param}"
+                        ;;
+                    *)
+                        echo "WARN: Unknown option: ${param} $1"
+                        shift
+                        ;;
+                esac
                 ;;
         esac
     done
