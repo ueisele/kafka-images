@@ -124,6 +124,14 @@ CONNECT_PLUGIN_INSTALL_CMDS: |
     wget -qP $${CONNECT_PLUGIN_INSTALL_DIR}/confluentinc-kafka-connect-jdbc/lib https://dlm.mariadb.com/1496775/Connectors/java/connector-java-2.7.2/mariadb-java-client-2.7.2.jar
 ```
 
+## Pre-installed Kafka Connect Plugins
+
+This Kafka Connect image has the Confluent converters for Avro, Protobuf and JSON Schema already pre-installed to simplify usage of Confluent Schema Registry.
+
+* [https://www.confluent.io/hub/confluentinc/kafka-connect-avro-converter](confluentinc/kafka-connect-avro-converter:7.0.1)
+* [https://www.confluent.io/hub/confluentinc/kafka-connect-protobuf-converter](confluentinc/kafka-connect-protobuf-converter:7.0.1)
+* [https://www.confluent.io/hub/confluentinc/kafka-connect-json-schema-converter](confluentinc/kafka-connect-json-schema-converter:7.0.1)
+
 ## Build
 
 In order to create your own Docker image for Apache Kafka Connect clone the [ueisele/kafka-image](https://github.com/ueisele/kafka-images) Git repository and run the build command:

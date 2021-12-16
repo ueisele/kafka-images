@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 export CONNECT_PLUGIN_INSTALL_DIR="${CONNECT_PLUGIN_INSTALL_DIR:-"/opt/apache/kafka/connectors_install"}"
 
