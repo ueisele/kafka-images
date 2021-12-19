@@ -8,6 +8,7 @@ The Docker images are available on the following DockerHub repositories:
 
 * link:https://hub.docker.com/repository/docker/ueisele/apache-kafka-server[ueisele/apache-kafka-server]
 * link:https://hub.docker.com/repository/docker/ueisele/apache-kafka-server-standalone[ueisele/apache-kafka-server-standalone]
+* link:https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect-base[ueisele/apache-kafka-connect-base]
 * link:https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect[ueisele/apache-kafka-connect]
 * link:https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect-standalone[ueisele/apache-kafka-connect-standalone]
 
