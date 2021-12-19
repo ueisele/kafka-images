@@ -2,8 +2,8 @@
 set -e
 SCRIPT_DIR=$(dirname ${BASH_SOURCE[0]})
 
-PUSH=false
-BUILD=false
+MODULES=server,connect
+MODES=build
 
 DOCKERREGISTRY_USER="ueisele"
 KAFKA_GITHUB_REPO="apache/kafka"
@@ -12,15 +12,28 @@ ZULU_OPENJDK_RELEASE=11
 function usage () {
     echo "$0: $1" >&2
     echo
-    echo "Usage: $0 [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha 8cb0a5e] [--tag 3.0.0] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17] [--patch 3.0.0-openjdk17.patch]"
+    echo "Usage: $0 [--modules server,connect] [--modes build,push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha 8cb0a5e] [--tag 3.0.0] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17] [--patch 3.0.0-openjdk17.patch]"
     echo
     return 1
 }
 
+function doServer () {
+    local modes=${1:?"Requires 'build' or 'push' or 'build,push' as first parameter!"}
+    doAction "${modes}" "server"
+    doAction "${modes}" "server-standalone"
+}
+
+function doConnect () {
+    local modes=${1:?"Requires 'build' or 'push' or 'build,push' as first parameter!"}
+    doAction "${modes}" "connect"
+    doAction "${modes}" "connect-standalone"
+}
+
 function doAction () {
-    local mode=${1:?"Requires build or push as first parameter!"}
-    local module=${2:?"Requires module as second parameter!"}
-    ${SCRIPT_DIR}/${module}/build.sh --${mode} \
+    local modes=${1:?"Requires 'build' or 'push' or 'build,push' as first parameter!"}
+    local artifact=${2:?"Requires artifact as second parameter!"}
+    ${SCRIPT_DIR}/${artifact}/build.sh \
+        $(for mode in $(sed "s/,/ /g" <<< ${modes}); do echo --${mode} ; done) \
         --user "${DOCKERREGISTRY_USER}" --github-repo "${KAFKA_GITHUB_REPO}" \
         $([[ -n "${KAFKA_GIT_COMMIT_SHA}" ]] && echo --commit-sha "${KAFKA_GIT_COMMIT_SHA}") \
         $([[ -n "${KAFKA_GIT_TAG}" ]] && echo --tag "${KAFKA_GIT_TAG}") \
@@ -31,24 +44,34 @@ function doAction () {
         $([[ -n "${KAFKA_PATCH}" ]] && echo --patch "${KAFKA_PATCH}")
 }
 
-function doActionAll () {
-    local mode=${1:?"Requires build or push as first parameter!"}
-    doAction "${mode}" "server"
-    doAction "${mode}" "server-standalone"
-    doAction "${mode}" "connect"
-    doAction "${mode}" "connect-standalone"
-}
-
 function parseCmd () {
     while [[ $# -gt 0 ]]; do
         case "$1" in
-            --build)
-                BUILD=true
+            --modules)
                 shift
+                case "$1" in
+                    server,connect|connect,server|server|connect)
+                        MODULES="$1"
+                        shift
+                        ;;
+                    *)
+                        usage "Requires server or connect as modules"
+                        return 1
+                        ;;
+                esac
                 ;;
-            --push)
-                PUSH=true
+            --modes)
                 shift
+                case "$1" in
+                    build,push|push,build|build|push)
+                        MODES="$1"
+                        shift
+                        ;;
+                    *)
+                        usage "Requires build or push as modes"
+                        return 1
+                        ;;
+                esac
                 ;;
             --user)
                 shift
@@ -167,6 +190,10 @@ function parseCmd () {
                         ;;
                 esac
                 ;;                                    
+            --help)
+                usage
+                return 0
+                ;;
             *)
                 usage "Unknown option: $1"
                 return $?
@@ -184,12 +211,13 @@ function main () {
         exit $retval
     fi
 
-    if [ "$BUILD" = true ]; then
-        doActionAll "build"
-    fi
-    if [ "$PUSH" = true ]; then
-        doActionAll "push"
-    fi
+    for module in $(sed "s/,/ /g" <<< ${MODULES}); do 
+        if [ "${module}" = "server" ]; then
+            doServer "${MODES}"
+        elif [ "${module}" = "connect" ]; then
+            doConnect "${MODES}"
+        fi         
+    done
 }
 
 main "$@"

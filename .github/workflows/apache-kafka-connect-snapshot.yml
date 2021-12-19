@@ -1,8 +1,8 @@
-name: Apache Kafka Snapshot Build and Push
+name: Apache Kafka Connect Snapshot Build and Push
 
 on:
   schedule:
-  - cron:  '0 4 * * 2-6'
+  - cron:  '0 4 * * 3,6'
   workflow_dispatch:
 
 jobs:
@@ -19,8 +19,5 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build
-        run: ./build-all.sh --build --snapshot
-      -
-        name: Push
-        run: ./build-all.sh --push --snapshot
+        name: Build and Push
+        run: ./build-all.sh --modules connect --modes build,push --versions snapshot
