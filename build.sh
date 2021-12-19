@@ -25,6 +25,7 @@ function doServer () {
 
 function doConnect () {
     local modes=${1:?"Requires 'build' or 'push' or 'build,push' as first parameter!"}
+    doAction "${modes}" "connect-base"
     doAction "${modes}" "connect"
     doAction "${modes}" "connect-standalone"
 }

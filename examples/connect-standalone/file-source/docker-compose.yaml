@@ -15,7 +15,7 @@ services:
       - 8083:8083
     volumes:
       - connector-offsets:/opt/apache/kafka/data
-      - file-source:/var/lib/kafka-connect
+      - file-source:/opt/apache/kafka/userdata
     environment:
       ## Worker Configuration
       CONNECT_BOOTSTRAP_SERVERS: kafka:9092
@@ -26,7 +26,7 @@ services:
       CONNECTOR_NAME: file-source
       CONNECTOR_CONNECTOR_CLASS: FileStreamSource
       CONNECTOR_TASKS_MAX: 1
-      CONNECTOR_FILE: /var/lib/kafka-connect/input.txt
+      CONNECTOR_FILE: /opt/apache/kafka/userdata/input.txt
       CONNECTOR_TOPIC: connect-file-source
 
   #############################################################

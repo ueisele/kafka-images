@@ -82,5 +82,6 @@ You find additional examples in link:examples/connect-standalone/[]:
 * OpenJDK base image: link:openjdk/[]
 * Apache Kafka server image: link:server/[]
 * Apache Kafka server standalone image: link:server-standalone/[]
+* Apache Kafka Connect base image: link:connect-base/[]
 * Apache Kafka Connect image: link:connect/[]
 * Apache Kafka Connect standalone image: link:connect-standalone/[]

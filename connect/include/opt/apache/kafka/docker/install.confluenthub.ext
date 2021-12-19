@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+set -e
+
+# download and install connect plugins via confluent hub cli
+# example:
+#   confluentinc/kafka-connect-jdbc:latest
+#   confluentinc/kafka-connect-http:latest
+function installPluginsByConfluentHub () {
+  local pluginIds="${1:?Requires plugin ids as first parameter!}"
+  touch /tmp/connect-worker-dummy.properties
+  for connector in $(sed "s/,/ /g" <<< ${pluginIds}); do 
+    confluent-hub install --no-prompt \
+      --component-dir ${PLUGIN_INSTALL_DIR} --worker-configs /tmp/connect-worker-dummy.properties \
+      ${connector}; 
+  done
+  rm /tmp/connect-worker-dummy.properties
+}
+
+
+function doInstallFromEnv () {
+  if [ -n "${PLUGIN_INSTALL_CONFLUENT_HUB_IDS:-}" ] || [ -n "${CONNECT_PLUGIN_INSTALL_CONFLUENT_HUB_CONNECTOR_IDS:-}" ]; then
+    installPluginsByConfluentHub "${PLUGIN_INSTALL_CONFLUENT_HUB_IDS:-"${CONNECT_PLUGIN_INSTALL_CONFLUENT_HUB_CONNECTOR_IDS}"}"
+  fi
+}
+
+function extUsageOptions () {
+  echo -n "[--confluent-hub-ids id_1,id_n]"
+}
+
+function extMain () {
+  if [ -z "${PLUGIN_INSTALL_DIR:-}" ]; then
+    echo "Requires PLUGIN_INSTALL_DIR environment variable!"
+    return 1
+  fi
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --confluent-hub-ids)
+          shift
+          local hasNext=true
+          while [[ ${hasNext} = true ]]; do
+            case "$1" in
+                ""|--*)
+                    hasNext=false
+                    ;;
+                *)
+                    PLUGIN_INSTALL_CONFLUENT_HUB_IDS="${PLUGIN_INSTALL_CONFLUENT_HUB_IDS} ${1}"
+                    shift
+                    ;;
+            esac
+          done
+          ;; 
+      *)
+          shift
+          ;;
+    esac
+  done
+
+  doInstallFromEnv
+}
+
+if [ "${BASH_SOURCE[0]}" == "$0" ]; then
+  extMain "$@"
+fi

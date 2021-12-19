@@ -12,7 +12,7 @@ function kafka_connect_image_tags () {
     local base_image_tags="${@:3}"
     local kafka_connect_full_image_tag="${kafka_version//-g${kafka_git_commit_sha}/}-g${kafka_git_commit_sha}"
     local kafka_connect_short_image_tag="${kafka_version}"
-    echo $(kafka_connect_combine_tags ${kafka_connect_full_image_tag} ${base_image_tags}) $(kafka_connect_combine_tags ${kafka_connect_short_image_tag} ${base_image_tags}) ${kafka_connect_full_image_tag} ${kafka_connect_short_image_tag}
+    echo $(kafka_connect_base_combine_tags ${kafka_connect_full_image_tag} ${base_image_tags}) $(kafka_connect_combine_tags ${kafka_connect_short_image_tag} ${base_image_tags}) ${kafka_connect_full_image_tag} ${kafka_connect_short_image_tag}
 }
 
 function kafka_connect_combine_tags () {

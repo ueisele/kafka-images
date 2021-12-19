@@ -1,12 +1,11 @@
-# Docker Image for Apache Kafka Connect
+# Docker Image for Apache Kafka Connect (Base)
 
 Docker image for running the [Open Source version of Apache Kafka Connect](https://github.com/apache/kafka/) in distributed mode.
 
 The Kafka distribution included in the Docker image is built directly from [source](https://github.com/apache/kafka/).
+It is a base image and therefore has no additional Cli tools and Kafka Connect plugins installed.
 
-The Kafka Connect Docker image is based on [ueisele/apache-kafka-connect-base](https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect). It has the Confluent Hub Cli, as well as additional Kafka Connect plugins pre-installed.
-
-The Docker images are available on DockerHub repository [ueisele/apache-kafka-connect](https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect), and the source files for the images are available on GitHub repository [ueisele/kafka-images](https://github.com/ueisele/kafka-images).
+The Docker images are available on DockerHub repository [ueisele/apache-kafka-connect-base](https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect-base), and the source files for the images are available on GitHub repository [ueisele/kafka-images](https://github.com/ueisele/kafka-images).
 
 ## Most Recent Tags
 
@@ -21,7 +20,16 @@ Most recent tags for `SNAPSHOT` builds:
 * `3.2.0-SNAPSHOT`, `3.2.0-SNAPSHOT-zulu17`, `3.2.0-SNAPSHOT-zulu17.0.1`, `3.2.0-SNAPSHOT-zulu17-ubi8.5`, `3.2.0-SNAPSHOT-zulu17.0.1-ubi8.5-204`
 * `3.1.0-SNAPSHOT`, `3.1.0-SNAPSHOT-zulu17`, `3.1.0-SNAPSHOT-zulu17.0.1`, `3.1.0-SNAPSHOT-zulu17-ubi8.5`, `3.1.0-SNAPSHOT-zulu17.0.1-ubi8.5-204`
 
-Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-connect:3.1.0-SNAPSHOT-g36cc3dc`.
+Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-connect-base:3.1.0-SNAPSHOT-g36cc3dc`.
+
+## Image
+
+The Docker images are based on [ueisele/openjdk-jre](https://hub.docker.com/repository/docker/ueisele/openjdk-jre). 
+
+The OpenJDK image in turn is based on [RedHat's Universal Base Image 8](https://catalog.redhat.com/software/containers/ubi8/ubi-minimal/5c359a62bed8bd75a2c3fba8). If a new version of the base image is released, typically also a new version of this Docker image is created and published.
+
+As OpenJDK [Azul Zulu](https://www.azul.com/downloads/?package=jdk) is used.
+Azul Zulu builds of OpenJDK are fully tested and TCK compliant builds of OpenJDK.
 
 ## Quick Start
 
@@ -57,18 +65,17 @@ docker run -d --name kafka-connect --net quickstart-kafka-connect -p 8083:8083 \
     -e CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE=false \
     -e CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE=true \
     -e CONNECT_LOG4J_LOGGERS: org.reflections=ERROR,org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR \
-    ueisele/apache-kafka-connect:3.0.0
+    ueisele/apache-kafka-connect-base:3.0.0
 ```
 
 You find additional examples in [examples/connect-standalone/]():
 
 * [examples/connect-standalone/file-source/docker-compose.yaml]()
-* [examples/connect-standalone/datagen-plugin-install/docker-compose.yaml]()
 * [examples/connect-standalone/http-source-plugin-install/docker-compose.yaml]()
 
 ## Configuration
 
-For the Apache Kafka Connect ([ueisele/apache-kafka-connect](https://hub.docker.com/repository/registry-1.docker.io/ueisele/apache-kafka-connect/)) image, convert the [Apache Kafka Connect configuration properties](https://kafka.apache.org/documentation/#connectconfigs) as below and use them as environment variables:
+For the Apache Kafka Connect ([ueisele/apache-kafka-connect-base](https://hub.docker.com/repository/registry-1.docker.io/ueisele/apache-kafka-connect-base/)) image, convert the [Apache Kafka Connect configuration properties](https://kafka.apache.org/documentation/#connectconfigs) as below and use them as environment variables:
 
 * Prefix with CONNECT_.
 * Convert to upper-case.
@@ -100,14 +107,6 @@ The minimum required worker configuration is:
 
 The Apache Kafka Connect Docker image supports Connector installation during startup with multiple methods.
 
-Define a comma separated list of Confluent Hub Connectors to be installed.
-
-```yaml
-PLUGIN_INSTALL_CONFLUENT_HUB_IDS: |
-    confluentinc/kafka-connect-jdbc:latest
-    confluentinc/kafka-connect-http:latest
-```
-
 Define a comma separated list of Connector Urls. Supported are `*.zip`, `*.tar*`, `*.tgz` and `*.jar` files.
 
 ```yaml
@@ -124,14 +123,6 @@ PLUGIN_INSTALL_LIB_URLS: |
     confluentinc-kafka-connect-avro-converter/lib=https://repo1.maven.org/maven2/com/google/guava/guava/30.1.1-jre/guava-30.1.1-jre.jar
 ```
 
-## Pre-installed Kafka Connect Plugins
-
-This Kafka Connect image has the Confluent converters for Avro, Protobuf and JSON Schema already pre-installed to simplify usage of Confluent Schema Registry.
-
-* [confluentinc/kafka-connect-avro-converter:7.0.1](https://www.confluent.io/hub/confluentinc/kafka-connect-avro-converter)
-* [confluentinc/kafka-connect-protobuf-converter:7.0.1](https://www.confluent.io/hub/confluentinc/kafka-connect-protobuf-converter)
-* [confluentinc/kafka-connect-json-schema-converter:7.0.1](https://www.confluent.io/hub/confluentinc/kafka-connect-json-schema-converter)
-
 ## Build
 
 In order to create your own Docker image for Apache Kafka Connect clone the [ueisele/kafka-image](https://github.com/ueisele/kafka-images) Git repository and run the build command:
@@ -139,32 +130,32 @@ In order to create your own Docker image for Apache Kafka Connect clone the [uei
 ```bash
 git clone https://github.com/ueisele/kafka-images.git
 cd kafka-images
-connect/build.sh --build --tag 3.0.0 --openjdk-release 11
+connect-base/build.sh --build --tag 3.0.0 --openjdk-release 11
 ```
 
 To create an image with a specific OpenJDK version use the following command:
 
 ```bash
-connect/build.sh --build --tag 3.0.0 --openjdk-release 11 --openjdk-version 11.0.12
+connect-base/build.sh --build --tag 3.0.0 --openjdk-release 11 --openjdk-version 11.0.12
 ```
 
 By default Apache Kafka 3.0.0 does not support Java 17. In order to build Apache Kafka 3.0.0 with Java 17, the Gradle configuration is patched with [patch/3.0.0-openjdk17.patch]().
 
 ```bash
-connect/build.sh --build --tag 3.0.0 --openjdk-release 17 --patch 3.0.0-openjdk17.patch
+connect-base/build.sh --build --tag 3.0.0 --openjdk-release 17 --patch 3.0.0-openjdk17.patch
 ```
 
 To build the most recent `SNAPSHOT` of Apache Kafka 3.1.0 with Java 17, run:
 
 ```bash
-connect/build.sh --build --branch trunk --openjdk-release 17 --patch 3.1.0-openjdk17.patch
+connect-base/build.sh --build --branch trunk --openjdk-release 17 --patch 3.1.0-openjdk17.patch
 ```
 
 ### Build Options
 
-The `connect/build.sh` script provides the following options:
+The `connect-base/build.sh` script provides the following options:
 
-`Usage: connect/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha 8cb0a5e] [--tag 3.0.0] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17] [--patch 3.0.0-openjdk17.patch]`
+`Usage: connect-base/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha 8cb0a5e] [--tag 3.0.0] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17] [--patch 3.0.0-openjdk17.patch]`
 
 ## License 
 

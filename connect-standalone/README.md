@@ -4,6 +4,8 @@ Docker image for running the [Open Source version of Apache Kafka Connect](https
 
 The Kafka distribution included in the Docker image is built directly from [source](https://github.com/apache/kafka/).
 
+The standalone Docker image is based on [ueisele/apache-kafka-connect](https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect). 
+
 The Docker images are available on DockerHub repository [ueisele/apache-kafka-connect-standalone](https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect-standalone), and the source files for the images are available on GitHub repository [ueisele/kafka-images](https://github.com/ueisele/kafka-images).
 
 **IMPORTANT**: Kafka Connect Standalone is not suited for most productive uses cases. It does not support scaling and offsets of external systems are just stored on a file. See also: https://rmoff.net/2019/11/22/common-mistakes-made-when-configuring-multiple-kafka-connect-workers/
@@ -22,10 +24,6 @@ Most recent tags for `SNAPSHOT` builds:
 * `3.1.0-SNAPSHOT`, `3.1.0-SNAPSHOT-zulu17`, `3.1.0-SNAPSHOT-zulu17.0.1`, `3.1.0-SNAPSHOT-zulu17-ubi8.5`, `3.1.0-SNAPSHOT-zulu17.0.1-ubi8.5-204`
 
 Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-connect:3.1.0-SNAPSHOT-g36cc3dc`.
-
-## Image
-
-The standalone Docker image is based on [ueisele/apache-kafka-connect](https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect). 
 
 ## Quick Start
 

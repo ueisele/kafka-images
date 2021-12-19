@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+set -e
+SCRIPT_DIR="$(dirname ${BASH_SOURCE[0]})"
+
+PLUGIN_INSTALL_DIR="${PLUGIN_INSTALL_DIR:-"${CONNECT_PLUGIN_INSTALL_DIR:-"/opt/apache/kafka/connectors_install"}"}"
+
+function extensions () {
+  ls ${SCRIPT_DIR}/*.ext
+}
+
+function usage () {
+  echo "$0: $1" >&2
+  echo
+  echo -n "Usage: $0 [--plugin-dir /opt/apache/kafka/connectors_install]"
+  for ext in $(extensions); do
+    echo -n " "
+    (
+      source ${ext}
+      extUsageOptions
+    )
+  done
+  echo
+  return 1
+}
+
+function main () {
+  local params=$@
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --plugin-dir)
+          shift
+          case "$1" in
+              ""|--*)
+                  usage "Requires Plugin installation directory"
+                  return 1
+                  ;;
+              *)
+                  PLUGIN_INSTALL_DIR="$1"
+                  shift
+                  ;;
+          esac
+          ;;
+      --help)
+          usage
+          return 0
+          ;;
+      *)
+          shift
+          ;;
+    esac
+  done
+
+  if [ -n "${CONNECT_PLUGIN_INSTALL_CMDS:-}" ]; then
+    usage "Installation by command is no longer supported. Use 'PLUGIN_INSTALL_LIB_URLS' instead and provide a list of 'path=url' pairs."
+    return 1
+  fi
+
+  for ext in $(extensions); do
+    (
+      source ${ext}
+      extMain ${params}
+    )
+  done
+}
+
+if [ "${BASH_SOURCE[0]}" == "$0" ]; then
+  main "$@"
+fi

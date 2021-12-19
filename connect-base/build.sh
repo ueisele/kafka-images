@@ -2,7 +2,6 @@
 set -e
 SCRIPT_DIR=$(dirname ${BASH_SOURCE[0]})
 source ${SCRIPT_DIR}/env
-source ${SCRIPT_DIR}/../connect-base/env
 source ${SCRIPT_DIR}/../openjdk/env
 
 PUSH=false
@@ -12,24 +11,29 @@ DOCKERFILE=Dockerfile.ubi8
 
 DOCKERREGISTRY_USER="ueisele"
 KAFKA_GITHUB_REPO="apache/kafka"
+ZULU_OPENJDK_RELEASE=11
 
 function usage () {
     echo "$0: $1" >&2
     echo
-    echo "Usage: $0 [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha 8cb0a5e] [--tag 3.0.0] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17]"
+    echo "Usage: $0 [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha 8cb0a5e] [--tag 3.0.0] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17] [--patch 3.0.0-openjdk17.patch]"
     echo
     return 1
 }
 
-function build_image () {
-    local openjdk_tags=($(openjdk_image_tags "${ZULU_OPENJDK_RELEASE}" "${ZULU_OPENJDK_VERSION}"))
-    local connect_base_tags=($(kafka_connect_base_image_tags ${KAFKA_TAG_VERSION} $(echo ${KAFKA_GIT_COMMIT_SHA} | cut -c 1-7) ${openjdk_tags[@]}))
-    local connect_tags=($(kafka_connect_image_tags ${KAFKA_TAG_VERSION} $(echo ${KAFKA_GIT_COMMIT_SHA} | cut -c 1-7) ${openjdk_tags[@]}))
+function build_image () {  
+    local tags=($(openjdk_image_tags "${ZULU_OPENJDK_RELEASE}" "${ZULU_OPENJDK_VERSION}"))
     docker build \
-        $(for tag in ${connect_tags[@]}; do
-        echo -t "$(kafka_connect_image_name ${DOCKERREGISTRY_USER} ${KAFKA_GITHUB_REPO}):${tag}"
+        $(for tag in $(kafka_connect_base_image_tags ${KAFKA_TAG_VERSION} $(echo ${KAFKA_GIT_COMMIT_SHA} | cut -c 1-7) ${tags[@]}); do
+        echo -t "$(kafka_connect_base_image_name ${DOCKERREGISTRY_USER} ${KAFKA_GITHUB_REPO}):${tag}"
         done) \
-        --build-arg KAFKA_CONNECT_BASE_IMAGE="$(kafka_connect_base_image_name ${DOCKERREGISTRY_USER} ${KAFKA_GITHUB_REPO}):${connect_base_tags[0]}" \
+        --build-arg OPENJDK_JDK_IMAGE=$(openjdk_image_name_and_tag ${DOCKERREGISTRY_USER} jdk ${ZULU_OPENJDK_RELEASE} ${ZULU_OPENJDK_VERSION}) \
+        --build-arg OPENJDK_JRE_IMAGE=$(openjdk_image_name_and_tag ${DOCKERREGISTRY_USER} jre ${ZULU_OPENJDK_RELEASE} ${ZULU_OPENJDK_VERSION}) \
+        --build-arg KAFKA_GIT_REPO=${KAFKA_GIT_REPO} \
+        --build-arg KAFKA_GIT_REFSPEC=${KAFKA_GIT_COMMIT_SHA} \
+        --build-arg KAFKA_BUILD_GIT_REFSPEC=${KAFKA_BUILD_GIT_REFSPEC} \
+        --build-arg KAFKA_VERSION=${KAFKA_VERSION} \
+        --build-arg KAFKA_PATCH="${KAFKA_PATCH}" \
         -f ${SCRIPT_DIR}/${DOCKERFILE} ${SCRIPT_DIR}
 }
 
@@ -39,10 +43,9 @@ function build () {
 }
 
 function push_image () {
-    local openjdk_tags=($(openjdk_image_tags "${ZULU_OPENJDK_RELEASE}" "${ZULU_OPENJDK_VERSION}"))
-    local connect_tags=($(kafka_connect_image_tags ${KAFKA_TAG_VERSION} $(echo ${KAFKA_GIT_COMMIT_SHA} | cut -c 1-7) ${openjdk_tags[@]}))
-    for tag in ${connect_tags[@]}; do
-        docker push "$(kafka_connect_image_name ${DOCKERREGISTRY_USER} ${KAFKA_GITHUB_REPO}):${tag}"
+    local tags=($(openjdk_image_tags "${ZULU_OPENJDK_RELEASE}" "${ZULU_OPENJDK_VERSION}"))
+    for tag in $(kafka_connect_base_image_tags ${KAFKA_TAG_VERSION} $(echo ${KAFKA_GIT_COMMIT_SHA} | cut -c 1-7) ${tags[@]}); do
+        docker push "$(kafka_connect_base_image_name ${DOCKERREGISTRY_USER} ${KAFKA_GITHUB_REPO}):${tag}"
     done
 }
 
@@ -171,7 +174,20 @@ function parseCmd () {
                         shift
                         ;;
                 esac
-                ;;                   
+                ;;   
+            --patch)
+                shift
+                case "$1" in
+                    ""|--*)
+                        usage "Requires Kafka patch name"
+                        return 1
+                        ;;
+                    *)
+                        KAFKA_PATCH="$1"
+                        shift
+                        ;;
+                esac
+                ;;                                    
             *)
                 local param="$1"
                 shift
@@ -226,6 +242,11 @@ function parseCmd () {
             usage "requires OpenJDK version"
             return 1
         fi
+    fi
+
+    if [ -n "${KAFKA_PATCH}" ] && [ ! -e "${SCRIPT_DIR}/patch/${KAFKA_PATCH}" ]; then
+        usage "missing patch file ${SCRIPT_DIR}/patch/${KAFKA_PATCH}"
+        return 1
     fi
     
     return 0

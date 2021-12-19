@@ -5,6 +5,8 @@ It offers support for running a single Apache Kafka instance in Kafka [KRaft mod
 
 The Kafka distribution included in the Docker image is built directly from [source](https://github.com/apache/kafka/).
 
+The standalone Docker image is based on [ueisele/apache-kafka-server](https://hub.docker.com/repository/docker/ueisele/apache-kafka-server). 
+
 The Docker images are available on DockerHub repository [ueisele/apache-kafka-server-standalone](https://hub.docker.com/repository/docker/ueisele/apache-kafka-server), and the source files for the images are available on GitHub repository [ueisele/kafka-images](https://github.com/ueisele/kafka-images).
 
 ## Most Recent Tags
@@ -37,9 +39,6 @@ To start a single Kafka instance in KRaft mode with Ipv6 just run:
 docker network create --ipv6 --subnet fd01::/80 kafka-standalone
 docker run --rm -p 9092:9092 --net kafka-standalone -e STANDALONE_BROKER_IP_VERSION=ipv6 ueisele/apache-kafka-server-standalone:3.0.0
 ```
-## Image
-
-The standalone Docker images are based on [ueisele/apache-kafka-server](https://hub.docker.com/repository/docker/ueisele/apache-kafka-server). 
 
 ## Configuration
 
