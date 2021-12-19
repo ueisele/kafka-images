@@ -140,11 +140,11 @@ You can also specify the flush interval for the offsets. By default its one minu
 CONNECT_OFFSET_FLUSH_INTERVAL_MS: 5000
 ```
 
-### Connector Installation
+### Kafka Connect Plugin Installation
 
-The Apache Kafka Connect Docker image supports Connector installation during startup with multiple methods.
+The Apache Kafka Connect Docker image supports installation of Kafka Connect plugins like connectors during startup with multiple methods.
 
-Define a comma separated list of Confluent Hub Connectors to be installed.
+Define a comma separated list of plugins which should be installed via Confluent Hub.
 
 ```yaml
 PLUGIN_INSTALL_CONFLUENT_HUB_IDS: |
@@ -152,7 +152,7 @@ PLUGIN_INSTALL_CONFLUENT_HUB_IDS: |
     confluentinc/kafka-connect-http:latest
 ```
 
-Define a comma separated list of Connector Urls. Supported are `*.zip`, `*.tar*`, `*.tgz` and `*.jar` files.
+Define a comma separated list of plugin Urls. Supported are `*.zip`, `*.tar*`, `*.tgz` and `*.jar` files.
 
 ```yaml
 PLUGIN_INSTALL_URLS: |

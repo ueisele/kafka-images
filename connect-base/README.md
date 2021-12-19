@@ -103,11 +103,11 @@ The minimum required worker configuration is:
 * `CONNECT_CONFIG_STORAGE_TOPIC`, `CONNECT_OFFSET_STORAGE_TOPIC` and `CONNECT_STATUS_STORAGE_TOPIC` which define the names of the topics where connector tasks, configuration, offsets and status updates are stored. This names must be unique per Connect cluster.
 * `CONNECT_REST_ADVERTISED_HOST_NAME` which defines the hostname that will be given out to other Workers to connect to. You should set this to a value that is resolvable by all containers.
 
-### Connector Installation
+### Kafka Connect Plugin Installation
 
-The Apache Kafka Connect Docker image supports Connector installation during startup with multiple methods.
+The Apache Kafka Connect Docker image supports installation of Kafka Connect plugins like connectors during startup with multiple methods.
 
-Define a comma separated list of Connector Urls. Supported are `*.zip`, `*.tar*`, `*.tgz` and `*.jar` files.
+Define a comma separated list of plugin Urls. Supported are `*.zip`, `*.tar*`, `*.tgz` and `*.jar` files.
 
 ```yaml
 PLUGIN_INSTALL_URLS: |
