@@ -4,7 +4,7 @@ Docker image for running the [Open Source version of Apache Kafka Connect](https
 
 The Kafka distribution included in the Docker image is built directly from [source](https://github.com/apache/kafka/).
 
-The Kafka Connect Docker image is based on [ueisele/apache-kafka-connect-base](https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect). It has the Confluent Hub Cli, as well as additional Kafka Connect plugins pre-installed.
+The Kafka Connect Docker image is based on [ueisele/apache-kafka-connect-base](https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect-base). It has the Confluent Hub Cli, as well as additional Kafka Connect plugins pre-installed.
 
 The Docker images are available on DockerHub repository [ueisele/apache-kafka-connect](https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect), and the source files for the images are available on GitHub repository [ueisele/kafka-images](https://github.com/ueisele/kafka-images).
 
