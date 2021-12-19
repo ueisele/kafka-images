@@ -16,14 +16,15 @@ services:
     volumes:
       - connector-offsets:/opt/apache/kafka/data
     environment:
+      ## Plugin Installation
+      PLUGIN_INSTALL_URLS: |
+        https://github.com/castorm/kafka-connect-http/releases/download/v0.8.11/castorm-kafka-connect-http-0.8.11.zip
+        https://github.com/RedHatInsights/expandjsonsmt/releases/download/0.0.7/kafka-connect-smt-expandjsonsmt-0.0.7.tar.gz
       ## Worker Configuration
       CONNECT_BOOTSTRAP_SERVERS: kafka:9092
       CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
       CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
-      CONNECT_PLUGIN_INSTALL_EXTENSION_URLS: |
-        https://github.com/castorm/kafka-connect-http/releases/download/v0.8.11/castorm-kafka-connect-http-0.8.11.zip
-        https://github.com/RedHatInsights/expandjsonsmt/releases/download/0.0.7/kafka-connect-smt-expandjsonsmt-0.0.7.tar.gz
       ## Connector Configuration
       CONNECTOR_NAME: http-source
       CONNECTOR_CONNECTOR_CLASS: com.github.castorm.kafka.connect.http.HttpSourceConnector

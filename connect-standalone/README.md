@@ -149,22 +149,25 @@ The Apache Kafka Connect Docker image supports Connector installation during sta
 Define a comma separated list of Confluent Hub Connectors to be installed.
 
 ```yaml
-CONNECT_PLUGIN_INSTALL_CONFLUENT_HUB_CONNECTOR_IDS: confluentinc/kafka-connect-jdbc:latest,confluentinc/kafka-connect-http:latest
+PLUGIN_INSTALL_CONFLUENT_HUB_IDS: |
+    confluentinc/kafka-connect-jdbc:latest
+    confluentinc/kafka-connect-http:latest
 ```
 
-Define a comma separated list of Connector Urls. Supported are `*.zip`, `*.tar`, `*.tgz` and `*.jar` files.
+Define a comma separated list of Connector Urls. Supported are `*.zip`, `*.tar*`, `*.tgz` and `*.jar` files.
 
 ```yaml
-CONNECT_PLUGIN_INSTALL_EXTENSION_URLS: |
+PLUGIN_INSTALL_URLS: |
     https://github.com/castorm/kafka-connect-http/releases/download/v0.8.11/castorm-kafka-connect-http-0.8.11.zip
     https://github.com/RedHatInsights/expandjsonsmt/releases/download/0.0.7/kafka-connect-smt-expandjsonsmt-0.0.7.tar.gz
 ```
 
-Specify a bash command to download a file to a specific directory, for example to install a JDBC driver for the JDBC connector.
+Define a comma separated list of 'path=url' pairs, to download additional libraries. Supported are `*.zip`, `*.tar*`, `*.tgz` and `*.jar` files.
 
 ```yaml
-CONNECT_PLUGIN_INSTALL_CMDS: |
-    wget -qP $${CONNECT_PLUGIN_INSTALL_DIR}/confluentinc-kafka-connect-jdbc/lib https://dlm.mariadb.com/1496775/Connectors/java/connector-java-2.7.2/mariadb-java-client-2.7.2.jar
+PLUGIN_INSTALL_LIB_URLS: |
+    confluentinc-kafka-connect-jdbc/lib=https://dlm.mariadb.com/1496775/Connectors/java/connector-java-2.7.2/mariadb-java-client-2.7.2.jar
+    confluentinc-kafka-connect-avro-converter/lib=https://repo1.maven.org/maven2/com/google/guava/guava/30.1.1-jre/guava-30.1.1-jre.jar
 ```
 
 ### Verbatim Connector Configuration

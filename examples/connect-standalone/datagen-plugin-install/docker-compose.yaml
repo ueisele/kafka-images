@@ -16,13 +16,14 @@ services:
     volumes:
       - connector-offsets:/opt/apache/kafka/data
     environment:
+      ## Plugin Installation
+      PLUGIN_INSTALL_CONFLUENT_HUB_IDS: confluentinc/kafka-connect-datagen:latest
       ## Worker Configuration
       CONNECT_BOOTSTRAP_SERVERS: kafka:9092
       CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
       CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
       CONNECT_OFFSET_FLUSH_INTERVAL_MS: 5000
-      CONNECT_PLUGIN_INSTALL_CONFLUENT_HUB_CONNECTOR_IDS: confluentinc/kafka-connect-datagen:latest
       ## Connector Configuration
       CONNECTOR_NAME: datagen-source
       CONNECTOR_CONNECTOR_CLASS: io.confluent.kafka.connect.datagen.DatagenConnector
