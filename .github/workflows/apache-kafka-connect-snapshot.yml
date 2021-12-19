@@ -1,4 +1,4 @@
-name: Apache Kafka Connect Snapshot Build and Push
+name: Apache Kafka Connect Snapshot
 
 on:
   schedule:

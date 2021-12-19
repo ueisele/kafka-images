@@ -1,4 +1,4 @@
-name: Apache Kafka Server Snapshot Build and Push
+name: Apache Kafka Server Snapshot
 
 on:
   schedule:

@@ -1,4 +1,4 @@
-name: Apache Kafka Server Release Build and Push
+name: Apache Kafka Connect Release
 
 on:
   workflow_dispatch:
