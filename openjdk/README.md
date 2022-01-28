@@ -48,7 +48,7 @@ openjdk/build.sh --build --user ueisele --openjdk-release 17
 To create an image with a specific OpenJDK version use the following command:
 
 ```bash
-openjdk/build.sh --build --user ueisele --openjdk-release 11 --openjdk-version 11.0.13
+openjdk/build.sh --build --user ueisele --openjdk-release 11 --openjdk-version 11.0.14
 ```
 
 ## License 

@@ -59,7 +59,7 @@ docker run -d --name kafka-kraft -p 9092:9092 \
     -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1 \
-    ueisele/apache-kafka-server:3.0.0
+    ueisele/apache-kafka-server:3.1.0
 ```
 
 You find additional examples in [examples/kraft/]():

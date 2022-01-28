@@ -45,7 +45,7 @@ The [ueisele/apache-kafka-server-standalone](https://hub.docker.com/repository/r
 
 The configuration is identical to the [ueisele/apache-kafka-server](https://hub.docker.com/repository/docker/ueisele/apache-kafka-server) image and therefore also fully compatible with the [Confluent Docker images](https://docs.confluent.io/platform/current/installation/docker/config-reference.html#confluent-ak-configuration).
 
-For the Apahce Kafka ([ueisele/apache-kafka-server-standalone](https://hub.docker.com/repository/registry-1.docker.io/ueisele/apache-kafka-server/)) image, convert the [Apache Kafka broker configuration properties](https://kafka.apache.org/documentation/#brokerconfigs) as below and use them as environment variables:
+For the Apache Kafka ([ueisele/apache-kafka-server-standalone](https://hub.docker.com/repository/registry-1.docker.io/ueisele/apache-kafka-server/)) image, convert the [Apache Kafka broker configuration properties](https://kafka.apache.org/documentation/#brokerconfigs) as below and use them as environment variables:
 
 * Prefix with KAFKA_.
 * Convert to upper-case.

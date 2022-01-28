@@ -23,7 +23,7 @@ Most recent tags for `SNAPSHOT` builds:
 
 * `3.2.0-SNAPSHOT`, `3.2.0-SNAPSHOT-zulu17`, `3.2.0-SNAPSHOT-zulu17.0.2`, `3.2.0-SNAPSHOT-zulu17-ubi8.5`, `3.2.0-SNAPSHOT-zulu17.0.2-ubi8.5-218`
 
-Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-connect:3.1.0-SNAPSHOT-g7215c90`.
+Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-connect-standalone:3.1.0-SNAPSHOT-g7215c90`.
 
 ## Quick Start
 
@@ -220,6 +220,7 @@ connect-standalone/build.sh --build --branch trunk --openjdk-release 17
 The `connect-standalone/build.sh` script provides the following options:
 
 `Usage: connect-standalone/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha 37edeed] [--tag 3.1.0] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.2]`
+
 ## License 
 
 This Docker image is licensed under the [Apache 2 license](https://github.com/ueisele/kafka-images/blob/main/LICENSE).
