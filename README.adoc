@@ -1,6 +1,6 @@
 = Apache Kafka Images
 
-Docker image for running the link:https://github.com/apache/kafka/[Open Source version of Apache Kafka]. It offers support for running Kafka in link:https://github.com/apache/kafka/blob/3.0.0/config/kraft/README.md[KRaft] mode as well as in ZooKeeper mode.
+Docker image for running the link:https://github.com/apache/kafka/[Open Source version of Apache Kafka]. It offers support for running Kafka in link:https://github.com/apache/kafka/blob/3.1.0/config/kraft/README.md[KRaft] mode as well as in ZooKeeper mode.
 
 The Kafka distribution included in the Docker image is built directly from link:https://github.com/apache/kafka/[source].
 
@@ -17,14 +17,14 @@ The Docker images are available on the following DockerHub repositories:
 .To start Kafka in KRaft single mode just run: 
 [source,bash]
 ----
-docker run --rm -p 9092:9092 ueisele/apache-kafka-server-standalone:3.0.0
+docker run --rm -p 9092:9092 ueisele/apache-kafka-server-standalone:3.1.0
 ----
 
 .To start Kafka in KRaft single mode with Ipv6 just run: 
 [source,bash]
 ----
 docker network create --ipv6 --subnet fd01::/80 kafka-standalone
-docker run --rm -p 9092:9092 --net kafka-standalone -e STANDALONE_BROKER_IP_VERSION=ipv6 ueisele/apache-kafka-server-standalone:3.0.0
+docker run --rm -p 9092:9092 --net kafka-standalone -e STANDALONE_BROKER_IP_VERSION=ipv6 ueisele/apache-kafka-server-standalone:3.1.0
 ----
 
 == Docker Compose Examples

@@ -14,16 +14,16 @@ The Docker images are available on DockerHub repository [ueisele/apache-kafka-co
 
 Most recent tags for `RELEASE` builds:
 
-* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17.0.1`, `3.0.0-zulu17-ubi8.5`, `3.0.0-zulu17.0.1-ubi8.5-204`
-* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.13`, `2.8.1-zulu11-ubi8.5`, `2.8.1-zulu11.0.13-ubi8.5-204`
-* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.13`, `2.8.0-zulu11-ubi8.5`, `2.8.0-zulu11.0.13-ubi8.5-204`
+* `3.1.0`, `3.1.0-zulu17`, `3.1.0-zulu17.0.2`, `3.1.0-zulu17-ubi8.5`, `3.1.0-zulu17.0.2-ubi8.5-218`
+* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17.0.2`, `3.0.0-zulu17-ubi8.5`, `3.0.0-zulu17.0.2-ubi8.5-218`
+* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.14`, `2.8.1-zulu11-ubi8.5`, `2.8.1-zulu11.0.14-ubi8.5-218`
+* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.14`, `2.8.0-zulu11-ubi8.5`, `2.8.0-zulu11.0.14-ubi8.5-218`
 
 Most recent tags for `SNAPSHOT` builds:
 
-* `3.2.0-SNAPSHOT`, `3.2.0-SNAPSHOT-zulu17`, `3.2.0-SNAPSHOT-zulu17.0.1`, `3.2.0-SNAPSHOT-zulu17-ubi8.5`, `3.2.0-SNAPSHOT-zulu17.0.1-ubi8.5-204`
-* `3.1.0-SNAPSHOT`, `3.1.0-SNAPSHOT-zulu17`, `3.1.0-SNAPSHOT-zulu17.0.1`, `3.1.0-SNAPSHOT-zulu17-ubi8.5`, `3.1.0-SNAPSHOT-zulu17.0.1-ubi8.5-204`
+* `3.2.0-SNAPSHOT`, `3.2.0-SNAPSHOT-zulu17`, `3.2.0-SNAPSHOT-zulu17.0.2`, `3.2.0-SNAPSHOT-zulu17-ubi8.5`, `3.2.0-SNAPSHOT-zulu17.0.2-ubi8.5-218`
 
-Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-connect:3.1.0-SNAPSHOT-g36cc3dc`.
+Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-connect:3.1.0-SNAPSHOT-g7215c90`.
 
 ## Quick Start
 
@@ -37,7 +37,7 @@ docker network create quickstart-kafka-connect-standalone
 Now, start a single Kafka instance: 
 
 ```bash
-docker run -d --name kafka --net quickstart-kafka-connect-standalone -p 9092:9092 ueisele/apache-kafka-server-standalone:3.0.0
+docker run -d --name kafka --net quickstart-kafka-connect-standalone -p 9092:9092 ueisele/apache-kafka-server-standalone:3.1.0
 ```
 
 Create some sample data:
@@ -61,13 +61,13 @@ docker run -d --name kafka-connect-standalone \
     -e CONNECTOR_TASKS_MAX=1 \
     -e CONNECTOR_FILE=/var/lib/kafka-connect/source.txt \
     -e CONNECTOR_TOPIC=connect-file-source \
-    ueisele/apache-kafka-connect-standalone:3.0.0
+    ueisele/apache-kafka-connect-standalone:3.1.0
 ```
 
 Consume published messages:
 
 ```bash
-docker run --rm -it --net quickstart-kafka-connect-standalone ueisele/apache-kafka-server-standalone:3.0.0 \
+docker run --rm -it --net quickstart-kafka-connect-standalone ueisele/apache-kafka-server-standalone:3.1.0 \
     kafka-console-consumer.sh \
         --bootstrap-server kafka:9092 \
         --topic connect-file-source \
@@ -200,16 +200,16 @@ In order to create your own Docker image for Apache Kafka Connect standalone clo
 ```bash
 git clone https://github.com/ueisele/kafka-images.git
 cd kafka-images
-connect-standalone/build.sh --build --tag 3.0.0 --openjdk-release 17
+connect-standalone/build.sh --build --tag 3.1.0 --openjdk-release 17
 ```
 
 To create an image with a specific OpenJDK version use the following command:
 
 ```bash
-connect-standalone/build.sh --build --tag 3.0.0 --openjdk-release 17 --openjdk-version 17
+connect-standalone/build.sh --build --tag 3.1.0 --openjdk-release 17 --openjdk-version 17.0.2
 ```
 
-To build the most recent `SNAPSHOT` of Apache Kafka 3.1.0 with Java 17, run:
+To build the most recent `SNAPSHOT` of Apache Kafka 3.2.0 with Java 17, run:
 
 ```bash
 connect-standalone/build.sh --build --branch trunk --openjdk-release 17
@@ -219,7 +219,7 @@ connect-standalone/build.sh --build --branch trunk --openjdk-release 17
 
 The `connect-standalone/build.sh` script provides the following options:
 
-`Usage: connect-standalone/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha 8cb0a5e] [--tag 3.0.0] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17]`
+`Usage: connect-standalone/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha 37edeed] [--tag 3.1.0] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.2]`
 ## License 
 
 This Docker image is licensed under the [Apache 2 license](https://github.com/ueisele/kafka-images/blob/main/LICENSE).
