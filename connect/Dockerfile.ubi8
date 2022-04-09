@@ -19,7 +19,7 @@ COPY --chown=appuser:appuser include/opt/apache/kafka/docker /opt/apache/kafka/d
 ## Installation of the base Kafka Connect plugins to be delivered with the image
 ## Note: Guava must be added to the Avro converter dependencies, because it is missing in the installation package 
 ##       (see https://github.com/confluentinc/schema-registry/pull/2115).
-ARG CONFLUENT_VERSION=7.0.1
+ARG CONFLUENT_VERSION=7.1.0
 RUN /opt/apache/kafka/docker/install \
     --confluent-hub-ids \
         "confluentinc/kafka-connect-avro-converter:${CONFLUENT_VERSION}" \
