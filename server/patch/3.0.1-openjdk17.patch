@@ -1,0 +1,48 @@
+diff --git a/build.gradle b/build.gradle
+index 7627dc13ae..588aceccf9 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -97,7 +97,7 @@ allprojects {
+ 
+ ext {
+   gradleVersion = versions.gradle
+-  minJavaVersion = "8"
++  minJavaVersion = "17"
+   buildVersionFileName = "kafka-version.properties"
+ 
+   defaultMaxHeapSize = "2g"
+@@ -226,7 +226,7 @@ subprojects {
+       options.compilerArgs << "-Xlint:-rawtypes"
+     options.compilerArgs << "-Xlint:-serial"
+     options.compilerArgs << "-Xlint:-try"
+-    options.compilerArgs << "-Werror"
++    //options.compilerArgs << "-Werror"
+     // --release is the recommended way to select the target release, but it's only supported in Java 9 so we also
+     // set --source and --target via `sourceCompatibility` and `targetCompatibility`. If/when Gradle supports `--release`
+     // natively (https://github.com/gradle/gradle/issues/2510), we should switch to that.
+diff --git a/gradle/dependencies.gradle b/gradle/dependencies.gradle
+index d1d647068f..c15180eb17 100644
+--- a/gradle/dependencies.gradle
++++ b/gradle/dependencies.gradle
+@@ -62,7 +62,7 @@ versions += [
+   checkstyle: "8.36.2",
+   commonsCli: "1.4",
+   dropwizardMetrics: "4.1.12.1",
+-  gradle: "7.1.1",
++  gradle: "7.2.0",
+   grgit: "4.1.1",
+   httpclient: "4.5.13",
+   easymock: "4.3",
+diff --git a/gradle/wrapper/gradle-wrapper.properties b/gradle/wrapper/gradle-wrapper.properties
+index 17ba19021b..a37233c5e2 100644
+--- a/gradle/wrapper/gradle-wrapper.properties
++++ b/gradle/wrapper/gradle-wrapper.properties
+@@ -1,6 +1,6 @@
+ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+-distributionSha256Sum=9bb8bc05f562f2d42bdf1ba8db62f6b6fa1c3bf6c392228802cc7cb0578fe7e0
+-distributionUrl=https\://services.gradle.org/distributions/gradle-7.1.1-all.zip
++distributionSha256Sum=a8da5b02437a60819cad23e10fc7e9cf32bcb57029d9cb277e26eeff76ce014b
++distributionUrl=https\://services.gradle.org/distributions/gradle-7.2-all.zip
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists

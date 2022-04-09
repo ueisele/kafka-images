@@ -23,7 +23,7 @@ function release () {
     doAction "${modules}" "${modes}" "tag" "2.8.0" "11" "2.8.0-grgit.patch"
     doAction "${modules}" "${modes}" "tag" "2.8.1" "11" "2.8.1-grgit.patch"
     doAction "${modules}" "${modes}" "tag" "3.0.0" "17" "3.0.0-openjdk17.patch"
-    doAction "${modules}" "${modes}" "tag" "3.0.1" "17"
+    doAction "${modules}" "${modes}" "tag" "3.0.1" "17" "3.0.1-openjdk17.patch"
     doAction "${modules}" "${modes}" "tag" "3.1.0" "17"
 }
 
