@@ -25,12 +25,12 @@ function release () {
     doAction "${modules}" "${modes}" "tag" "3.0.0" "17" "3.0.0-openjdk17.patch"
     doAction "${modules}" "${modes}" "tag" "3.0.1" "17" "3.0.1-openjdk17.patch"
     doAction "${modules}" "${modes}" "tag" "3.1.0" "17"
+    doAction "${modules}" "${modes}" "tag" "3.1.1-rc0" "17"
 }
 
 function snapshot () {
     local modules=${1:?"Requires modules as first parameter!"}
     local modes=${2:?"Requires modes as second parameter!"}
-    doAction "${modules}" "${modes}" "tag" "3.1.1-rc0" "17"
     doAction "${modules}" "${modes}" "branch" "3.2" "17"
     doAction "${modules}" "${modes}" "branch" "trunk" "17"
 }
