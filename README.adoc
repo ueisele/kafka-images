@@ -86,3 +86,26 @@ You find additional examples in link:examples/connect-standalone/[]:
 * Apache Kafka Connect base image: link:connect-base/[]
 * Apache Kafka Connect image: link:connect/[]
 * Apache Kafka Connect standalone image: link:connect-standalone/[]
+
+== Podman and Podman Compose Support
+
+The examples can also be used with link:https://github.com/containers/podman-compose[podman-compose].
+
+[source,bash]
+----
+cd example/kraft/single-mode
+podman-compose up
+----
+
+It is important to note that at least link:https://github.com/containers/podman-compose[podman-compose] 1.0.4 is required. The reason is, that in the examples network alias are used. Unfortunately, 1.0.4 is not released at the moment. However, you could install it manually.
+
+
+[source,bash]
+----
+pip3 install --upgrade --target=${HOME}/Applications/podman-compose git+https://github.com/containers/podman-compose.git
+cat > ~/.local/bin/podman-compose <<EOF
+PODMAN_COMPOSE_PATH=${HOME}/Applications/podman-compose
+PYTHONPATH=\${PODMAN_COMPOSE_PATH} \${PODMAN_COMPOSE_PATH}/bin/podman-compose \$@
+EOF
+chmod +x ~/.local/bin/podman-compose
+----

@@ -12,6 +12,6 @@ export GROUP=kafka-broker
 export CA_KEY_PASS="cakeypass"
 export CERT_KEY_PASS="certkeypass"
 generateCA
-NAME=server CERT_SAN="IP:127.0.0.1,DNS:localhost,DNS:kafka,DNS:kafka-broker1,DNS:kafka-broker2,DNS:kafka-broker3,DNS:kafka-broker1.${DOMAIN_NAME},DNS:kafka-broker2.${DOMAIN_NAME},DNS:kafka-broker3.${DOMAIN_NAME}" generateCert
+NAME=server CERT_SAN="IP:127.0.0.1,DNS:localhost,DNS:kafka,DNS:kafka-broker1,DNS:kafka-broker2,DNS:kafka-broker3" generateCert
 
 btpl "${EXAMPLE_DIR}/client.properties.btpl" "${EXAMPLE_DIR}/target/client.properties"

@@ -103,7 +103,7 @@ services:
             KAFKA_NODE_ID: 101 # (default: -1, required in KRaft mode) The node id for this server.
             KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181 # (required) Instructs Kafka how to get in touch with ZooKeeper.
             #### Socket Server Settings ###
-            KAFKA_ADVERTISED_LISTENERS: HOST://localhost:19092,PLAINTEXT://kafka-broker1.${DOMAIN_NAME}:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
+            KAFKA_ADVERTISED_LISTENERS: HOST://localhost:19092,PLAINTEXT://kafka-broker1:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
 
     kafka-broker2:
@@ -122,7 +122,7 @@ services:
             KAFKA_NODE_ID: 102 # (default: -1, required in KRaft mode) The node id for this server.
             KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181 # (required) Instructs Kafka how to get in touch with ZooKeeper.
             #### Socket Server Settings ###
-            KAFKA_ADVERTISED_LISTENERS: HOST://localhost:29092,PLAINTEXT://kafka-broker2.${DOMAIN_NAME}:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
+            KAFKA_ADVERTISED_LISTENERS: HOST://localhost:29092,PLAINTEXT://kafka-broker2:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
 
     kafka-broker3:
@@ -141,7 +141,7 @@ services:
             KAFKA_NODE_ID: 103 # (default: -1, required in KRaft mode) The node id for this server.
             KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181 # (required) Instructs Kafka how to get in touch with ZooKeeper.
             #### Socket Server Settings ###
-            KAFKA_ADVERTISED_LISTENERS: HOST://localhost:39092,PLAINTEXT://kafka-broker3.${DOMAIN_NAME}:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
+            KAFKA_ADVERTISED_LISTENERS: HOST://localhost:39092,PLAINTEXT://kafka-broker3:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
 
 volumes:
@@ -154,7 +154,3 @@ volumes:
     kafka-broker1:
     kafka-broker2:
     kafka-broker3:
-
-networks:
-    default:
-        name: ${DOMAIN_NAME}

@@ -100,7 +100,7 @@ services:
             KAFKA_NODE_ID: 101 # (default: -1, required in KRaft mode) The node id for this server.
             KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka-controller1:9093,2@kafka-controller2:9093,3@kafka-controller3:9093 # (required in KRaft mode) The connect string for the controller quorum
             #### Socket Server Settings ###
-            KAFKA_ADVERTISED_LISTENERS: EXTERNAL_SSL://localhost:19092,PLAINTEXT://kafka-broker1.${DOMAIN_NAME}:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
+            KAFKA_ADVERTISED_LISTENERS: EXTERNAL_SSL://localhost:19092,PLAINTEXT://kafka-broker1:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
             KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER # (required in KRaft mode) A comma-separated list of the names of the listeners used by the controller.
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL_SSL:SSL,CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
             KAFKA_SSL_KEYSTORE_TYPE: JKS
@@ -129,7 +129,7 @@ services:
             KAFKA_NODE_ID: 102 # (default: -1, required in KRaft mode) The node id for this server.
             KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka-controller1:9093,2@kafka-controller2:9093,3@kafka-controller3:9093 # (required in KRaft mode) The connect string for the controller quorum
             #### Socket Server Settings ###
-            KAFKA_ADVERTISED_LISTENERS: EXTERNAL_SSL://localhost:29092,PLAINTEXT://kafka-broker2.${DOMAIN_NAME}:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
+            KAFKA_ADVERTISED_LISTENERS: EXTERNAL_SSL://localhost:29092,PLAINTEXT://kafka-broker2:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
             KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER # (required in KRaft mode) A comma-separated list of the names of the listeners used by the controller.
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL_SSL:SSL,CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
             KAFKA_SSL_KEYSTORE_TYPE: JKS
@@ -158,7 +158,7 @@ services:
             KAFKA_NODE_ID: 103 # (default: -1, required in KRaft mode) The node id for this server.
             KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka-controller1:9093,2@kafka-controller2:9093,3@kafka-controller3:9093 # (required in KRaft mode) The connect string for the controller quorum
             #### Socket Server Settings ###
-            KAFKA_ADVERTISED_LISTENERS: EXTERNAL_SSL://localhost:39092,PLAINTEXT://kafka-broker3.${DOMAIN_NAME}:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
+            KAFKA_ADVERTISED_LISTENERS: EXTERNAL_SSL://localhost:39092,PLAINTEXT://kafka-broker3:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
             KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER # (required in KRaft mode) A comma-separated list of the names of the listeners used by the controller.
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL_SSL:SSL,CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
             KAFKA_SSL_KEYSTORE_TYPE: JKS
@@ -173,7 +173,3 @@ volumes:
     kafka-broker1:
     kafka-broker2:
     kafka-broker3:
-
-networks:
-    default:
-        name: ${DOMAIN_NAME}

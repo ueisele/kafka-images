@@ -37,7 +37,7 @@ services:
             KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka-server1:9093,2@kafka-server2:9093,3@kafka-server3:9093 # (required in KRaft mode) The connect string for the controller quorum
             #### Socket Server Settings ###
             KAFKA_LISTENERS: HOST://:19092,PLAINTEXT://:9092,CONTROLLER://:9093 # (by default derived from advertised listeners) List of URIs we will listen on and the listener names. In this case, Kafka listens in both ports on all interfaces.
-            KAFKA_ADVERTISED_LISTENERS: HOST://localhost:19092,PLAINTEXT://kafka-server1.${DOMAIN_NAME}:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
+            KAFKA_ADVERTISED_LISTENERS: HOST://localhost:19092,PLAINTEXT://kafka-server1:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
             KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER # (default: required in KRaft mode) A comma-separated list of the names of the listeners used by the controller.
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: HOST:PLAINTEXT,CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
 
@@ -62,7 +62,7 @@ services:
             KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka-server1:9093,2@kafka-server2:9093,3@kafka-server3:9093 # (required in KRaft mode) The connect string for the controller quorum
             #### Socket Server Settings ###
             KAFKA_LISTENERS: HOST://:29092,PLAINTEXT://:9092,CONTROLLER://:9093 # (by default derived from advertised listeners) List of URIs we will listen on and the listener names. In this case, Kafka listens in both ports on all interfaces.
-            KAFKA_ADVERTISED_LISTENERS: HOST://localhost:29092,PLAINTEXT://kafka-server2.${DOMAIN_NAME}:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
+            KAFKA_ADVERTISED_LISTENERS: HOST://localhost:29092,PLAINTEXT://kafka-server2:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
             KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER # (default: required in KRaft mode) A comma-separated list of the names of the listeners used by the controller.
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: HOST:PLAINTEXT,CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
 
@@ -87,7 +87,7 @@ services:
             KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka-server1:9093,2@kafka-server2:9093,3@kafka-server3:9093 # (required in KRaft mode) The connect string for the controller quorum
             #### Socket Server Settings ###
             KAFKA_LISTENERS: HOST://:39092,PLAINTEXT://:9092,CONTROLLER://:9093 # (by default derived from advertised listeners) List of URIs we will listen on and the listener names. In this case, Kafka listens in both ports on all interfaces.
-            KAFKA_ADVERTISED_LISTENERS: HOST://localhost:39092,PLAINTEXT://kafka-server3.${DOMAIN_NAME}:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
+            KAFKA_ADVERTISED_LISTENERS: HOST://localhost:39092,PLAINTEXT://kafka-server3:9092 # (required) Describes how the host name that is advertised and can be reached by clients. HOST://localhost:19092 enables access from Docker host.
             KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER # (default: required in KRaft mode) A comma-separated list of the names of the listeners used by the controller.
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: HOST:PLAINTEXT,CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL # (default: PLAINTEXT:PLAINTEXT,...) Map between listener names and security protocols. In this scenario this setting is used to define listeners with names.
        
@@ -95,7 +95,3 @@ volumes:
     kafka-server-1:
     kafka-server-2:
     kafka-server-3:
-
-networks:
-    default:
-        name: ${DOMAIN_NAME}

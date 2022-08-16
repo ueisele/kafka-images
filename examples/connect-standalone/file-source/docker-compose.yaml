@@ -75,7 +75,3 @@ volumes:
   kafka:
   connector-offsets:
   file-source:
-
-networks:
-  default:
-    name: ${DOMAIN_NAME}
