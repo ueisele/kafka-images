@@ -16,7 +16,7 @@ ZULU_OPENJDK_RELEASE=11
 function usage () {
     echo "$0: $1" >&2
     echo
-    echo "Usage: $0 [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha 37edeed] [--tag 3.1.0] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.2] [--patch 3.0.0-openjdk17.patch]"
+    echo "Usage: $0 [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha b172a0a] [--tag 3.2.1] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.4] [--patch 3.0.0-openjdk17.patch]"
     echo
     return 1
 }

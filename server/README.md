@@ -1,7 +1,7 @@
 # Docker Image for Apache Kafka Broker and Controller
 
 Docker image for running the [Open Source version of Apache Kafka](https://github.com/apache/kafka/).
-It offers support for running Kafka [KRaft mode](https://github.com/apache/kafka/blob/3.1.0/config/kraft/README.md) as well as in ZooKeeper mode.
+It offers support for running Kafka [KRaft mode](https://github.com/apache/kafka/blob/3.2.1/config/kraft/README.md) as well as in ZooKeeper mode.
 
 The Kafka distribution included in the Docker image is built directly from [source](https://github.com/apache/kafka/).
 
@@ -11,18 +11,21 @@ The Docker images are available on DockerHub repository [ueisele/apache-kafka-se
 
 Most recent tags for `RELEASE` builds:
 
-* `3.1.0`, `3.1.0-zulu17`, `3.1.0-zulu17.0.2`, `3.1.0-zulu17-ubi8.5`, `3.1.0-zulu17.0.2-ubi8.5-240`
-* `3.0.1`, `3.0.1-zulu17`, `3.0.1-zulu17.0.2`, `3.0.1-zulu17-ubi8.5`, `3.0.1-zulu17.0.2-ubi8.5-240`
-* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17.0.2`, `3.0.0-zulu17-ubi8.5`, `3.0.0-zulu17.0.2-ubi8.5-240`
-* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.14`, `2.8.1-zulu11-ubi8.5`, `2.8.1-zulu11.0.14-ubi8.5-240`
-* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.14`, `2.8.0-zulu11-ubi8.5`, `2.8.0-zulu11.0.14-ubi8.5-240`
+* `3.2.1`, `3.2.1-zulu17`, `3.2.1-zulu17.0.4`, `3.2.1-zulu17-ubi8.6`, `3.2.1-zulu17.0.4-ubi8.6-902`
+* `3.2.0`, `3.2.0-zulu17`, `3.2.0-zulu17.0.4`, `3.2.0-zulu17-ubi8.6`, `3.2.0-zulu17.0.4-ubi8.6-902`
+* `3.1.1`, `3.1.1-zulu17`, `3.1.1-zulu17.0.4`, `3.1.1-zulu17-ubi8.6`, `3.1.1-zulu17.0.4-ubi8.6-902`
+* `3.1.0`, `3.1.0-zulu17`, `3.1.0-zulu17.0.4`, `3.1.0-zulu17-ubi8.6`, `3.1.0-zulu17.0.4-ubi8.6-902`
+* `3.0.1`, `3.0.1-zulu17`, `3.0.1-zulu17.0.4`, `3.0.1-zulu17-ubi8.6`, `3.0.1-zulu17.0.4-ubi8.6-902`
+* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17.0.4`, `3.0.0-zulu17-ubi8.6`, `3.0.0-zulu17.0.4-ubi8.6-902`
+* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.16`, `2.8.1-zulu11-ubi8.6`, `2.8.1-zulu11.0.16-ubi8.6-902`
+* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.16`, `2.8.0-zulu11-ubi8.6`, `2.8.0-zulu11.0.16-ubi8.6-902`
 
 Most recent tags for `SNAPSHOT` builds:
 
-* `3.3.0-SNAPSHOT`, `3.3.0-SNAPSHOT-zulu17`, `3.3.0-SNAPSHOT-zulu17.0.2`, `3.3.0-SNAPSHOT-zulu17-ubi8.5`, `3.3.0-SNAPSHOT-zulu17.0.2-ubi8.5-240`
-* `3.2.0-SNAPSHOT`, `3.2.0-SNAPSHOT-zulu17`, `3.2.0-SNAPSHOT-zulu17.0.2`, `3.2.0-SNAPSHOT-zulu17-ubi8.5`, `3.2.0-SNAPSHOT-zulu17.0.2-ubi8.5-240`
+* `3.4.0-SNAPSHOT`, `3.4.0-SNAPSHOT-zulu17`, `3.4.0-SNAPSHOT-zulu17.0.4`, `3.4.0-SNAPSHOT-zulu17-ubi8.6`, `3.4.0-SNAPSHOT-zulu17.0.4-ubi8.6-902`
+* `3.3.0-SNAPSHOT`, `3.3.0-SNAPSHOT-zulu17`, `3.3.0-SNAPSHOT-zulu17.0.4`, `3.3.0-SNAPSHOT-zulu17-ubi8.6`, `3.3.0-SNAPSHOT-zulu17.0.4-ubi8.6-902`
 
-Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-server:3.2.0-SNAPSHOT-g7215c90`.
+Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-server-standalome:3.3.0-SNAPSHOT-g478de45`.
 
 ## Image
 
@@ -61,7 +64,7 @@ docker run -d --name kafka-kraft -p 9092:9092 \
     -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1 \
-    ueisele/apache-kafka-server:3.1.0
+    ueisele/apache-kafka-server:3.2.1
 ```
 
 You find additional examples in [examples/kraft/]():
@@ -84,7 +87,7 @@ In order to run Apache Kafka with a single instance in `ZooKeeper` mode, first s
 docker run -d --name zookeeper --net host \
     -e ZOO_MY_ID=1 \
     -e ZOO_SERVERS="server.1=localhost:2888:3888;2181" \
-    zookeeper:3.7.0
+    zookeeper:3.8.0
 ```
 
 If ZooKeeper is running, a single Kafka instance can be started with the following command:
@@ -98,7 +101,7 @@ docker run -d --name kafka-zk --net host \
     -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1 \
-    ueisele/apache-kafka-server:3.1.0
+    ueisele/apache-kafka-server:3.2.1
 ```
 
 You find additional examples in [examples/zk/]():
@@ -231,7 +234,7 @@ docker run -d --name kafka-kraft -p 9092:9092 \
     -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1 \
-    ueisele/apache-kafka-server:3.1.0
+    ueisele/apache-kafka-server:3.2.1
 ```
 
 ## Build
@@ -241,13 +244,13 @@ In order to create your own Docker image for Apache Kafka clone the [ueisele/kaf
 ```bash
 git clone https://github.com/ueisele/kafka-images.git
 cd kafka-images
-server/build.sh --build --tag 3.1.0 --openjdk-release 17
+server/build.sh --build --tag 3.2.1 --openjdk-release 17
 ```
 
 To create an image with a specific OpenJDK version use the following command:
 
 ```bash
-server/build.sh --build --tag 3.1.0 --openjdk-release 17 --openjdk-version 17.0.2
+server/build.sh --build --tag 3.2.1 --openjdk-release 17 --openjdk-version 17.0.4
 ```
 
 By default Apache Kafka 3.0.0 does not support Java 17. In order to build Apache Kafka 3.0.0 with Java 17, the Gradle configuration is patched with [patch/3.0.0-openjdk17.patch]().
@@ -256,7 +259,7 @@ By default Apache Kafka 3.0.0 does not support Java 17. In order to build Apache
 server/build.sh --build --tag 3.0.0 --openjdk-release 17 --patch 3.0.0-openjdk17.patch
 ```
 
-To build the most recent `SNAPSHOT` of Apache Kafka 3.2.0 with Java 17, run:
+To build the most recent `SNAPSHOT` of Apache Kafka 3.4.0 with Java 17, run:
 
 ```bash
 server/build.sh --build --branch trunk --openjdk-release 17
@@ -266,7 +269,7 @@ server/build.sh --build --branch trunk --openjdk-release 17
 
 The `server/build.sh` script provides the following options:
 
-`Usage: server/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha 37edeed] [--tag 3.1.0] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.2] [--patch 3.0.0-openjdk17.patch]`
+`Usage: server/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha b172a0a] [--tag 3.2.1] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.4] [--patch 3.0.0-openjdk17.patch]`
 
 ## License 
 

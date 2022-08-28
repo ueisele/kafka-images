@@ -7,7 +7,7 @@ source "${EXAMPLE_DIR}/generate-ca"
 source "${EXAMPLE_DIR}/generate-cert"
 source "${EXAMPLE_DIR}/btpl"
 
-export TARGET_DIR="${EXAMPLE_DIR}/target/certs"
+export TARGET_DIR="${EXAMPLE_DIR}/target"
 export GROUP=kafka-broker
 export CA_KEY_PASS="cakeypass"
 export CA_TRUSTSTORE_PASS="changeit"
@@ -16,4 +16,10 @@ export KEYSTORE_PASS="changeit"
 generateCA
 NAME=server CERT_SAN="IP:127.0.0.1,DNS:localhost,DNS:kafka,DNS:kafka-broker1,DNS:kafka-broker2,DNS:kafka-broker3" generateCert
 
-btpl "${EXAMPLE_DIR}/client.properties.btpl" "${EXAMPLE_DIR}/target/client.properties"
+btpl "${EXAMPLE_DIR}/client.properties.btpl" "${TARGET_DIR}/client.properties"
+
+if command -v podman &> /dev/null; then
+  # if podman is installed, set permissions of generated artifacts to allow access by user appuser if podman is used in rootless mode
+  chmod -R ugo=rwX ${TARGET_DIR}
+  podman unshare chown -R 1000:1000 ${TARGET_DIR}
+fi

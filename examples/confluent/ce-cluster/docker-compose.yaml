@@ -257,17 +257,21 @@ services:
     #############################################################
     # Kafka CLI                                                 #
     #############################################################
-    kafka-cli:
+    cli-kafka:
         image: confluentinc/cp-server:${CONFLUENT_VERSION}
-        hostname: kafka-cli
+        hostname: cli-kafka
         entrypoint: /bin/bash
         tty: true
+        volumes:
+         - ./security/client:/tmp/conf
 
-    kafkacat:
-        image: confluentinc/cp-kafkacat:${CONFLUENT_VERSION}
-        hostname: kafkacat
+    cli-kcat:
+        image: confluentinc/cp-kcat:${CONFLUENT_VERSION}
+        hostname: cli-kcat
         entrypoint: /bin/bash
         tty: true
+        volumes:
+         - ./security/client:/tmp/conf
 
 
 volumes:

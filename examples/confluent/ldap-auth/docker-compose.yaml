@@ -373,25 +373,25 @@ services:
     #############################################################
     # CLIs                                                      #
     #############################################################
-    confluent-cli:
-        image: confluentinc/confluent-cli:2.4.0
-        hostname: confluent-cli
+    cli-confluent:
+        image: confluentinc/confluent-cli:2.24.2
+        hostname: cli-confluent
         entrypoint: /bin/bash
         tty: true
         environment:
             MDS_URL: http://kafka-broker1:8090
 
-    kafka-cli:
+    cli-kafka:
         image: confluentinc/cp-server:${CONFLUENT_VERSION}
-        hostname: kafka-cli
+        hostname: cli-kafka
         entrypoint: /bin/bash
         tty: true
         volumes:
          - ./security/client:/tmp/conf
 
-    kafkacat:
-        image: confluentinc/cp-kafkacat:${CONFLUENT_VERSION}
-        hostname: kafkacat
+    cli-kcat:
+        image: confluentinc/cp-kcat:${CONFLUENT_VERSION}
+        hostname: cli-kcat
         entrypoint: /bin/bash
         tty: true
         volumes:

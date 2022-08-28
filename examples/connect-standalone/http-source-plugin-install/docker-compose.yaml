@@ -82,7 +82,7 @@ services:
         MOCKSERVER_PROPERTY_FILE: /config/mockserver.properties
         MOCKSERVER_INITIALIZATION_JSON_PATH: /config/mock-server.initializer.json
       volumes:
-        - ./mock-server.initializer.json:/config/mock-server.initializer.json
+        - ./mock-server.initializer.json:/config/mock-server.initializer.json:ro,z
 
 volumes:
   kafka:

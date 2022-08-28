@@ -90,7 +90,7 @@ services:
                     - kafka
         volumes:
             - kafka-broker1:/opt/apache/kafka/data
-            - ./target/certs:/opt/apache/kafka/secrets/
+            - ./target:/opt/apache/kafka/secrets/:ro,z
         environment:
             #### Setup ####
             CLUSTER_ID: ${CLUSTER_ID} # In KRaft mode the cluster id must be generated manually. All nodes in a cluster must have the same id.
@@ -118,7 +118,7 @@ services:
                     - kafka
         volumes:
             - kafka-broker2:/opt/apache/kafka/data
-            - ./target/certs:/opt/apache/kafka/secrets/
+            - ./target:/opt/apache/kafka/secrets/:ro,z
         environment:
             #### Setup ####
             CLUSTER_ID: ${CLUSTER_ID} # In KRaft mode the cluster id must be generated manually. All nodes in a cluster must have the same id.
@@ -146,7 +146,7 @@ services:
                     - kafka
         volumes:
             - kafka-broker3:/opt/apache/kafka/data
-            - ./target/certs:/opt/apache/kafka/secrets/
+            - ./target:/opt/apache/kafka/secrets/:ro,z
         environment:
             #### Setup ####
             CLUSTER_ID: ${CLUSTER_ID} # In KRaft mode the cluster id must be generated manually. All nodes in a cluster must have the same id.

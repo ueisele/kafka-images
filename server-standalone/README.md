@@ -1,7 +1,7 @@
 # Standalone Docker Image for Apache Kafka Broker and Controller
 
 Docker image for running the [Open Source version of Apache Kafka](https://github.com/apache/kafka/).
-It offers support for running a single Apache Kafka instance in Kafka [KRaft mode](https://github.com/apache/kafka/blob/3.1.0/config/kraft/README.md).
+It offers support for running a single Apache Kafka instance in Kafka [KRaft mode](https://github.com/apache/kafka/blob/3.2.1/config/kraft/README.md).
 
 The Kafka distribution included in the Docker image is built directly from [source](https://github.com/apache/kafka/).
 
@@ -13,32 +13,35 @@ The Docker images are available on DockerHub repository [ueisele/apache-kafka-se
 
 Most recent tags for `RELEASE` builds:
 
-* `3.1.0`, `3.1.0-zulu17`, `3.1.0-zulu17.0.2`, `3.1.0-zulu17-ubi8.5`, `3.1.0-zulu17.0.2-ubi8.5-240`
-* `3.0.1`, `3.0.1-zulu17`, `3.0.1-zulu17.0.2`, `3.0.1-zulu17-ubi8.5`, `3.0.1-zulu17.0.2-ubi8.5-240`
-* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17.0.2`, `3.0.0-zulu17-ubi8.5`, `3.0.0-zulu17.0.2-ubi8.5-240`
-* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.14`, `2.8.1-zulu11-ubi8.5`, `2.8.1-zulu11.0.14-ubi8.5-240`
-* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.14`, `2.8.0-zulu11-ubi8.5`, `2.8.0-zulu11.0.14-ubi8.5-240`
+* `3.2.1`, `3.2.1-zulu17`, `3.2.1-zulu17.0.4`, `3.2.1-zulu17-ubi8.6`, `3.2.1-zulu17.0.4-ubi8.6-902`
+* `3.2.0`, `3.2.0-zulu17`, `3.2.0-zulu17.0.4`, `3.2.0-zulu17-ubi8.6`, `3.2.0-zulu17.0.4-ubi8.6-902`
+* `3.1.1`, `3.1.1-zulu17`, `3.1.1-zulu17.0.4`, `3.1.1-zulu17-ubi8.6`, `3.1.1-zulu17.0.4-ubi8.6-902`
+* `3.1.0`, `3.1.0-zulu17`, `3.1.0-zulu17.0.4`, `3.1.0-zulu17-ubi8.6`, `3.1.0-zulu17.0.4-ubi8.6-902`
+* `3.0.1`, `3.0.1-zulu17`, `3.0.1-zulu17.0.4`, `3.0.1-zulu17-ubi8.6`, `3.0.1-zulu17.0.4-ubi8.6-902`
+* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17.0.4`, `3.0.0-zulu17-ubi8.6`, `3.0.0-zulu17.0.4-ubi8.6-902`
+* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.16`, `2.8.1-zulu11-ubi8.6`, `2.8.1-zulu11.0.16-ubi8.6-902`
+* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.16`, `2.8.0-zulu11-ubi8.6`, `2.8.0-zulu11.0.16-ubi8.6-902`
 
 Most recent tags for `SNAPSHOT` builds:
 
-* `3.3.0-SNAPSHOT`, `3.3.0-SNAPSHOT-zulu17`, `3.3.0-SNAPSHOT-zulu17.0.2`, `3.3.0-SNAPSHOT-zulu17-ubi8.5`, `3.3.0-SNAPSHOT-zulu17.0.2-ubi8.5-240`
-* `3.2.0-SNAPSHOT`, `3.2.0-SNAPSHOT-zulu17`, `3.2.0-SNAPSHOT-zulu17.0.2`, `3.2.0-SNAPSHOT-zulu17-ubi8.5`, `3.2.0-SNAPSHOT-zulu17.0.2-ubi8.5-240`
+* `3.4.0-SNAPSHOT`, `3.4.0-SNAPSHOT-zulu17`, `3.4.0-SNAPSHOT-zulu17.0.4`, `3.4.0-SNAPSHOT-zulu17-ubi8.6`, `3.4.0-SNAPSHOT-zulu17.0.4-ubi8.6-902`
+* `3.3.0-SNAPSHOT`, `3.3.0-SNAPSHOT-zulu17`, `3.3.0-SNAPSHOT-zulu17.0.4`, `3.3.0-SNAPSHOT-zulu17-ubi8.6`, `3.3.0-SNAPSHOT-zulu17.0.4-ubi8.6-902`
 
-Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-server-standalome:3.2.0-SNAPSHOT-g7215c90`.
+Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-server-standalome:3.3.0-SNAPSHOT-g478de45`.
 
 ## Quick Start
 
 To start a single Kafka instance in KRaft mode just run: 
 
 ```bash
-docker run --rm -p 9092:9092 ueisele/apache-kafka-server-standalone:3.1.0
+docker run --rm -p 9092:9092 ueisele/apache-kafka-server-standalone:3.2.1
 ```
 
 To start a single Kafka instance in KRaft mode with Ipv6 just run: 
 
 ```bash
 docker network create --ipv6 --subnet fd01::/80 kafka-standalone
-docker run --rm -p 9092:9092 --net kafka-standalone -e STANDALONE_BROKER_IP_VERSION=ipv6 ueisele/apache-kafka-server-standalone:3.1.0
+docker run --rm -p 9092:9092 --net kafka-standalone -e STANDALONE_BROKER_IP_VERSION=ipv6 ueisele/apache-kafka-server-standalone:3.2.1
 ```
 
 ## Configuration
@@ -76,16 +79,16 @@ In order to create your own Docker image for Apache Kafka clone the [ueisele/kaf
 ```bash
 git clone https://github.com/ueisele/kafka-images.git
 cd kafka-images
-server-standalone/build.sh --build --tag 3.1.0 --openjdk-release 17
+server-standalone/build.sh --build --tag 3.2.1 --openjdk-release 17
 ```
 
 To create an image with a specific OpenJDK version use the following command:
 
 ```bash
-server-standalone/build.sh --build --tag 3.1.0 --openjdk-release 17 --openjdk-version 17.0.2
+server-standalone/build.sh --build --tag 3.2.1 --openjdk-release 17 --openjdk-version 17.0.4
 ```
 
-To build the most recent `SNAPSHOT` of Apache Kafka 3.2.0 with Java 17, run:
+To build the most recent `SNAPSHOT` of Apache Kafka 3.4.0 with Java 17, run:
 
 ```bash
 server-standalone/build.sh --build --branch trunk --openjdk-release 17
@@ -95,7 +98,7 @@ server-standalone/build.sh --build --branch trunk --openjdk-release 17
 
 The `server-standalone/build.sh` script provides the following options:
 
-`Usage: server-standalone/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha 37edeed] [--tag 3.1.0] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.2]`
+`Usage: server-standalone/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha b172a0a] [--tag 3.2.1] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.4]`
 
 ## License 
 
