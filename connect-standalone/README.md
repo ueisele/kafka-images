@@ -45,27 +45,22 @@ Now, start a single Kafka instance:
 docker run -d --name kafka --net quickstart-kafka-connect-standalone -p 9092:9092 ueisele/apache-kafka-server-standalone:3.2.1
 ```
 
-Create some sample data:
-
-```bash
-for i in {1..7}; do echo "log line $i"; done > source.txt
-```
-
 In order to run Apache Kafka Connect in standalone mode run the following command:
 
 ```bash
 docker run -d --name kafka-connect-standalone \
     --net quickstart-kafka-connect-standalone -p 8083:8083 \
-    -v "$(pwd)/source.txt:/var/lib/kafka-connect/source.txt" \
+    -e PLUGIN_INSTALL_CONFLUENT_HUB_IDS=confluentinc/kafka-connect-datagen:latest \
     -e CONNECT_BOOTSTRAP_SERVERS=kafka:9092 \
     -e CONNECT_KEY_CONVERTER=org.apache.kafka.connect.storage.StringConverter \
-    -e CONNECT_VALUE_CONVERTER=org.apache.kafka.connect.storage.StringConverter \
+    -e CONNECT_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter \
+    -e CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE="false" \
     -e CONNECT_OFFSET_FLUSH_INTERVAL_MS=5000 \
-    -e CONNECTOR_NAME=file-source \
-    -e CONNECTOR_CONNECTOR_CLASS=FileStreamSource \
+    -e CONNECTOR_NAME=datagen-source \
+    -e CONNECTOR_CONNECTOR_CLASS=io.confluent.kafka.connect.datagen.DatagenConnector \
     -e CONNECTOR_TASKS_MAX=1 \
-    -e CONNECTOR_FILE=/var/lib/kafka-connect/source.txt \
-    -e CONNECTOR_TOPIC=connect-file-source \
+    -e CONNECTOR_KAFKA_TOPIC=connect-datagen-source \
+    -e CONNECTOR_QUICKSTART=users \
     ueisele/apache-kafka-connect-standalone:3.2.1
 ```
 
@@ -75,14 +70,8 @@ Consume published messages:
 docker run --rm -it --net quickstart-kafka-connect-standalone ueisele/apache-kafka-server-standalone:3.2.1 \
     kafka-console-consumer.sh \
         --bootstrap-server kafka:9092 \
-        --topic connect-file-source \
+        --topic connect-datagen-source \
         --from-beginning
-```
-
-If you add additional lines to the sample data you will recognise that it is published, too:
-
-```bash
-for i in {1..3}; do echo "additional log line $i"; done >> source.txt
 ```
 
 You find additional examples in [examples/connect-standalone/]():
