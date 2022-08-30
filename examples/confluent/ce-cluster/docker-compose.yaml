@@ -262,16 +262,12 @@ services:
         hostname: cli-kafka
         entrypoint: /bin/bash
         tty: true
-        volumes:
-         - ./security/client:/tmp/conf
 
     cli-kcat:
         image: confluentinc/cp-kcat:${CONFLUENT_VERSION}
         hostname: cli-kcat
         entrypoint: /bin/bash
         tty: true
-        volumes:
-         - ./security/client:/tmp/conf
 
 
 volumes:
