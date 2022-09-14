@@ -10,7 +10,7 @@ services:
     # Zookeeper                                                 #
     #############################################################
     zookeeper1:
-        image: zookeeper:${ZOOKEEPER_VERSION}
+        image: docker.io/zookeeper:${ZOOKEEPER_VERSION}
         restart: always
         hostname: zookeeper1
         volumes:
@@ -31,7 +31,7 @@ services:
             ZOO_CFG_EXTRA: "metricsProvider.className=org.apache.zookeeper.metrics.prometheus.PrometheusMetricsProvider metricsProvider.httpPort=7070 metricsProvider.exportJvmInfo=true"
 
     zookeeper2:
-        image: zookeeper:${ZOOKEEPER_VERSION}
+        image: docker.io/zookeeper:${ZOOKEEPER_VERSION}
         restart: always
         hostname: zookeeper2
         volumes:
@@ -50,7 +50,7 @@ services:
             ZOO_CFG_EXTRA: "metricsProvider.className=org.apache.zookeeper.metrics.prometheus.PrometheusMetricsProvider metricsProvider.httpPort=7070 metricsProvider.exportJvmInfo=true"
 
     zookeeper3:
-        image: zookeeper:${ZOOKEEPER_VERSION}
+        image: docker.io/zookeeper:${ZOOKEEPER_VERSION}
         restart: always
         hostname: zookeeper3
         volumes:
@@ -75,7 +75,7 @@ services:
     # Confluent Server                                          #
     #############################################################
     kafka-broker1:
-        image: confluentinc/cp-server:${CONFLUENT_VERSION}
+        image: docker.io/confluentinc/cp-server:${CONFLUENT_VERSION}
         restart: always
         networks:
             default:
@@ -83,7 +83,7 @@ services:
                     - kafka
         volumes:
             - kafka-broker1:/var/lib/kafka/data
-            - ./security/keypair:/tmp/conf
+            - ./security/keypair:/tmp/conf:ro,z
         environment:
             #### Server Basics ####
             KAFKA_NODE_ID: 101
@@ -168,7 +168,7 @@ services:
             KAFKA_KAFKA_REST_CLIENT_CONFLUENT_METADATA_SERVER_URLS_MAX_AGE_MS: 60000           
 
     kafka-broker2:
-        image: confluentinc/cp-server:${CONFLUENT_VERSION}
+        image: docker.io/confluentinc/cp-server:${CONFLUENT_VERSION}
         restart: always
         networks:
             default:
@@ -176,7 +176,7 @@ services:
                     - kafka
         volumes:
             - kafka-broker2:/var/lib/kafka/data
-            - ./security/keypair:/tmp/conf
+            - ./security/keypair:/tmp/conf:ro,z
         environment:
             #### Server Basics ####
             KAFKA_NODE_ID: 102
@@ -261,17 +261,15 @@ services:
             KAFKA_KAFKA_REST_CLIENT_CONFLUENT_METADATA_SERVER_URLS_MAX_AGE_MS: 60000        
 
     kafka-broker3:
-        image: confluentinc/cp-server:${CONFLUENT_VERSION}
+        image: docker.io/confluentinc/cp-server:${CONFLUENT_VERSION}
         restart: always
-        ports:
-            - 39092:39092
         networks:
             default:
                 aliases:
                     - kafka
         volumes:
             - kafka-broker3:/var/lib/kafka/data
-            - ./security/keypair:/tmp/conf
+            - ./security/keypair:/tmp/conf:ro,z
         environment:
             #### Server Basics ####
             KAFKA_NODE_ID: 103
@@ -359,10 +357,10 @@ services:
     # Open Ldap                                                 #
     #############################################################
     openldap:
-        image: osixia/openldap:1.3.0
+        image: docker.io/osixia/openldap:1.3.0
         restart: always
         volumes:
-            - ./security/ldap_users:/container/service/slapd/assets/config/bootstrap/ldif/custom
+            - ./security/ldap_users:/container/service/slapd/assets/config/bootstrap/ldif/custom:ro,z
         environment:
             LDAP_ORGANISATION: "ConfluentDemo"
             LDAP_DOMAIN: "confluentdemo.io"
@@ -374,28 +372,31 @@ services:
     # CLIs                                                      #
     #############################################################
     cli-confluent:
-        image: confluentinc/confluent-cli:2.24.2
+        image: docker.io/confluentinc/confluent-cli:2.24.2
         hostname: cli-confluent
         entrypoint: /bin/bash
         tty: true
+        user: root
         environment:
-            MDS_URL: http://kafka-broker1:8090
+            CONFLUENT_PLATFORM_MDS_URL: http://kafka:8090
 
     cli-kafka:
-        image: confluentinc/cp-server:${CONFLUENT_VERSION}
+        image: docker.io/confluentinc/cp-server:${CONFLUENT_VERSION}
         hostname: cli-kafka
         entrypoint: /bin/bash
         tty: true
+        user: root
         volumes:
-         - ./security/client:/tmp/conf
+         - ./security/client:/tmp/conf:ro,z
 
     cli-kcat:
-        image: confluentinc/cp-kcat:${CONFLUENT_VERSION}
+        image: docker.io/confluentinc/cp-kcat:${CONFLUENT_VERSION}
         hostname: cli-kcat
         entrypoint: /bin/bash
         tty: true
+        user: root
         volumes:
-         - ./security/client:/tmp/conf
+         - ./security/client:/tmp/conf:ro,z
 
 volumes:
     zookeeper1_data:
