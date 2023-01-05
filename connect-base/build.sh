@@ -211,7 +211,7 @@ function parseCmd () {
         KAFKA_VERSION="$(resolveKafkaVersion ${KAFKA_GITHUB_REPO} ${KAFKA_GIT_COMMIT_SHA})"
         KAFKA_TAG_VERSION="${KAFKA_VERSION}-g$(echo ${KAFKA_GIT_COMMIT_SHA} | cut -c 1-7)"
     elif [ -n "${KAFKA_GIT_TAG}" ]; then
-        KAFKA_GIT_COMMIT_SHA=$(git ls-remote --tags ${KAFKA_GIT_REPO} "refs/tags/${KAFKA_GIT_TAG}^{}" | awk '{ print $1}')
+        KAFKA_GIT_COMMIT_SHA=$(git ls-remote --tags ${KAFKA_GIT_REPO} "refs/tags/${KAFKA_GIT_TAG}" | awk '{ print $1}')
         KAFKA_BUILD_GIT_REFSPEC="tags/${KAFKA_GIT_TAG}"
         KAFKA_VERSION=${KAFKA_GIT_TAG}
         KAFKA_TAG_VERSION=${KAFKA_GIT_TAG}

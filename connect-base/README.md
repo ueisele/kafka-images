@@ -8,21 +8,29 @@ It is a base image and therefore has no additional Cli tools and Kafka Connect p
 The Docker images are available on DockerHub repository [ueisele/apache-kafka-connect-base](https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect-base), and the source files for the images are available on GitHub repository [ueisele/kafka-images](https://github.com/ueisele/kafka-images).
 
 ## Most Recent Tags
+
 Most recent tags for `RELEASE` builds:
 
-* `3.2.1`, `3.2.1-zulu17`, `3.2.1-zulu17.0.4`, `3.2.1-zulu17-ubi8.6`, `3.2.1-zulu17.0.4-ubi8.6-902`
-* `3.2.0`, `3.2.0-zulu17`, `3.2.0-zulu17.0.4`, `3.2.0-zulu17-ubi8.6`, `3.2.0-zulu17.0.4-ubi8.6-902`
-* `3.1.1`, `3.1.1-zulu17`, `3.1.1-zulu17.0.4`, `3.1.1-zulu17-ubi8.6`, `3.1.1-zulu17.0.4-ubi8.6-902`
-* `3.1.0`, `3.1.0-zulu17`, `3.1.0-zulu17.0.4`, `3.1.0-zulu17-ubi8.6`, `3.1.0-zulu17.0.4-ubi8.6-902`
-* `3.0.1`, `3.0.1-zulu17`, `3.0.1-zulu17.0.4`, `3.0.1-zulu17-ubi8.6`, `3.0.1-zulu17.0.4-ubi8.6-902`
-* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17.0.4`, `3.0.0-zulu17-ubi8.6`, `3.0.0-zulu17.0.4-ubi8.6-902`
-* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.16`, `2.8.1-zulu11-ubi8.6`, `2.8.1-zulu11.0.16-ubi8.6-902`
-* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.16`, `2.8.0-zulu11-ubi8.6`, `2.8.0-zulu11.0.16-ubi8.6-902`
+* `3.3.1`, `3.3.1-zulu17`, `3.3.1-zulu17.0.5`, `3.3.1-zulu17-ubi8.6`, `3.3.1-zulu17.0.5-ubi8.7-1031`
+* `3.3.0`, `3.3.0-zulu17`, `3.3.0-zulu17.0.5`, `3.3.0-zulu17-ubi8.6`, `3.3.0-zulu17.0.5-ubi8.7-1031`
+* `3.2.3`, `3.2.3-zulu17`, `3.2.3-zulu17.0.5`, `3.2.3-zulu17-ubi8.6`, `3.2.3-zulu17.0.5-ubi8.7-1031`
+* `3.2.2`, `3.2.2-zulu17`, `3.2.2-zulu17.0.5`, `3.2.2-zulu17-ubi8.6`, `3.2.2-zulu17.0.5-ubi8.7-1031`
+* `3.2.1`, `3.2.1-zulu17`, `3.2.1-zulu17.0.5`, `3.2.1-zulu17-ubi8.6`, `3.2.1-zulu17.0.5-ubi8.7-1031`
+* `3.2.0`, `3.2.0-zulu17`, `3.2.0-zulu17.0.5`, `3.2.0-zulu17-ubi8.6`, `3.2.0-zulu17.0.5-ubi8.7-1031`
+* `3.1.2`, `3.1.2-zulu17`, `3.1.2-zulu17.0.5`, `3.1.2-zulu17-ubi8.6`, `3.1.2-zulu17.0.5-ubi8.7-1031`
+* `3.1.1`, `3.1.1-zulu17`, `3.1.1-zulu17.0.5`, `3.1.1-zulu17-ubi8.6`, `3.1.1-zulu17.0.5-ubi8.7-1031`
+* `3.1.0`, `3.1.0-zulu17`, `3.1.0-zulu17.0.5`, `3.1.0-zulu17-ubi8.6`, `3.1.0-zulu17.0.5-ubi8.7-1031`
+* `3.0.2`, `3.0.2-zulu17`, `3.0.2-zulu17.0.5`, `3.0.2-zulu17-ubi8.6`, `3.0.2-zulu17.0.5-ubi8.7-1031`
+* `3.0.1`, `3.0.1-zulu17`, `3.0.1-zulu17.0.5`, `3.0.1-zulu17-ubi8.6`, `3.0.1-zulu17.0.5-ubi8.7-1031`
+* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17.0.5`, `3.0.0-zulu17-ubi8.6`, `3.0.0-zulu17.0.5-ubi8.7-1031`
+* `2.8.2`, `2.8.2-zulu11`, `2.8.2-zulu11.0.17`, `2.8.2-zulu11-ubi8.6`, `2.8.2-zulu11.0.17-ubi8.7-1031`
+* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.17`, `2.8.1-zulu11-ubi8.6`, `2.8.1-zulu11.0.17-ubi8.7-1031`
+* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.17`, `2.8.0-zulu11-ubi8.6`, `2.8.0-zulu11.0.17-ubi8.7-1031`
 
 Most recent tags for `SNAPSHOT` builds:
 
-* `3.4.0-SNAPSHOT`, `3.4.0-SNAPSHOT-zulu17`, `3.4.0-SNAPSHOT-zulu17.0.4`, `3.4.0-SNAPSHOT-zulu17-ubi8.6`, `3.4.0-SNAPSHOT-zulu17.0.4-ubi8.6-902`
-* `3.3.0-SNAPSHOT`, `3.3.0-SNAPSHOT-zulu17`, `3.3.0-SNAPSHOT-zulu17.0.4`, `3.3.0-SNAPSHOT-zulu17-ubi8.6`, `3.3.0-SNAPSHOT-zulu17.0.4-ubi8.6-902`
+* `3.5.0-SNAPSHOT`, `3.5.0-SNAPSHOT-zulu17`, `3.5.0-SNAPSHOT-zulu17.0.5`, `3.5.0-SNAPSHOT-zulu17-ubi8.6`, `3.5.0-SNAPSHOT-zulu17.0.5-ubi8.7-1031`
+* `3.4.0-SNAPSHOT`, `3.4.0-SNAPSHOT-zulu17`, `3.4.0-SNAPSHOT-zulu17.0.5`, `3.4.0-SNAPSHOT-zulu17-ubi8.6`, `3.4.0-SNAPSHOT-zulu17.0.5-ubi8.7-1031`
 
 Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-server-standalome:3.3.0-SNAPSHOT-g478de45`.
 

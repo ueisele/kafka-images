@@ -11,9 +11,9 @@ The Docker images are available in the following repositories on DockerHub:
 
 ## Most Recent Tags
 
-* `zulu17`, `zulu17.0.4`, `zulu17-ubi8.6`, `zulu17.0.4-ubi8.6-902`
-* `zulu11`, `zulu11.0.16`, `zulu11-ubi8.6`, `zulu11.0.16-ubi8.6-902`
-* `zulu8`, `zulu8.0.345`, `zulu8-ubi8.6`, `zulu8.0.345-ubi8.6-902` 
+* `zulu17`, `zulu17.0.5`, `zulu17-ubi8.6`, `zulu17.0.5-ubi8.7-1031`
+* `zulu11`, `zulu11.0.17`, `zulu11-ubi8.6`, `zulu11.0.17-ubi8.7-1031`
+* `zulu8`, `zulu8.0.352`, `zulu8-ubi8.6`, `zulu8.0.352-ubi8.7-1031` 
 
 ## Image
 
