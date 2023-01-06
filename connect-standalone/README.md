@@ -189,9 +189,9 @@ You can find the entire example setup at [examples/connect-standalone/http-sourc
 
 This Kafka Connect image has the Confluent converters for Avro, Protobuf and JSON Schema already pre-installed to simplify usage of Confluent Schema Registry.
 
-* [confluentinc/kafka-connect-avro-converter:7.3.1](https://www.confluent.io/hub/confluentinc/kafka-connect-avro-converter)
-* [confluentinc/kafka-connect-protobuf-converter:7.3.1](https://www.confluent.io/hub/confluentinc/kafka-connect-protobuf-converter)
-* [confluentinc/kafka-connect-json-schema-converter:7.3.1](https://www.confluent.io/hub/confluentinc/kafka-connect-json-schema-converter)
+* [confluentinc/kafka-connect-avro-converter:7.3.0](https://www.confluent.io/hub/confluentinc/kafka-connect-avro-converter)
+* [confluentinc/kafka-connect-protobuf-converter:7.3.0](https://www.confluent.io/hub/confluentinc/kafka-connect-protobuf-converter)
+* [confluentinc/kafka-connect-json-schema-converter:7.3.0](https://www.confluent.io/hub/confluentinc/kafka-connect-json-schema-converter)
 
 ## Build
 
