@@ -12,26 +12,26 @@ The Docker images are available on DockerHub repository [ueisele/apache-kafka-co
 
 Most recent tags for `RELEASE` builds:
 
-* `3.3.1`, `3.3.1-zulu17`, `3.3.1-zulu17.0.5`, `3.3.1-zulu17-ubi8.6`, `3.3.1-zulu17.0.5-ubi8.7-1031`
-* `3.3.0`, `3.3.0-zulu17`, `3.3.0-zulu17.0.5`, `3.3.0-zulu17-ubi8.6`, `3.3.0-zulu17.0.5-ubi8.7-1031`
-* `3.2.3`, `3.2.3-zulu17`, `3.2.3-zulu17.0.5`, `3.2.3-zulu17-ubi8.6`, `3.2.3-zulu17.0.5-ubi8.7-1031`
-* `3.2.2`, `3.2.2-zulu17`, `3.2.2-zulu17.0.5`, `3.2.2-zulu17-ubi8.6`, `3.2.2-zulu17.0.5-ubi8.7-1031`
-* `3.2.1`, `3.2.1-zulu17`, `3.2.1-zulu17.0.5`, `3.2.1-zulu17-ubi8.6`, `3.2.1-zulu17.0.5-ubi8.7-1031`
-* `3.2.0`, `3.2.0-zulu17`, `3.2.0-zulu17.0.5`, `3.2.0-zulu17-ubi8.6`, `3.2.0-zulu17.0.5-ubi8.7-1031`
-* `3.1.2`, `3.1.2-zulu17`, `3.1.2-zulu17.0.5`, `3.1.2-zulu17-ubi8.6`, `3.1.2-zulu17.0.5-ubi8.7-1031`
-* `3.1.1`, `3.1.1-zulu17`, `3.1.1-zulu17.0.5`, `3.1.1-zulu17-ubi8.6`, `3.1.1-zulu17.0.5-ubi8.7-1031`
-* `3.1.0`, `3.1.0-zulu17`, `3.1.0-zulu17.0.5`, `3.1.0-zulu17-ubi8.6`, `3.1.0-zulu17.0.5-ubi8.7-1031`
-* `3.0.2`, `3.0.2-zulu17`, `3.0.2-zulu17.0.5`, `3.0.2-zulu17-ubi8.6`, `3.0.2-zulu17.0.5-ubi8.7-1031`
-* `3.0.1`, `3.0.1-zulu17`, `3.0.1-zulu17.0.5`, `3.0.1-zulu17-ubi8.6`, `3.0.1-zulu17.0.5-ubi8.7-1031`
-* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17.0.5`, `3.0.0-zulu17-ubi8.6`, `3.0.0-zulu17.0.5-ubi8.7-1031`
-* `2.8.2`, `2.8.2-zulu11`, `2.8.2-zulu11.0.17`, `2.8.2-zulu11-ubi8.6`, `2.8.2-zulu11.0.17-ubi8.7-1031`
-* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.17`, `2.8.1-zulu11-ubi8.6`, `2.8.1-zulu11.0.17-ubi8.7-1031`
-* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.17`, `2.8.0-zulu11-ubi8.6`, `2.8.0-zulu11.0.17-ubi8.7-1031`
+* `3.3.1`, `3.3.1-zulu17`, `3.3.1-zulu17.0.5`, `3.3.1-zulu17-ubi8.7`, `3.3.1-zulu17.0.5-ubi8.7-1031`
+* `3.3.0`, `3.3.0-zulu17`, `3.3.0-zulu17.0.5`, `3.3.0-zulu17-ubi8.7`, `3.3.0-zulu17.0.5-ubi8.7-1031`
+* `3.2.3`, `3.2.3-zulu17`, `3.2.3-zulu17.0.5`, `3.2.3-zulu17-ubi8.7`, `3.2.3-zulu17.0.5-ubi8.7-1031`
+* `3.2.2`, `3.2.2-zulu17`, `3.2.2-zulu17.0.5`, `3.2.2-zulu17-ubi8.7`, `3.2.2-zulu17.0.5-ubi8.7-1031`
+* `3.2.1`, `3.2.1-zulu17`, `3.2.1-zulu17.0.5`, `3.2.1-zulu17-ubi8.7`, `3.2.1-zulu17.0.5-ubi8.7-1031`
+* `3.2.0`, `3.2.0-zulu17`, `3.2.0-zulu17.0.5`, `3.2.0-zulu17-ubi8.7`, `3.2.0-zulu17.0.5-ubi8.7-1031`
+* `3.1.2`, `3.1.2-zulu17`, `3.1.2-zulu17.0.5`, `3.1.2-zulu17-ubi8.7`, `3.1.2-zulu17.0.5-ubi8.7-1031`
+* `3.1.1`, `3.1.1-zulu17`, `3.1.1-zulu17.0.5`, `3.1.1-zulu17-ubi8.7`, `3.1.1-zulu17.0.5-ubi8.7-1031`
+* `3.1.0`, `3.1.0-zulu17`, `3.1.0-zulu17.0.5`, `3.1.0-zulu17-ubi8.7`, `3.1.0-zulu17.0.5-ubi8.7-1031`
+* `3.0.2`, `3.0.2-zulu17`, `3.0.2-zulu17.0.5`, `3.0.2-zulu17-ubi8.7`, `3.0.2-zulu17.0.5-ubi8.7-1031`
+* `3.0.1`, `3.0.1-zulu17`, `3.0.1-zulu17.0.5`, `3.0.1-zulu17-ubi8.7`, `3.0.1-zulu17.0.5-ubi8.7-1031`
+* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17.0.5`, `3.0.0-zulu17-ubi8.7`, `3.0.0-zulu17.0.5-ubi8.7-1031`
+* `2.8.2`, `2.8.2-zulu11`, `2.8.2-zulu11.0.17`, `2.8.2-zulu11-ubi8.7`, `2.8.2-zulu11.0.17-ubi8.7-1031`
+* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.17`, `2.8.1-zulu11-ubi8.7`, `2.8.1-zulu11.0.17-ubi8.7-1031`
+* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.17`, `2.8.0-zulu11-ubi8.7`, `2.8.0-zulu11.0.17-ubi8.7-1031`
 
 Most recent tags for `SNAPSHOT` builds:
 
-* `3.5.0-SNAPSHOT`, `3.5.0-SNAPSHOT-zulu17`, `3.5.0-SNAPSHOT-zulu17.0.5`, `3.5.0-SNAPSHOT-zulu17-ubi8.6`, `3.5.0-SNAPSHOT-zulu17.0.5-ubi8.7-1031`
-* `3.4.0-SNAPSHOT`, `3.4.0-SNAPSHOT-zulu17`, `3.4.0-SNAPSHOT-zulu17.0.5`, `3.4.0-SNAPSHOT-zulu17-ubi8.6`, `3.4.0-SNAPSHOT-zulu17.0.5-ubi8.7-1031`
+* `3.5.0-SNAPSHOT`, `3.5.0-SNAPSHOT-zulu17`, `3.5.0-SNAPSHOT-zulu17.0.5`, `3.5.0-SNAPSHOT-zulu17-ubi8.7`, `3.5.0-SNAPSHOT-zulu17.0.5-ubi8.7-1031`
+* `3.4.0-SNAPSHOT`, `3.4.0-SNAPSHOT-zulu17`, `3.4.0-SNAPSHOT-zulu17.0.5`, `3.4.0-SNAPSHOT-zulu17-ubi8.7`, `3.4.0-SNAPSHOT-zulu17.0.5-ubi8.7-1031`
 
 Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-server-standalome:3.3.0-SNAPSHOT-g478de45`.
 
@@ -139,9 +139,9 @@ PLUGIN_INSTALL_LIB_URLS: |
 
 This Kafka Connect image has the Confluent converters for Avro, Protobuf and JSON Schema already pre-installed to simplify usage of Confluent Schema Registry.
 
-* [confluentinc/kafka-connect-avro-converter:7.2.1](https://www.confluent.io/hub/confluentinc/kafka-connect-avro-converter)
-* [confluentinc/kafka-connect-protobuf-converter:7.2.1](https://www.confluent.io/hub/confluentinc/kafka-connect-protobuf-converter)
-* [confluentinc/kafka-connect-json-schema-converter:7.2.1](https://www.confluent.io/hub/confluentinc/kafka-connect-json-schema-converter)
+* [confluentinc/kafka-connect-avro-converter:7.3.1](https://www.confluent.io/hub/confluentinc/kafka-connect-avro-converter)
+* [confluentinc/kafka-connect-protobuf-converter:7.3.1](https://www.confluent.io/hub/confluentinc/kafka-connect-protobuf-converter)
+* [confluentinc/kafka-connect-json-schema-converter:7.3.1](https://www.confluent.io/hub/confluentinc/kafka-connect-json-schema-converter)
 
 ## Build
 
@@ -150,13 +150,13 @@ In order to create your own Docker image for Apache Kafka Connect clone the [uei
 ```bash
 git clone https://github.com/ueisele/kafka-images.git
 cd kafka-images
-connect/build.sh --build --tag 3.2.1 --openjdk-release 17
+connect/build.sh --build --tag 3.3.1 --openjdk-release 17
 ```
 
 To create an image with a specific OpenJDK version use the following command:
 
 ```bash
-connect/build.sh --build --tag 3.2.1 --openjdk-release 17 --openjdk-version 17.0.4
+connect/build.sh --build --tag 3.3.1 --openjdk-release 17 --openjdk-version 17.0.5
 ```
 
 By default Apache Kafka 3.0.0 does not support Java 17. In order to build Apache Kafka 3.0.0 with Java 17, the Gradle configuration is patched with [patch/3.0.0-openjdk17.patch]().
@@ -175,7 +175,7 @@ connect/build.sh --build --branch trunk --openjdk-release 17
 
 The `connect/build.sh` script provides the following options:
 
-`Usage: connect/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha b172a0a] [--tag 3.2.1] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.4] [--patch 3.0.0-openjdk17.patch]`
+`Usage: connect/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha b172a0a] [--tag 3.3.1] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.5] [--patch 3.0.0-openjdk17.patch]`
 
 ## License 
 
