@@ -11,26 +11,26 @@ The Docker images are available on DockerHub repository [ueisele/apache-kafka-se
 
 Most recent tags for `RELEASE` builds:
 
-* `3.3.1`, `3.3.1-zulu17`, `3.3.1-zulu17.0.5`, `3.3.1-zulu17-ubi8.7`, `3.3.1-zulu17.0.5-ubi8.7-1031`
-* `3.3.0`, `3.3.0-zulu17`, `3.3.0-zulu17.0.5`, `3.3.0-zulu17-ubi8.7`, `3.3.0-zulu17.0.5-ubi8.7-1031`
-* `3.2.3`, `3.2.3-zulu17`, `3.2.3-zulu17.0.5`, `3.2.3-zulu17-ubi8.7`, `3.2.3-zulu17.0.5-ubi8.7-1031`
-* `3.2.2`, `3.2.2-zulu17`, `3.2.2-zulu17.0.5`, `3.2.2-zulu17-ubi8.7`, `3.2.2-zulu17.0.5-ubi8.7-1031`
-* `3.2.1`, `3.2.1-zulu17`, `3.2.1-zulu17.0.5`, `3.2.1-zulu17-ubi8.7`, `3.2.1-zulu17.0.5-ubi8.7-1031`
-* `3.2.0`, `3.2.0-zulu17`, `3.2.0-zulu17.0.5`, `3.2.0-zulu17-ubi8.7`, `3.2.0-zulu17.0.5-ubi8.7-1031`
-* `3.1.2`, `3.1.2-zulu17`, `3.1.2-zulu17.0.5`, `3.1.2-zulu17-ubi8.7`, `3.1.2-zulu17.0.5-ubi8.7-1031`
-* `3.1.1`, `3.1.1-zulu17`, `3.1.1-zulu17.0.5`, `3.1.1-zulu17-ubi8.7`, `3.1.1-zulu17.0.5-ubi8.7-1031`
-* `3.1.0`, `3.1.0-zulu17`, `3.1.0-zulu17.0.5`, `3.1.0-zulu17-ubi8.7`, `3.1.0-zulu17.0.5-ubi8.7-1031`
-* `3.0.2`, `3.0.2-zulu17`, `3.0.2-zulu17.0.5`, `3.0.2-zulu17-ubi8.7`, `3.0.2-zulu17.0.5-ubi8.7-1031`
-* `3.0.1`, `3.0.1-zulu17`, `3.0.1-zulu17.0.5`, `3.0.1-zulu17-ubi8.7`, `3.0.1-zulu17.0.5-ubi8.7-1031`
-* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17.0.5`, `3.0.0-zulu17-ubi8.7`, `3.0.0-zulu17.0.5-ubi8.7-1031`
-* `2.8.2`, `2.8.2-zulu11`, `2.8.2-zulu11.0.17`, `2.8.2-zulu11-ubi8.7`, `2.8.2-zulu11.0.17-ubi8.7-1031`
-* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.17`, `2.8.1-zulu11-ubi8.7`, `2.8.1-zulu11.0.17-ubi8.7-1031`
-* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.17`, `2.8.0-zulu11-ubi8.7`, `2.8.0-zulu11.0.17-ubi8.7-1031`
+* `3.3.1`, `3.3.1-zulu17`, `3.3.1-zulu17.0.6`, `3.3.1-zulu17-ubi8.7`, `3.3.1-zulu17.0.6-ubi8.7-1049`
+* `3.3.0`, `3.3.0-zulu17`, `3.3.0-zulu17.0.6`, `3.3.0-zulu17-ubi8.7`, `3.3.0-zulu17.0.6-ubi8.7-1049`
+* `3.2.3`, `3.2.3-zulu17`, `3.2.3-zulu17.0.6`, `3.2.3-zulu17-ubi8.7`, `3.2.3-zulu17.0.6-ubi8.7-1049`
+* `3.2.2`, `3.2.2-zulu17`, `3.2.2-zulu17.0.6`, `3.2.2-zulu17-ubi8.7`, `3.2.2-zulu17.0.6-ubi8.7-1049`
+* `3.2.1`, `3.2.1-zulu17`, `3.2.1-zulu17.0.6`, `3.2.1-zulu17-ubi8.7`, `3.2.1-zulu17.0.6-ubi8.7-1049`
+* `3.2.0`, `3.2.0-zulu17`, `3.2.0-zulu17.0.6`, `3.2.0-zulu17-ubi8.7`, `3.2.0-zulu17.0.6-ubi8.7-1049`
+* `3.1.2`, `3.1.2-zulu17`, `3.1.2-zulu17.0.6`, `3.1.2-zulu17-ubi8.7`, `3.1.2-zulu17.0.6-ubi8.7-1049`
+* `3.1.1`, `3.1.1-zulu17`, `3.1.1-zulu17.0.6`, `3.1.1-zulu17-ubi8.7`, `3.1.1-zulu17.0.6-ubi8.7-1049`
+* `3.1.0`, `3.1.0-zulu17`, `3.1.0-zulu17.0.6`, `3.1.0-zulu17-ubi8.7`, `3.1.0-zulu17.0.6-ubi8.7-1049`
+* `3.0.2`, `3.0.2-zulu17`, `3.0.2-zulu17.0.6`, `3.0.2-zulu17-ubi8.7`, `3.0.2-zulu17.0.6-ubi8.7-1049`
+* `3.0.1`, `3.0.1-zulu17`, `3.0.1-zulu17.0.6`, `3.0.1-zulu17-ubi8.7`, `3.0.1-zulu17.0.6-ubi8.7-1049`
+* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17.0.6`, `3.0.0-zulu17-ubi8.7`, `3.0.0-zulu17.0.6-ubi8.7-1049`
+* `2.8.2`, `2.8.2-zulu11`, `2.8.2-zulu11.0.18`, `2.8.2-zulu11-ubi8.7`, `2.8.2-zulu11.0.18-ubi8.7-1049`
+* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.18`, `2.8.1-zulu11-ubi8.7`, `2.8.1-zulu11.0.18-ubi8.7-1049`
+* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.18`, `2.8.0-zulu11-ubi8.7`, `2.8.0-zulu11.0.18-ubi8.7-1049`
 
 Most recent tags for `SNAPSHOT` builds:
 
-* `3.5.0-SNAPSHOT`, `3.5.0-SNAPSHOT-zulu17`, `3.5.0-SNAPSHOT-zulu17.0.5`, `3.5.0-SNAPSHOT-zulu17-ubi8.7`, `3.5.0-SNAPSHOT-zulu17.0.5-ubi8.7-1031`
-* `3.4.0-SNAPSHOT`, `3.4.0-SNAPSHOT-zulu17`, `3.4.0-SNAPSHOT-zulu17.0.5`, `3.4.0-SNAPSHOT-zulu17-ubi8.7`, `3.4.0-SNAPSHOT-zulu17.0.5-ubi8.7-1031`
+* `3.5.0-SNAPSHOT`, `3.5.0-SNAPSHOT-zulu17`, `3.5.0-SNAPSHOT-zulu17.0.6`, `3.5.0-SNAPSHOT-zulu17-ubi8.7`, `3.5.0-SNAPSHOT-zulu17.0.6-ubi8.7-1049`
+* `3.4.0-SNAPSHOT`, `3.4.0-SNAPSHOT-zulu17`, `3.4.0-SNAPSHOT-zulu17.0.6`, `3.4.0-SNAPSHOT-zulu17-ubi8.7`, `3.4.0-SNAPSHOT-zulu17.0.6-ubi8.7-1049`
 
 Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-server-standalome:3.3.0-SNAPSHOT-g478de45`.
 
@@ -257,7 +257,7 @@ server/build.sh --build --tag 3.3.1 --openjdk-release 17
 To create an image with a specific OpenJDK version use the following command:
 
 ```bash
-server/build.sh --build --tag 3.3.1 --openjdk-release 17 --openjdk-version 17.0.5
+server/build.sh --build --tag 3.3.1 --openjdk-release 17 --openjdk-version 17.0.6
 ```
 
 By default Apache Kafka 3.0.0 does not support Java 17. In order to build Apache Kafka 3.0.0 with Java 17, the Gradle configuration is patched with [patch/3.0.0-openjdk17.patch]().
@@ -276,7 +276,7 @@ server/build.sh --build --branch trunk --openjdk-release 17
 
 The `server/build.sh` script provides the following options:
 
-`Usage: server/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha b172a0a] [--tag 3.3.1] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.5] [--patch 3.0.0-openjdk17.patch]`
+`Usage: server/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha b172a0a] [--tag 3.3.1] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.6] [--patch 3.0.0-openjdk17.patch]`
 
 ## License 
 
