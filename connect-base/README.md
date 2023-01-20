@@ -11,6 +11,7 @@ The Docker images are available on DockerHub repository [ueisele/apache-kafka-co
 
 Most recent tags for `RELEASE` builds:
 
+* `3.3.2`, `3.3.2-zulu17`, `3.3.2-zulu17.0.6`, `3.3.2-zulu17-ubi8.7`, `3.3.2-zulu17.0.6-ubi8.7-1049`
 * `3.3.1`, `3.3.1-zulu17`, `3.3.1-zulu17.0.6`, `3.3.1-zulu17-ubi8.7`, `3.3.1-zulu17.0.6-ubi8.7-1049`
 * `3.3.0`, `3.3.0-zulu17`, `3.3.0-zulu17.0.6`, `3.3.0-zulu17-ubi8.7`, `3.3.0-zulu17.0.6-ubi8.7-1049`
 * `3.2.3`, `3.2.3-zulu17`, `3.2.3-zulu17.0.6`, `3.2.3-zulu17-ubi8.7`, `3.2.3-zulu17.0.6-ubi8.7-1049`
@@ -142,13 +143,13 @@ In order to create your own Docker image for Apache Kafka Connect clone the [uei
 ```bash
 git clone https://github.com/ueisele/kafka-images.git
 cd kafka-images
-connect-base/build.sh --build --tag 3.3.1 --openjdk-release 17
+connect-base/build.sh --build --tag 3.3.2 --openjdk-release 17
 ```
 
 To create an image with a specific OpenJDK version use the following command:
 
 ```bash
-connect-base/build.sh --build --tag 3.3.1 --openjdk-release 17 --openjdk-version 17.0.6
+connect-base/build.sh --build --tag 3.3.2 --openjdk-release 17 --openjdk-version 17.0.6
 ```
 
 By default Apache Kafka 3.0.0 does not support Java 17. In order to build Apache Kafka 3.0.0 with Java 17, the Gradle configuration is patched with [patch/3.0.0-openjdk17.patch]().
@@ -167,7 +168,7 @@ connect-base/build.sh --build --branch trunk --openjdk-release 17
 
 The `connect-base/build.sh` script provides the following options:
 
-`Usage: connect-base/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha b172a0a] [--tag 3.3.1] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.6] [--patch 3.0.0-openjdk17.patch]`
+`Usage: connect-base/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha b172a0a] [--tag 3.3.2] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.6] [--patch 3.0.0-openjdk17.patch]`
 
 ## License 
 

@@ -14,6 +14,7 @@ The Docker images are available on DockerHub repository [ueisele/apache-kafka-co
 
 Most recent tags for `RELEASE` builds:
 
+* `3.3.2`, `3.3.2-zulu17`, `3.3.2-zulu17.0.6`, `3.3.2-zulu17-ubi8.7`, `3.3.2-zulu17.0.6-ubi8.7-1049`
 * `3.3.1`, `3.3.1-zulu17`, `3.3.1-zulu17.0.6`, `3.3.1-zulu17-ubi8.7`, `3.3.1-zulu17.0.6-ubi8.7-1049`
 * `3.3.0`, `3.3.0-zulu17`, `3.3.0-zulu17.0.6`, `3.3.0-zulu17-ubi8.7`, `3.3.0-zulu17.0.6-ubi8.7-1049`
 * `3.2.3`, `3.2.3-zulu17`, `3.2.3-zulu17.0.6`, `3.2.3-zulu17-ubi8.7`, `3.2.3-zulu17.0.6-ubi8.7-1049`
@@ -49,7 +50,7 @@ docker network create quickstart-kafka-connect-standalone
 Now, start a single Kafka instance: 
 
 ```bash
-docker run -d --name kafka --net quickstart-kafka-connect-standalone -p 9092:9092 ueisele/apache-kafka-server-standalone:3.3.1
+docker run -d --name kafka --net quickstart-kafka-connect-standalone -p 9092:9092 ueisele/apache-kafka-server-standalone:3.3.2
 ```
 
 In order to run Apache Kafka Connect in standalone mode run the following command:
@@ -74,7 +75,7 @@ docker run -d --name kafka-connect-standalone \
 Consume published messages:
 
 ```bash
-docker run --rm -it --net quickstart-kafka-connect-standalone ueisele/apache-kafka-server-standalone:3.3.1 \
+docker run --rm -it --net quickstart-kafka-connect-standalone ueisele/apache-kafka-server-standalone:3.3.2 \
     kafka-console-consumer.sh \
         --bootstrap-server kafka:9092 \
         --topic connect-datagen-source \
@@ -200,13 +201,13 @@ In order to create your own Docker image for Apache Kafka Connect standalone clo
 ```bash
 git clone https://github.com/ueisele/kafka-images.git
 cd kafka-images
-connect-standalone/build.sh --build --tag 3.3.1 --openjdk-release 17
+connect-standalone/build.sh --build --tag 3.3.2 --openjdk-release 17
 ```
 
 To create an image with a specific OpenJDK version use the following command:
 
 ```bash
-connect-standalone/build.sh --build --tag 3.3.1 --openjdk-release 17 --openjdk-version 17.0.6
+connect-standalone/build.sh --build --tag 3.3.2 --openjdk-release 17 --openjdk-version 17.0.6
 ```
 
 To build the most recent `SNAPSHOT` of Apache Kafka 3.4.0 with Java 17, run:
@@ -219,7 +220,7 @@ connect-standalone/build.sh --build --branch trunk --openjdk-release 17
 
 The `connect-standalone/build.sh` script provides the following options:
 
-`Usage: connect-standalone/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha b172a0a] [--tag 3.3.1] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.6]`
+`Usage: connect-standalone/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha b172a0a] [--tag 3.3.2] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.6]`
 
 ## License 
 

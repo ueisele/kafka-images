@@ -1,7 +1,7 @@
 # Docker Image for Apache Kafka Broker and Controller
 
 Docker image for running the [Open Source version of Apache Kafka](https://github.com/apache/kafka/).
-It offers support for running Kafka [KRaft mode](https://github.com/apache/kafka/blob/3.3.1/config/kraft/README.md) as well as in ZooKeeper mode.
+It offers support for running Kafka [KRaft mode](https://github.com/apache/kafka/blob/3.3.2/config/kraft/README.md) as well as in ZooKeeper mode.
 
 The Kafka distribution included in the Docker image is built directly from [source](https://github.com/apache/kafka/).
 
@@ -11,6 +11,7 @@ The Docker images are available on DockerHub repository [ueisele/apache-kafka-se
 
 Most recent tags for `RELEASE` builds:
 
+* `3.3.2`, `3.3.2-zulu17`, `3.3.2-zulu17.0.6`, `3.3.2-zulu17-ubi8.7`, `3.3.2-zulu17.0.6-ubi8.7-1049`
 * `3.3.1`, `3.3.1-zulu17`, `3.3.1-zulu17.0.6`, `3.3.1-zulu17-ubi8.7`, `3.3.1-zulu17.0.6-ubi8.7-1049`
 * `3.3.0`, `3.3.0-zulu17`, `3.3.0-zulu17.0.6`, `3.3.0-zulu17-ubi8.7`, `3.3.0-zulu17.0.6-ubi8.7-1049`
 * `3.2.3`, `3.2.3-zulu17`, `3.2.3-zulu17.0.6`, `3.2.3-zulu17-ubi8.7`, `3.2.3-zulu17.0.6-ubi8.7-1049`
@@ -71,7 +72,7 @@ docker run -d --name kafka-kraft -p 9092:9092 \
     -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1 \
-    ueisele/apache-kafka-server:3.3.1
+    ueisele/apache-kafka-server:3.3.2
 ```
 
 You find additional examples in [examples/kraft/]():
@@ -108,7 +109,7 @@ docker run -d --name kafka-zk --net host \
     -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1 \
-    ueisele/apache-kafka-server:3.3.1
+    ueisele/apache-kafka-server:3.3.2
 ```
 
 You find additional examples in [examples/zk/]():
@@ -241,7 +242,7 @@ docker run -d --name kafka-kraft -p 9092:9092 \
     -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1 \
-    ueisele/apache-kafka-server:3.3.1
+    ueisele/apache-kafka-server:3.3.2
 ```
 
 ## Build
@@ -251,13 +252,13 @@ In order to create your own Docker image for Apache Kafka clone the [ueisele/kaf
 ```bash
 git clone https://github.com/ueisele/kafka-images.git
 cd kafka-images
-server/build.sh --build --tag 3.3.1 --openjdk-release 17
+server/build.sh --build --tag 3.3.2 --openjdk-release 17
 ```
 
 To create an image with a specific OpenJDK version use the following command:
 
 ```bash
-server/build.sh --build --tag 3.3.1 --openjdk-release 17 --openjdk-version 17.0.6
+server/build.sh --build --tag 3.3.2 --openjdk-release 17 --openjdk-version 17.0.6
 ```
 
 By default Apache Kafka 3.0.0 does not support Java 17. In order to build Apache Kafka 3.0.0 with Java 17, the Gradle configuration is patched with [patch/3.0.0-openjdk17.patch]().
@@ -276,7 +277,7 @@ server/build.sh --build --branch trunk --openjdk-release 17
 
 The `server/build.sh` script provides the following options:
 
-`Usage: server/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha b172a0a] [--tag 3.3.1] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.6] [--patch 3.0.0-openjdk17.patch]`
+`Usage: server/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha b172a0a] [--tag 3.3.2] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.6] [--patch 3.0.0-openjdk17.patch]`
 
 ## License 
 
