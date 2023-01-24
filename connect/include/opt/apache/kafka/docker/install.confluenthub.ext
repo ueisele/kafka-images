@@ -10,8 +10,8 @@ function installPluginsByConfluentHub () {
   touch /tmp/connect-worker-dummy.properties
   for connector in $(sed "s/,/ /g" <<< ${pluginIds}); do 
     confluent-hub install --no-prompt \
-      --component-dir ${PLUGIN_INSTALL_DIR} --worker-configs /tmp/connect-worker-dummy.properties \
-      ${connector}; 
+      --component-dir "${PLUGIN_INSTALL_DIR}" --worker-configs /tmp/connect-worker-dummy.properties \
+      "${connector}" ; 
   done
   rm /tmp/connect-worker-dummy.properties
 }
