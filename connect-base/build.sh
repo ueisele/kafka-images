@@ -179,15 +179,14 @@ function parseCmd () {
                 shift
                 case "$1" in
                     ""|--*)
-                        usage "Requires Kafka patch name"
-                        return 1
+                        unset KAFKA_PATCH
                         ;;
                     *)
                         KAFKA_PATCH="$1"
                         shift
                         ;;
                 esac
-                ;;                                    
+                ;;                                  
             *)
                 local param="$1"
                 shift
