@@ -17,16 +17,23 @@ ENV PATH=/opt/confluent/confluent-hub-client/bin:${PATH}
 COPY --chown=appuser:appuser include/opt/apache/kafka/docker /opt/apache/kafka/docker
 
 ## Installation of the base Kafka Connect plugins to be delivered with the image
+## Retries are required, because sometimes confluent hub cli does not find the connector
 ARG CONFLUENT_VERSION=7.3.1
-RUN /opt/apache/kafka/docker/install \
-    --confluent-hub-ids "confluentinc/kafka-connect-json-schema-converter:${CONFLUENT_VERSION}"
-RUN /opt/apache/kafka/docker/install \
-    --confluent-hub-ids "confluentinc/kafka-connect-protobuf-converter:${CONFLUENT_VERSION}"
+RUN until \
+    /opt/apache/kafka/docker/install \
+      --confluent-hub-ids "confluentinc/kafka-connect-json-schema-converter:${CONFLUENT_VERSION}"; \
+    do echo "Retry"; done
+RUN until \
+    /opt/apache/kafka/docker/install \
+      --confluent-hub-ids "confluentinc/kafka-connect-protobuf-converter:${CONFLUENT_VERSION}"; \
+    do echo "Retry"; done
 ## Note: Guava must be added to the Avro converter dependencies, because it is missing in the installation package 
 ##       (see https://github.com/confluentinc/schema-registry/pull/2115).
-RUN /opt/apache/kafka/docker/install \
-    --confluent-hub-ids \
-        "confluentinc/kafka-connect-avro-converter:${CONFLUENT_VERSION}" \
-    --lib-urls \
-        "confluentinc-kafka-connect-avro-converter/lib=https://repo1.maven.org/maven2/com/google/guava/guava/30.1.1-jre/guava-30.1.1-jre.jar" \
-        "confluentinc-kafka-connect-avro-converter/lib=https://repo1.maven.org/maven2/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar"
+RUN until \
+    /opt/apache/kafka/docker/install \
+      --confluent-hub-ids \
+          "confluentinc/kafka-connect-avro-converter:${CONFLUENT_VERSION}" \
+      --lib-urls \
+          "confluentinc-kafka-connect-avro-converter/lib=https://repo1.maven.org/maven2/com/google/guava/guava/30.1.1-jre/guava-30.1.1-jre.jar" \
+          "confluentinc-kafka-connect-avro-converter/lib=https://repo1.maven.org/maven2/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar"; \
+    do echo "Retry"; done
