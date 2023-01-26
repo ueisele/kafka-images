@@ -1,0 +1,43 @@
+name: Apache Kafka Server 2.x Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  docker:
+    strategy:
+      matrix:
+        kafka:
+        - version: "2.8.0"
+          patch: "2.8.0-grgit.patch"
+          openjdk: 11
+        - version: "2.8.1"
+          patch: "2.8.1-grgit.patch"
+          openjdk: 11
+        - version: "2.8.2"
+          openjdk: 11
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build
+        run: ./server/build.sh --build --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }} --patch ${{ matrix.kafka.patch }}
+      -
+        name: Push
+        run: ./server/build.sh --build --push ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
+      -
+        name: Build
+        run: ./server-standalone/build.sh --build --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
+      -
+        name: Push
+        run: ./server-standalone/build.sh --build --push ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
