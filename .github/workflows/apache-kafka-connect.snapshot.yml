@@ -29,19 +29,19 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
         name: Build Connect Base
-        run: ./connect-base/build.sh --build --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
+        run: ./connect-base/build.sh --build --branch ${{ matrix.kafka.branch }} --openjdk-release ${{ matrix.kafka.openjdk }}
       -
         name: Push Connect Base
-        run: ./connect-base/build.sh --push --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
+        run: ./connect-base/build.sh --push --branch ${{ matrix.kafka.branch }} --openjdk-release ${{ matrix.kafka.openjdk }}
       -
         name: Build Connect
-        run: ./connect/build.sh --build --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
+        run: ./connect/build.sh --build --branch ${{ matrix.kafka.branch }} --openjdk-release ${{ matrix.kafka.openjdk }}
       -
         name: Push Connect
-        run: ./connect/build.sh --push --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
+        run: ./connect/build.sh --push --branch ${{ matrix.kafka.branch }} --openjdk-release ${{ matrix.kafka.openjdk }}
       -
         name: Build Connect Standalone
-        run: ./connect-standalone/build.sh --build --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
+        run: ./connect-standalone/build.sh --build --branch ${{ matrix.kafka.branch }} --openjdk-release ${{ matrix.kafka.openjdk }}
       -
         name: Push Connect Standalone
-        run: ./connect-standalone/build.sh --push --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
+        run: ./connect-standalone/build.sh --push --branch ${{ matrix.kafka.branch }} --openjdk-release ${{ matrix.kafka.openjdk }}
