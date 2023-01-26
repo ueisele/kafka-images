@@ -1,6 +1,8 @@
-name: Apache Kafka Server Snapshot
+name: Apache Kafka Connect Snapshot
 
 on:
+  schedule:
+  - cron:  '0 4 * * 3,6'
   workflow_dispatch:
 
 jobs:

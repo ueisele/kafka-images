@@ -1,4 +1,4 @@
-name: Apache Kafka Server 3.x Release
+name: Apache Kafka Connect 3.x Release
 
 on:
   workflow_dispatch:
