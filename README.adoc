@@ -11,6 +11,7 @@ The Docker images are available on the following DockerHub repositories:
 * link:https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect-base[ueisele/apache-kafka-connect-base]
 * link:https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect[ueisele/apache-kafka-connect]
 * link:https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect-standalone[ueisele/apache-kafka-connect-standalone]
+* link:https://hub.docker.com/repository/docker/ueisele/kcat[ueisele/kcat]
 
 == Quick Start
 
@@ -85,6 +86,7 @@ You find additional examples in link:examples/connect-standalone/[]:
 * Apache Kafka Connect base image: link:connect-base/[]
 * Apache Kafka Connect image: link:connect/[]
 * Apache Kafka Connect standalone image: link:connect-standalone/[]
+* Kcat image: link:kcat/[]
 
 == Podman and Podman Compose Support
 

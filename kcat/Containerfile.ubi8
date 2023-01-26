@@ -1,0 +1,65 @@
+ARG UBI8_VERSION
+FROM registry.access.redhat.com/ubi8/ubi-minimal:${UBI8_VERSION} as build
+LABEL maintainer="code@uweeisele.eu"
+
+RUN microdnf update -y \
+    && microdnf clean all \
+    && rm -rf /tmp/*
+RUN microdnf install -y \
+      git \
+    && microdnf clean all \
+    && rm -rf /tmp/*
+RUN microdnf install -y \
+      which curl wget python3 \
+      cmake pkg-config gcc-c++ libtool \
+      openssl-devel cyrus-sasl-lib cyrus-sasl-devel libssh-devel \
+      brotli-devel libnghttp2-devel curl-devel lz4-devel \
+    && microdnf clean all \
+    && rm -rf /tmp/*
+
+WORKDIR /usr/src/kcat
+
+ARG KCAT_GIT_REPO=https://github.com/edenhill/kcat.git
+ARG KCAT_GIT_REFSPEC
+RUN git init \
+    && git remote add origin ${KCAT_GIT_REPO} \
+    && git fetch --depth 1 origin ${KCAT_GIT_REFSPEC} \
+    && git reset --hard FETCH_HEAD
+ARG LIBRDKAFKA_VERSION=2.0.2
+RUN LIBRDKAFKA_VERSION=v${LIBRDKAFKA_VERSION} ./bootstrap.sh
+
+
+ARG UBI8_VERSION
+FROM registry.access.redhat.com/ubi8/ubi-minimal:${UBI8_VERSION}
+LABEL maintainer="code@uweeisele.eu"
+
+ENV LANG="C.UTF-8"
+
+RUN microdnf -y install shadow-utils \
+    && useradd --no-log-init --create-home --shell /bin/bash appuser \
+    && microdnf remove shadow-utils \
+    && microdnf clean all \
+    && rm -rf /var/lib/rpm \
+    && rm -rf /tmp/*
+
+RUN mkdir -p /opt/kcat \
+    && chown appuser:appuser -R /opt/kcat
+
+USER appuser
+WORKDIR /home/appuser
+
+COPY --from=build --chown=appuser:appuser /usr/src/kcat/kcat /opt/kcat/
+ENV PATH=/opt/kcat:${PATH}
+
+CMD ["/opt/kcat/kcat"]
+
+ARG KCAT_GIT_REPO=https://github.com/edenhill/kcat.git \
+    KCAT_GIT_REFSPEC \
+    KCAT_BUILD_GIT_REFSPEC=${KCAT_GIT_REFSPEC} \
+    KCAT_VERSION=${KCAT_GIT_REFSPEC} \
+    LIBRDKAFKA_VERSION
+LABEL kcat.git.repo="${KCAT_GIT_REPO}" \
+    kcat.git.refspec="${KCAT_GIT_REFSPEC}" \
+    kcat.build.git.refspec="${KCAT_BUILD_GIT_REFSPEC}" \
+    kcat.version="${KCAT_VERSION}" \
+    librdkafka.version="${LIBRDKAFKA_VERSION}"
