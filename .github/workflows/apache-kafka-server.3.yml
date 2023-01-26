@@ -1,0 +1,68 @@
+name: Apache Kafka Server 3.x Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  docker:
+    strategy:
+      matrix:
+        kafka:
+        - version: "3.0.0"
+          patch: "3.0.0-openjdk17.patch"
+          openjdk: 17
+        - version: "3.0.1"
+          patch: "3.0.1-openjdk17.patch"
+          openjdk: 17
+        - version: "3.0.2"
+          patch: "3.0.2-openjdk17.patch"
+          openjdk: 17
+
+        - version: "3.1.0"
+          openjdk: 17
+        - version: "3.1.1"
+          openjdk: 17
+        - version: "3.1.2"
+          openjdk: 17
+
+        - version: "3.2.0"
+          openjdk: 17
+        - version: "3.2.1"
+          openjdk: 17
+        - version: "3.2.2"
+          openjdk: 17
+        - version: "3.2.3"
+          openjdk: 17
+
+        - version: "3.3.0"
+          openjdk: 17
+        - version: "3.3.1"
+          openjdk: 17
+        - version: "3.3.2"
+          openjdk: 17
+
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build Kafka Server
+        run: ./server/build.sh --build --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }} --patch ${{ matrix.kafka.patch }}
+      -
+        name: Push Kafka Server
+        run: ./server/build.sh --push --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
+      -
+        name: Build Kafka Server Standalone
+        run: ./server-standalone/build.sh --build --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
+      -
+        name: Push Kafka Server Standalone
+        run: ./server-standalone/build.sh --push --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}

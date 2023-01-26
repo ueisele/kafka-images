@@ -1,0 +1,39 @@
+name: Apache Kafka Server Snapshot
+
+on:
+  workflow_dispatch:
+
+jobs:
+  docker:
+    strategy:
+      matrix:
+        kafka:
+        - branch: "3.4"
+          openjdk: 17
+        - branch: "trunk"
+          openjdk: 17
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build Kafka Server
+        run: ./server/build.sh --build --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
+      -
+        name: Push Kafka Server
+        run: ./server/build.sh --push --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
+      -
+        name: Build Kafka Server Standalone
+        run: ./server-standalone/build.sh --build --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
+      -
+        name: Push Kafka Server Standalone
+        run: ./server-standalone/build.sh --push --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}

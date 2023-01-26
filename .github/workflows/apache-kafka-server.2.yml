@@ -30,14 +30,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build
+        name: Build Kafka Server
         run: ./server/build.sh --build --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }} --patch ${{ matrix.kafka.patch }}
       -
-        name: Push
-        run: ./server/build.sh --build --push ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
+        name: Push Kafka Server
+        run: ./server/build.sh --push --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
       -
-        name: Build
+        name: Build Kafka Server Standalone
         run: ./server-standalone/build.sh --build --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
       -
-        name: Push
-        run: ./server-standalone/build.sh --build --push ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
+        name: Push Kafka Server Standalone
+        run: ./server-standalone/build.sh --push --tag ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
