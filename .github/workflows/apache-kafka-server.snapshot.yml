@@ -10,8 +10,6 @@ jobs:
     strategy:
       matrix:
         kafka:
-        - branch: "3.4"
-          openjdk: 17
         - branch: "trunk"
           openjdk: 17
       fail-fast: false

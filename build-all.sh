@@ -36,6 +36,7 @@ function release () {
     doAction "${modules}" "${modes}" "tag" "3.3.0" "17"
     doAction "${modules}" "${modes}" "tag" "3.3.1" "17"
     doAction "${modules}" "${modes}" "tag" "3.3.2" "17"
+    doAction "${modules}" "${modes}" "tag" "3.4.0" "17"
 }
 
 function snapshot () {
