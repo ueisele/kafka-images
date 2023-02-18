@@ -2,7 +2,7 @@
 set -e
 SCRIPT_DIR="$(dirname ${BASH_SOURCE[0]})"
 
-PLUGIN_INSTALL_DIR="${PLUGIN_INSTALL_DIR:-"${CONNECT_PLUGIN_INSTALL_DIR:-"/opt/apache/kafka/connectors_install"}"}"
+PLUGIN_INSTALL_DIR="${PLUGIN_INSTALL_DIR:-"${CONNECT_PLUGIN_INSTALL_DIR:-"/opt/apache/kafka/plugins"}"}"
 
 function extensions () {
   ls ${SCRIPT_DIR}/*.ext
@@ -11,7 +11,7 @@ function extensions () {
 function usage () {
   echo "$0: $1" >&2
   echo
-  echo -n "Usage: $0 [--plugin-dir /opt/apache/kafka/connectors_install]"
+  echo -n "Usage: $0 [--plugin-dir /opt/apache/kafka/plugins]"
   for ext in $(extensions); do
     echo -n " "
     (

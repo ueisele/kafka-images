@@ -62,8 +62,8 @@ LABEL godub.version=${GODUB_VERSION}
 RUN curl -s -L https://github.com/ueisele/go-docker-utils/releases/download/${GODUB_VERSION}/godub-${GODUB_VERSION}-linux-amd64.tar.gz \
     | tar xvz -C /usr/local/bin
 
-RUN mkdir -p /opt/apache/kafka /usr/logs \
-    && chown appuser:appuser -R /opt/apache/kafka /usr/logs
+RUN mkdir -p /opt/apache/kafka /usr/local/share/kafka /var/lib/kafka /usr/logs \
+    && chown appuser:appuser -R /opt/apache/kafka /usr/local/share/kafka /var/lib/kafka /usr/logs
 
 RUN microdnf -y install curl unzip \
     && microdnf clean all \
@@ -73,15 +73,6 @@ RUN microdnf -y install curl unzip \
 USER appuser
 WORKDIR /home/appuser
 
-ENV CONNECT_PLUGIN_INSTALL_DIR=/opt/apache/kafka/connectors_install
-ENV CONNECT_PLUGIN_PATH=/usr/share/java,/opt/apache/kafka/connectors,${CONNECT_PLUGIN_INSTALL_DIR}
-
-RUN mkdir -p \
-    /opt/apache/kafka/data /opt/apache/kafka/secrets /opt/apache/kafka/config \
-    /opt/apache/kafka/connectors ${CONNECT_PLUGIN_INSTALL_DIR} \
-    /opt/apache/kafka/userdata
-VOLUME ["/opt/apache/kafka/data","/opt/apache/kafka/secrets","/opt/apache/kafka/connectors","/opt/apache/kafka/userdata"]
-
 COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/dependant-libs /opt/apache/kafka/libs
 COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/libs /opt/apache/kafka/libs
 
@@ -90,11 +81,24 @@ COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/licenses /opt
 COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/bin /opt/apache/kafka/bin
 ENV PATH=/opt/apache/kafka/bin:${PATH}
 
+ENV LEGACY_CONNECT_PLUGIN_PATH=/usr/share/java,/opt/apache/kafka/connectors,/opt/apache/kafka/connectors_install
+ENV CONNECT_PLUGIN_INSTALL_DIR=/opt/apache/kafka/plugins
+ENV CONNECT_PLUGIN_PATH="\
+/opt/apache/kafka/libs,\
+${CONNECT_PLUGIN_INSTALL_DIR},/usr/local/share/kafka/plugins,/var/lib/kafka/plugins,\
+${LEGACY_CONNECT_PLUGIN_PATH}"
+
+RUN mkdir -p \
+    /opt/apache/kafka/data /opt/apache/kafka/secrets /opt/apache/kafka/config \
+    ${CONNECT_PLUGIN_INSTALL_DIR} /usr/local/share/kafka/plugins /var/lib/kafka/plugins \
+    /opt/apache/kafka/connectors /opt/apache/kafka/connectors_install
+VOLUME ["/opt/apache/kafka/data","/opt/apache/kafka/secrets"]
+
 COPY --chown=appuser:appuser include/opt/apache/kafka/docker /opt/apache/kafka/docker
 
-EXPOSE 8083
-
 CMD ["/opt/apache/kafka/docker/run"]
+
+EXPOSE 8083
 
 ARG KAFKA_GIT_REPO=https://github.com/apache/kafka.git \
     KAFKA_GIT_REFSPEC \
