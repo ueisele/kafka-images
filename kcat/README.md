@@ -8,7 +8,7 @@ The Docker images are available in the following repositories on DockerHub:
 
 ## Most Recent Tags
 
-* `1.7.1`, `1.7.1-librdkafka2.0.2`, `1.7.1-librdkafka2.0.2-ubi8.7`, `1.7.1-librdkafka2.0.2-ubi8.7-1049`
+* `1.7.1`, `1.7.1-librdkafka2.0.2`, `1.7.1-librdkafka2.0.2-ubi8.7`, `1.7.1-librdkafka2.0.2-ubi8.7-1085`
 
 ## Image
 

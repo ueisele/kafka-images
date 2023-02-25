@@ -14,27 +14,27 @@ The Docker images are available on DockerHub repository [ueisele/apache-kafka-co
 
 Most recent tags for `RELEASE` builds:
 
-* `3.3.2`, `3.3.2-zulu17`, `3.3.2-zulu17.0.6`, `3.3.2-zulu17-ubi8.7`, `3.3.2-zulu17.0.6-ubi8.7-1049`
-* `3.3.1`, `3.3.1-zulu17`, `3.3.1-zulu17.0.6`, `3.3.1-zulu17-ubi8.7`, `3.3.1-zulu17.0.6-ubi8.7-1049`
-* `3.3.0`, `3.3.0-zulu17`, `3.3.0-zulu17.0.6`, `3.3.0-zulu17-ubi8.7`, `3.3.0-zulu17.0.6-ubi8.7-1049`
-* `3.2.3`, `3.2.3-zulu17`, `3.2.3-zulu17.0.6`, `3.2.3-zulu17-ubi8.7`, `3.2.3-zulu17.0.6-ubi8.7-1049`
-* `3.2.2`, `3.2.2-zulu17`, `3.2.2-zulu17.0.6`, `3.2.2-zulu17-ubi8.7`, `3.2.2-zulu17.0.6-ubi8.7-1049`
-* `3.2.1`, `3.2.1-zulu17`, `3.2.1-zulu17.0.6`, `3.2.1-zulu17-ubi8.7`, `3.2.1-zulu17.0.6-ubi8.7-1049`
-* `3.2.0`, `3.2.0-zulu17`, `3.2.0-zulu17.0.6`, `3.2.0-zulu17-ubi8.7`, `3.2.0-zulu17.0.6-ubi8.7-1049`
-* `3.1.2`, `3.1.2-zulu17`, `3.1.2-zulu17.0.6`, `3.1.2-zulu17-ubi8.7`, `3.1.2-zulu17.0.6-ubi8.7-1049`
-* `3.1.1`, `3.1.1-zulu17`, `3.1.1-zulu17.0.6`, `3.1.1-zulu17-ubi8.7`, `3.1.1-zulu17.0.6-ubi8.7-1049`
-* `3.1.0`, `3.1.0-zulu17`, `3.1.0-zulu17.0.6`, `3.1.0-zulu17-ubi8.7`, `3.1.0-zulu17.0.6-ubi8.7-1049`
-* `3.0.2`, `3.0.2-zulu17`, `3.0.2-zulu17.0.6`, `3.0.2-zulu17-ubi8.7`, `3.0.2-zulu17.0.6-ubi8.7-1049`
-* `3.0.1`, `3.0.1-zulu17`, `3.0.1-zulu17.0.6`, `3.0.1-zulu17-ubi8.7`, `3.0.1-zulu17.0.6-ubi8.7-1049`
-* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17.0.6`, `3.0.0-zulu17-ubi8.7`, `3.0.0-zulu17.0.6-ubi8.7-1049`
-* `2.8.2`, `2.8.2-zulu11`, `2.8.2-zulu11.0.18`, `2.8.2-zulu11-ubi8.7`, `2.8.2-zulu11.0.18-ubi8.7-1049`
-* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.18`, `2.8.1-zulu11-ubi8.7`, `2.8.1-zulu11.0.18-ubi8.7-1049`
-* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.18`, `2.8.0-zulu11-ubi8.7`, `2.8.0-zulu11.0.18-ubi8.7-1049`
+* `3.4.0`, `3.4.0-zulu17`, `3.4.0-zulu17.0.6`, `3.4.0-zulu17-ubi8.7`, `3.4.0-zulu17.0.6-ubi8.7-1085`
+* `3.3.2`, `3.3.2-zulu17`, `3.3.2-zulu17.0.6`, `3.3.2-zulu17-ubi8.7`, `3.3.2-zulu17.0.6-ubi8.7-1085`
+* `3.3.1`, `3.3.1-zulu17`, `3.3.1-zulu17.0.6`, `3.3.1-zulu17-ubi8.7`, `3.3.1-zulu17.0.6-ubi8.7-1085`
+* `3.3.0`, `3.3.0-zulu17`, `3.3.0-zulu17.0.6`, `3.3.0-zulu17-ubi8.7`, `3.3.0-zulu17.0.6-ubi8.7-1085`
+* `3.2.3`, `3.2.3-zulu17`, `3.2.3-zulu17.0.6`, `3.2.3-zulu17-ubi8.7`, `3.2.3-zulu17.0.6-ubi8.7-1085`
+* `3.2.2`, `3.2.2-zulu17`, `3.2.2-zulu17.0.6`, `3.2.2-zulu17-ubi8.7`, `3.2.2-zulu17.0.6-ubi8.7-1085`
+* `3.2.1`, `3.2.1-zulu17`, `3.2.1-zulu17.0.6`, `3.2.1-zulu17-ubi8.7`, `3.2.1-zulu17.0.6-ubi8.7-1085`
+* `3.2.0`, `3.2.0-zulu17`, `3.2.0-zulu17.0.6`, `3.2.0-zulu17-ubi8.7`, `3.2.0-zulu17.0.6-ubi8.7-1085`
+* `3.1.2`, `3.1.2-zulu17`, `3.1.2-zulu17.0.6`, `3.1.2-zulu17-ubi8.7`, `3.1.2-zulu17.0.6-ubi8.7-1085`
+* `3.1.1`, `3.1.1-zulu17`, `3.1.1-zulu17.0.6`, `3.1.1-zulu17-ubi8.7`, `3.1.1-zulu17.0.6-ubi8.7-1085`
+* `3.1.0`, `3.1.0-zulu17`, `3.1.0-zulu17.0.6`, `3.1.0-zulu17-ubi8.7`, `3.1.0-zulu17.0.6-ubi8.7-1085`
+* `3.0.2`, `3.0.2-zulu17`, `3.0.2-zulu17.0.6`, `3.0.2-zulu17-ubi8.7`, `3.0.2-zulu17.0.6-ubi8.7-1085`
+* `3.0.1`, `3.0.1-zulu17`, `3.0.1-zulu17.0.6`, `3.0.1-zulu17-ubi8.7`, `3.0.1-zulu17.0.6-ubi8.7-1085`
+* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17.0.6`, `3.0.0-zulu17-ubi8.7`, `3.0.0-zulu17.0.6-ubi8.7-1085`
+* `2.8.2`, `2.8.2-zulu11`, `2.8.2-zulu11.0.18`, `2.8.2-zulu11-ubi8.7`, `2.8.2-zulu11.0.18-ubi8.7-1085`
+* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.18`, `2.8.1-zulu11-ubi8.7`, `2.8.1-zulu11.0.18-ubi8.7-1085`
+* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.18`, `2.8.0-zulu11-ubi8.7`, `2.8.0-zulu11.0.18-ubi8.7-1085`
 
 Most recent tags for `SNAPSHOT` builds:
 
-* `3.5.0-SNAPSHOT`, `3.5.0-SNAPSHOT-zulu17`, `3.5.0-SNAPSHOT-zulu17.0.6`, `3.5.0-SNAPSHOT-zulu17-ubi8.7`, `3.5.0-SNAPSHOT-zulu17.0.6-ubi8.7-1049`
-* `3.4.0-SNAPSHOT`, `3.4.0-SNAPSHOT-zulu17`, `3.4.0-SNAPSHOT-zulu17.0.6`, `3.4.0-SNAPSHOT-zulu17-ubi8.7`, `3.4.0-SNAPSHOT-zulu17.0.6-ubi8.7-1049`
+* `3.5.0-SNAPSHOT`, `3.5.0-SNAPSHOT-zulu17`, `3.5.0-SNAPSHOT-zulu17.0.6`, `3.5.0-SNAPSHOT-zulu17-ubi8.7`, `3.5.0-SNAPSHOT-zulu17.0.6-ubi8.7-1085`
 
 Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-server-standalome:3.3.0-SNAPSHOT-g478de45`.
 
@@ -50,7 +50,7 @@ docker network create quickstart-kafka-connect-standalone
 Now, start a single Kafka instance: 
 
 ```bash
-docker run -d --name kafka --net quickstart-kafka-connect-standalone -p 9092:9092 ueisele/apache-kafka-server-standalone:3.3.2
+docker run -d --name kafka --net quickstart-kafka-connect-standalone -p 9092:9092 ueisele/apache-kafka-server-standalone:3.4.0
 ```
 
 In order to run Apache Kafka Connect in standalone mode run the following command:
@@ -69,13 +69,13 @@ docker run -d --name kafka-connect-standalone \
     -e CONNECTOR_TASKS_MAX=1 \
     -e CONNECTOR_KAFKA_TOPIC=connect-datagen-source \
     -e CONNECTOR_QUICKSTART=users \
-    ueisele/apache-kafka-connect-standalone:3.2.1
+    ueisele/apache-kafka-connect-standalone:3.4.0
 ```
 
 Consume published messages:
 
 ```bash
-docker run --rm -it --net quickstart-kafka-connect-standalone ueisele/apache-kafka-server-standalone:3.3.2 \
+docker run --rm -it --net quickstart-kafka-connect-standalone ueisele/apache-kafka-server-standalone:3.4.0 \
     kafka-console-consumer.sh \
         --bootstrap-server kafka:9092 \
         --topic connect-datagen-source \
@@ -141,6 +141,23 @@ You can also specify the flush interval for the offsets. By default its one minu
 CONNECT_OFFSET_FLUSH_INTERVAL_MS: 5000
 ```
 
+### Logger Configuration
+
+The logging configuration can be adjusted with the following environment variables:
+
+* `CONNECT_LOG4J_PATTERN` sets the logging pattern (default: `[%d] (%t) %p %m (%c)%n`)
+* `CONNECT_LOG4J_ROOT_LOGLEVEL` sets the root log level (default: `INFO`)
+* `CONNECT_LOG4J_LOGGERS` is a comma separated list of logger and log level key-value pairs (default: `org.reflections=ERROR,org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR`)
+
+### Debug Configuration
+
+In order to debug Kafka Connect, set the following environment variables:
+
+```properties
+KAFKA_DEBUG="y"
+JAVA_DEBUG_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+```
+
 ### Kafka Connect Plugin Installation
 
 The Apache Kafka Connect Docker image supports installation of Kafka Connect plugins like connectors during startup with multiple methods.
@@ -190,9 +207,9 @@ You can find the entire example setup at [examples/connect-standalone/http-sourc
 
 This Kafka Connect image has the Confluent converters for Avro, Protobuf and JSON Schema already pre-installed to simplify usage of Confluent Schema Registry.
 
-* [confluentinc/kafka-connect-avro-converter:7.3.0](https://www.confluent.io/hub/confluentinc/kafka-connect-avro-converter)
-* [confluentinc/kafka-connect-protobuf-converter:7.3.0](https://www.confluent.io/hub/confluentinc/kafka-connect-protobuf-converter)
-* [confluentinc/kafka-connect-json-schema-converter:7.3.0](https://www.confluent.io/hub/confluentinc/kafka-connect-json-schema-converter)
+* [confluentinc/kafka-connect-avro-converter:7.3.2](https://www.confluent.io/hub/confluentinc/kafka-connect-avro-converter)
+* [confluentinc/kafka-connect-protobuf-converter:7.3.2](https://www.confluent.io/hub/confluentinc/kafka-connect-protobuf-converter)
+* [confluentinc/kafka-connect-json-schema-converter:7.3.2](https://www.confluent.io/hub/confluentinc/kafka-connect-json-schema-converter)
 
 ## Build
 
@@ -201,16 +218,16 @@ In order to create your own Docker image for Apache Kafka Connect standalone clo
 ```bash
 git clone https://github.com/ueisele/kafka-images.git
 cd kafka-images
-connect-standalone/build.sh --build --tag 3.3.2 --openjdk-release 17
+connect-standalone/build.sh --build --tag 3.4.0 --openjdk-release 17
 ```
 
 To create an image with a specific OpenJDK version use the following command:
 
 ```bash
-connect-standalone/build.sh --build --tag 3.3.2 --openjdk-release 17 --openjdk-version 17.0.6
+connect-standalone/build.sh --build --tag 3.4.0 --openjdk-release 17 --openjdk-version 17.0.6
 ```
 
-To build the most recent `SNAPSHOT` of Apache Kafka 3.4.0 with Java 17, run:
+To build the most recent `SNAPSHOT` of Apache Kafka 3.5.0 with Java 17, run:
 
 ```bash
 connect-standalone/build.sh --build --branch trunk --openjdk-release 17
@@ -220,7 +237,7 @@ connect-standalone/build.sh --build --branch trunk --openjdk-release 17
 
 The `connect-standalone/build.sh` script provides the following options:
 
-`Usage: connect-standalone/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha b172a0a] [--tag 3.3.2] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.6]`
+`Usage: connect-standalone/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha b172a0a] [--tag 3.4.0] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.6]`
 
 ## License 
 
