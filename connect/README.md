@@ -6,6 +6,8 @@ The Kafka distribution included in the Docker image is built directly from [sour
 
 The Kafka Connect Docker image is based on [ueisele/apache-kafka-connect-base](https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect-base). It has the Confluent Hub Cli, as well as additional Kafka Connect plugins pre-installed.
 
+The image contains an [OpenTelemetry JavaAgent](https://opentelemetry.io/docs/instrumentation/java/automatic/). In the default configuration, this exports metrics via a [Prometheus](https://prometheus.io/) endpoint on port _9464_.
+
 The Docker images are available on DockerHub repository [ueisele/apache-kafka-connect](https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect), and the source files for the images are available on GitHub repository [ueisele/kafka-images](https://github.com/ueisele/kafka-images).
 
 ## Most Recent Tags
@@ -107,7 +109,7 @@ The minimum required worker configuration is:
 * `CONNECT_CONFIG_STORAGE_TOPIC`, `CONNECT_OFFSET_STORAGE_TOPIC` and `CONNECT_STATUS_STORAGE_TOPIC` which define the names of the topics where connector tasks, configuration, offsets and status updates are stored. This names must be unique per Connect cluster.
 * `CONNECT_REST_ADVERTISED_HOST_NAME` which defines the hostname that will be given out to other Workers to connect to. You should set this to a value that is resolvable by all containers.
 
-### Logger Configuration
+### Logging
 
 The logging configuration can be adjusted with the following environment variables:
 
@@ -115,13 +117,70 @@ The logging configuration can be adjusted with the following environment variabl
 * `CONNECT_LOG4J_ROOT_LOGLEVEL` sets the root log level (default: `INFO`)
 * `CONNECT_LOG4J_LOGGERS` is a comma separated list of logger and log level key-value pairs (default: `org.reflections=ERROR,org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR`)
 
-### Debug Configuration
+### OpenTelemetry
+
+The image contains an [OpenTelemetry JavaAgent](https://opentelemetry.io/docs/instrumentation/java/automatic/). In the default configuration, this exports metrics via a [Prometheus](https://prometheus.io/) endpoint on port _9464_.
+Kafka producer and consumer metrics (and traces) are captured via [agent instrumentation](https://opentelemetry.io/docs/instrumentation/java/automatic/agent-config/#suppressing-specific-agent-instrumentation).
+The Kafka Connect metrics are captured via [JMX](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/jmx-metrics/javaagent). 
+As configuration for the Kafka Connect metrics, the file [kafka-connect.yaml](include/opt/opentelemetry/javaagent/kafka-connect.yaml) is used. 
+
+The OpenTelemetry JavaAgent can be [configured via environment variables](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/jmx-metrics/javaagent):
+
+> #### `OTEL_JAVAAGENT_ENABLED`
+> Can be used to disable the OpenTelemetry JavaAgent.
+> *   Type: `Boolean`
+> *   Default: `true`
+>
+> #### `OTEL_SERVICE_NAME`
+> The name of the service.
+> *   Type: `String`
+> *   Default: `kafka-connect`
+>
+> #### `OTEL_JMX_KAFKA_CONNECT_ENABLED`
+> Can be used to disable the Kafka Connect JXM metrics.
+> *   Type: `Boolean`
+> *   Default: `true`
+>
+> #### `OTEL_JMX_CONFIG`
+> To provide your own metric definitions, create one or more [YAML configuration files](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/jmx-metrics/javaagent), and specify their locations, separated by commas.
+> The provided [kafka-connect.yaml](include/opt/opentelemetry/javaagent/kafka-connect.yaml) can be used as an example.
+> *   Type: `List(String)`
+> *   Default: `true`
+>
+> #### `OTEL_TRACES_EXPORTER`
+> List of exporters to be used for tracing, separated by commas.
+> Available exporters and configurations are described in the [autoconfigure documentation](https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md#exporters). 
+> *   Type: `List(String)`
+> *   Default: `none`
+>
+> #### `OTEL_METRICS_EXPORTER`
+> List of exporters to be used for metrics, separated by commas.
+> Available exporters and configurations are described in the [autoconfigure documentation](https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md#exporters). 
+> *   Type: `List(String)`
+> *   Default: `prometheus`
+>
+> #### `OTEL_EXPORTER_PROMETHEUS_PORT`
+> The port on which the prometheus metrics are provided.
+> *   Type: `Integer`
+> *   Default: `9464`
+>
+
+### Debugging
 
 In order to debug Kafka Connect, set the following environment variables:
 
 ```properties
 KAFKA_DEBUG="y"
 JAVA_DEBUG_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+```
+
+### JMX
+
+Remote JMX can be enabled with the following environment variables:
+
+```properties
+KAFKA_JMX_PORT=6001
+KAFKA_JMX_HOSTNAME=localhost
 ```
 
 ### Kafka Connect Plugin Installation

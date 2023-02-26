@@ -1,6 +1,9 @@
 ARG OPENJDK_JDK_IMAGE
 ARG OPENJDK_JRE_IMAGE
 
+#################################
+# Build Kafka Connect (Java)    #
+#################################
 FROM ${OPENJDK_JDK_IMAGE} as build
 LABEL maintainer="code@uweeisele.eu"
 
@@ -52,10 +55,18 @@ RUN mkdir -p /home/appuser/dist/kafka/bin \
     && cp /home/appuser/kafka/bin/kafka-run-class.sh /home/appuser/dist/kafka/bin/
 
 
+#################################
+# Build Kafka Connect (Image)   #
+#################################
 FROM ${OPENJDK_JRE_IMAGE}
 LABEL maintainer="code@uweeisele.eu"
 
 USER root
+
+RUN microdnf -y install curl unzip \
+    && microdnf clean all \
+    && rm -rf /var/lib/rpm \
+    && rm -rf /tmp/*
 
 ARG GODUB_VERSION=0.1.0
 LABEL godub.version=${GODUB_VERSION}
@@ -63,12 +74,7 @@ RUN curl -s -L https://github.com/ueisele/go-docker-utils/releases/download/${GO
     | tar xvz -C /usr/local/bin
 
 RUN mkdir -p /opt/apache/kafka /usr/local/share/kafka /var/lib/kafka /usr/logs \
-    && chown appuser:appuser -R /opt/apache/kafka /usr/local/share/kafka /var/lib/kafka /usr/logs
-
-RUN microdnf -y install curl unzip \
-    && microdnf clean all \
-    && rm -rf /var/lib/rpm \
-    && rm -rf /tmp/*
+    && chown appuser:appuser -R /opt/ /usr/local/share/kafka /var/lib/kafka /usr/logs
 
 USER appuser
 WORKDIR /home/appuser
@@ -99,6 +105,18 @@ COPY --chown=appuser:appuser include/opt/apache/kafka/docker /opt/apache/kafka/d
 CMD ["/opt/apache/kafka/docker/run"]
 
 EXPOSE 8083
+
+# https://opentelemetry.io/docs/instrumentation/java/automatic/agent-config/
+# https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/jmx-metrics/javaagent
+ARG OTEL_VERSION=1.23.0
+ARG OTEL_EXPORTER_PROMETHEUS_PORT=9464
+ENV OTEL_EXPORTER_PROMETHEUS_PORT=${OTEL_EXPORTER_PROMETHEUS_PORT}
+RUN mkdir -p /opt/opentelemetry/javaagent \
+  && curl -s -L -o /opt/opentelemetry/javaagent/opentelemetry-javaagent.jar \
+      https://repo1.maven.org/maven2/io/opentelemetry/javaagent/opentelemetry-javaagent/${OTEL_VERSION}/opentelemetry-javaagent-${OTEL_VERSION}.jar
+COPY --chown=appuser:appuser include/opt/opentelemetry/javaagent /opt/opentelemetry/javaagent
+EXPOSE ${OTEL_EXPORTER_PROMETHEUS_PORT}
+
 
 ARG KAFKA_GIT_REPO=https://github.com/apache/kafka.git \
     KAFKA_GIT_REFSPEC \

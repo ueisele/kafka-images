@@ -13,11 +13,24 @@ services:
     restart: always
     ports:
       - 8083:8083
+      - 9464:9464
+      - 6001:6001
+      - 5005:5005
     volumes:
       - connector-offsets:/opt/apache/kafka/data
     environment:
       ## Plugin Installation
       PLUGIN_INSTALL_CONFLUENT_HUB_IDS: confluentinc/kafka-connect-datagen:latest
+      ## Logging
+      CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
+      CONNECT_LOG4J_LOGGERS: "org.reflections=ERROR,org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR"
+      CONNECT_LOG4J_PATTERN: "[%d] (%t) %p %m (%c)%n"
+      ## JMX
+      KAFKA_JMX_PORT: 6001
+      KAFKA_JMX_HOSTNAME: localhost
+      ## DEBUG
+      KAFKA_DEBUG: "y"
+      JAVA_DEBUG_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
       ## Worker Configuration
       CONNECT_BOOTSTRAP_SERVERS: kafka:9092
       CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
@@ -39,9 +52,19 @@ services:
     restart: always
     ports:
       - 9092:9092
+      - 9465:9464
+      - 6002:6002
     volumes:
       - kafka:/opt/apache/kafka/data
     environment:
+      ## Logging
+      CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
+      CONNECT_LOG4J_LOGGERS: "kafka=INFO,kafka.network.RequestChannel$=WARN,kafka.producer.async.DefaultEventHandler=DEBUG,kafka.request.logger=WARN,kafka.controller=TRACE,kafka.log.LogCleaner=INFO,state.change.logger=TRACE,kafka.authorizer.logger=WARN"
+      CONNECT_LOG4J_PATTERN: "[%d] (%t) %p %m (%c)%n"
+      ## JMX
+      KAFKA_JMX_PORT: 6002
+      KAFKA_JMX_HOSTNAME: localhost
+      ## Kafka Configuration
       KAFKA_NUM_PARTITIONS: 2  
 
   #############################################################

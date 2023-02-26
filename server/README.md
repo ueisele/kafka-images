@@ -5,6 +5,8 @@ It offers support for running Kafka [KRaft mode](https://github.com/apache/kafka
 
 The Kafka distribution included in the Docker image is built directly from [source](https://github.com/apache/kafka/).
 
+The image contains an [OpenTelemetry JavaAgent](https://opentelemetry.io/docs/instrumentation/java/automatic/). In the default configuration, this exports metrics via a [Prometheus](https://prometheus.io/) endpoint on port _9464_.
+
 The Docker images are available on DockerHub repository [ueisele/apache-kafka-server](https://hub.docker.com/repository/docker/ueisele/apache-kafka-server), and the source files for the images are available on GitHub repository [ueisele/kafka-images](https://github.com/ueisele/kafka-images).
 
 ## Most Recent Tags
@@ -252,6 +254,67 @@ The logging configuration can be adjusted with the following environment variabl
 * `CONNECT_LOG4J_ROOT_LOGLEVEL` sets the root log level (default: `INFO`)
 * `CONNECT_LOG4J_LOGGERS` is a comma separated list of logger and log level key-value pairs 
   (default: `kafka=INFO,kafka.network.RequestChannel$=WARN,kafka.producer.async.DefaultEventHandler=DEBUG,kafka.request.logger=WARN,kafka.controller=TRACE,kafka.log.LogCleaner=INFO,state.change.logger=TRACE,kafka.authorizer.logger=WARN`)
+
+### OpenTelemetry
+
+The image contains an [OpenTelemetry JavaAgent](https://opentelemetry.io/docs/instrumentation/java/automatic/). In the default configuration, this exports metrics via a [Prometheus](https://prometheus.io/) endpoint on port _9464_.
+The Kafka metrics are captured via [JMX](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/jmx-metrics/javaagent). 
+As configuration for the Kafka metrics, the file [kafka-broker.yaml](include/opt/opentelemetry/javaagent/kafka-broker.yaml) is used. 
+
+The OpenTelemetry JavaAgent can be [configured via environment variables](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/jmx-metrics/javaagent):
+
+> #### `OTEL_JAVAAGENT_ENABLED`
+> Can be used to disable the OpenTelemetry JavaAgent.
+> *   Type: `Boolean`
+> *   Default: `true`
+>
+> #### `OTEL_SERVICE_NAME`
+> The name of the service.
+> *   Type: `String`
+> *   Default: `kafka-broker`
+>
+> #### `OTEL_JMX_KAFKA_BROKER_ENABLED`
+> Can be used to disable the Kafka Broker JXM metrics.
+> *   Type: `Boolean`
+> *   Default: `true`
+>
+> #### `OTEL_JMX_CONFIG`
+> To provide your own metric definitions, create one or more [YAML configuration files](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/jmx-metrics/javaagent), and specify their locations, separated by commas.
+> The provided [kafka-broker.yaml](include/opt/opentelemetry/javaagent/kafka-broker.yaml) can be used as an example.
+> *   Type: `List(String)`
+> *   Default: `true`
+>
+> #### `OTEL_INSTRUMENTATION_COMMON_DEFAULT_ENABLED`
+> Can be used to enable [automatic agent configuration](https://opentelemetry.io/docs/instrumentation/java/automatic/agent-config/#enable-only-specific-instrumentation).
+> *   Type: `Boolean`
+> *   Default: `false`
+>
+> #### `OTEL_TRACES_EXPORTER`
+> List of exporters to be used for tracing, separated by commas.
+> Available exporters and configurations are described in the [autoconfigure documentation](https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md#exporters). 
+> *   Type: `List(String)`
+> *   Default: `none`
+>
+> #### `OTEL_METRICS_EXPORTER`
+> List of exporters to be used for metrics, separated by commas.
+> Available exporters and configurations are described in the [autoconfigure documentation](https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md#exporters). 
+> *   Type: `List(String)`
+> *   Default: `prometheus`
+>
+> #### `OTEL_EXPORTER_PROMETHEUS_PORT`
+> The port on which the prometheus metrics are provided.
+> *   Type: `Integer`
+> *   Default: `9464`
+>
+
+### JMX
+
+Remote JMX can be enabled with the following environment variables:
+
+```properties
+KAFKA_JMX_PORT=6001
+KAFKA_JMX_HOSTNAME=localhost
+```
 
 ## Build
 

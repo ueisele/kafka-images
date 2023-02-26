@@ -4,6 +4,8 @@ Docker image for running the link:https://github.com/apache/kafka/[Open Source v
 
 The Kafka distribution included in the Docker image is built directly from link:https://github.com/apache/kafka/[source].
 
+All images contain an [OpenTelemetry JavaAgent](https://opentelemetry.io/docs/instrumentation/java/automatic/). In the default configuration, this exports metrics via a [Prometheus](https://prometheus.io/) endpoint on port _9464_.
+
 The Docker images are available on the following DockerHub repositories:
 
 * link:https://hub.docker.com/repository/docker/ueisele/apache-kafka-server[ueisele/apache-kafka-server]
