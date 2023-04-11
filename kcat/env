@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 UBI8_RELEASE=8.7
-UBI8_VERSION=${UBI8_RELEASE}-1049
+UBI8_VERSION=${UBI8_RELEASE}-1085
 
 function kcat_image_tags () {
     local kcat_version=${1:?"Missing Kcat version as first parameter!"}

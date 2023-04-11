@@ -11,12 +11,12 @@ CONTAINERFILE=Containerfile.ubi8
 DOCKERREGISTRY_USER="ueisele"
 KCAT_GITHUB_REPO="edenhill/kcat"
 KAFKA_GIT_BRANCH="master"
-LIBRDKAFKA_VERSION="2.0.2"
+LIBRDKAFKA_VERSION="2.1.0"
 
 function usage () {
     echo "$0: $1" >&2
     echo
-    echo "Usage: $0 [--build] [--push] [--user ueisele] [--github-repo edenhill/kcat] [ [--commit-sha 9ca33cd] [--tag 1.7.1] [--branch master] [--pull-request 9999] ] [--librdkafka-version 2.0.2]"
+    echo "Usage: $0 [--build] [--push] [--user ueisele] [--github-repo edenhill/kcat] [ [--commit-sha 9ca33cd] [--tag 1.7.1] [--branch master] [--pull-request 9999] ] [--librdkafka-version 2.1.0]"
     echo
     return 1
 }
