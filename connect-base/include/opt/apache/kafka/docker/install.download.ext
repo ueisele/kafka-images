@@ -2,23 +2,32 @@
 set -e
 
 function download () {
-  local path="${1:?Requires relative target path as first parameter!}"
-  local url="${2:?Requires url as second parameter!}"
-  local filename="$(basename "${url}")"
+  local url="${1:?Requires url as first parameter!}"
+
+  local tmpDir="$(mktemp -d --suffix=connect)"
+  local downloadFile="$(cd "${tmpDir}"; curl -sfL --remote-name --remote-header-name --write-out '%{filename_effective}' "${url}")"
+  local name="$(sed 's/\(-v\?[0-9]\+\)\?\..*$//' <<< "${downloadFile}")"
+
+  local path="${2:-"${name}"}"
+
   mkdir -p "${PLUGIN_INSTALL_DIR}/${path}"
-  if [[ ${filename} == *.zip ]]; then
+  if [[ ${downloadFile} == *.zip ]]; then
     (
       cd "${PLUGIN_INSTALL_DIR}/${path}"
-      curl -L -o "${filename}" "${url}"
-      unzip -o "${filename}"
-      rm "${filename}"
+      mv "${tmpDir}/${downloadFile}" "${downloadFile}"
+      unzip -o "${downloadFile}"
+      rm "${downloadFile}"
+      rm -rf "${tmpDir}"
     )
-  elif [[ ${filename} == *.tar* ]] || [[ ${filename} == *.tgz ]]; then
-    curl -L "${url}" | tar -zx -C "${PLUGIN_INSTALL_DIR}/${path}/"
-  elif [[ ${filename} == *.jar ]]; then
-    curl -L -o "${PLUGIN_INSTALL_DIR}/${path}/${filename}" "${url}"     
+  elif [[ ${downloadFile} == *.tar* ]] || [[ ${downloadFile} == *.tgz ]]; then
+    tar -xzf "${tmpDir}/${downloadFile}" -C "${PLUGIN_INSTALL_DIR}/${path}/"
+    rm -rf "${tmpDir}"
+  elif [[ ${downloadFile} == *.jar ]]; then
+    mv "${tmpDir}/${downloadFile}" "${PLUGIN_INSTALL_DIR}/${path}/"
+    rm -rf "${tmpDir}"
   else
-    echo "Could not install '${filename}', because extension is not supported!"
+    echo "Could not install '${downloadFile}', because extension is not supported!"
+    rm -rf "${tmpDir}"
     return 1
   fi
 }
@@ -30,9 +39,7 @@ function download () {
 function installPluginsByUrl () {
   local urls="${1:?Requires urls as first parameter!}"
   for url in $(sed "s/,/ /g" <<< ${urls}); do 
-    local filename="$(basename "${url}")"
-    local name="$(sed 's/\(-v\?[0-9]\+\)\?\..*$//' <<< "${filename}")"
-    download "${name}" "${url}"
+    download "${url}"
   done
 }
 
@@ -47,7 +54,7 @@ function downloadLibs () {
       local path=$(cut -d$'=' -f1 <<< "${lib}")
       local url=$(cut -d$'=' -f2 <<< "${lib}")
       local filename="$(basename "${url}")"
-      download "${path}" "${url}"
+      download "${url}" "${path}"
     else
       echo "Could not install '${lib}', because 'path=url' pair expected!"
       return 1

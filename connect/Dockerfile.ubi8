@@ -18,7 +18,7 @@ COPY --chown=appuser:appuser include/opt/apache/kafka/docker /opt/apache/kafka/d
 
 ## Installation of the base Kafka Connect plugins to be delivered with the image
 ## Retries are required, because sometimes confluent hub cli does not find the connector
-ARG CONFLUENT_VERSION=7.3.2
+ARG CONFLUENT_VERSION=7.3.3
 RUN until \
     /opt/apache/kafka/docker/install \
       --confluent-hub-ids "confluentinc/kafka-connect-json-schema-converter:${CONFLUENT_VERSION}"; \

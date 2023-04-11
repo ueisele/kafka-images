@@ -87,17 +87,14 @@ COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/licenses /opt
 COPY --from=build --chown=appuser:appuser /home/appuser/dist/kafka/bin /opt/apache/kafka/bin
 ENV PATH=/opt/apache/kafka/bin:${PATH}
 
-ENV LEGACY_CONNECT_PLUGIN_PATH=/usr/share/java,/opt/apache/kafka/connectors,/opt/apache/kafka/connectors_install
 ENV CONNECT_PLUGIN_INSTALL_DIR=/opt/apache/kafka/plugins
 ENV CONNECT_PLUGIN_PATH="\
 /opt/apache/kafka/libs,\
-${CONNECT_PLUGIN_INSTALL_DIR},/usr/local/share/kafka/plugins,/var/lib/kafka/plugins,\
-${LEGACY_CONNECT_PLUGIN_PATH}"
+${CONNECT_PLUGIN_INSTALL_DIR},/usr/local/share/kafka/plugins,/var/lib/kafka/plugins"
 
 RUN mkdir -p \
     /opt/apache/kafka/data /opt/apache/kafka/secrets /opt/apache/kafka/config \
-    ${CONNECT_PLUGIN_INSTALL_DIR} /usr/local/share/kafka/plugins /var/lib/kafka/plugins \
-    /opt/apache/kafka/connectors /opt/apache/kafka/connectors_install
+    ${CONNECT_PLUGIN_INSTALL_DIR} /usr/local/share/kafka/plugins /var/lib/kafka/plugins
 VOLUME ["/opt/apache/kafka/data","/opt/apache/kafka/secrets"]
 
 COPY --chown=appuser:appuser include/opt/apache/kafka/docker /opt/apache/kafka/docker
