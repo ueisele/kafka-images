@@ -54,6 +54,13 @@ docker network create --ipv6 --subnet fd01::/80 kafka-standalone
 docker run --rm -p 9092:9092 --net kafka-standalone -e STANDALONE_BROKER_IP_VERSION=ipv6 ueisele/apache-kafka-server-standalone:3.4.0
 ```
 
+If you use Podman, the Container network is not reachable from localhost.
+You can use port 9093, which exposes `localhost:9093` as advertised listener. 
+
+```bash
+podman run --rm -p 9093:9093 ueisele/apache-kafka-server-standalone:3.4.0
+```
+
 ## Configuration
 
 The [ueisele/apache-kafka-server-standalone](https://hub.docker.com/repository/registry-1.docker.io/ueisele/apache-kafka-server/) image just sets environment variables which are required for a standalone execution (see [Dockerfile](server-standalone/Dockerfile.ubi8)). 
