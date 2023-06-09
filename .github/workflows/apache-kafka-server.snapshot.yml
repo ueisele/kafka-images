@@ -32,9 +32,9 @@ jobs:
       run: ./server/build.sh --push --branch ${{ matrix.kafka.branch }} --openjdk-release ${{ matrix.kafka.openjdk }}
     
     - name: Build Kafka Server with OTel
-      run: ./server-otel/build.sh --build --branch ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
+      run: ./server-otel/build.sh --build --branch ${{ matrix.kafka.branch }} --openjdk-release ${{ matrix.kafka.openjdk }}
     - name: Push Kafka Server with OTel
-      run: ./server-otel/build.sh --push --branch ${{ matrix.kafka.version }} --openjdk-release ${{ matrix.kafka.openjdk }}
+      run: ./server-otel/build.sh --push --branch ${{ matrix.kafka.branch }} --openjdk-release ${{ matrix.kafka.openjdk }}
     
     - name: Build Kafka Server Standalone
       run: ./server-standalone/build.sh --build --branch ${{ matrix.kafka.branch }} --openjdk-release ${{ matrix.kafka.openjdk }}
