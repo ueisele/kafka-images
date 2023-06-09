@@ -372,7 +372,7 @@ services:
     # CLIs                                                      #
     #############################################################
     cli-confluent:
-        image: docker.io/confluentinc/confluent-cli:2.24.2
+        image: docker.io/confluentinc/confluent-cli:3.17.0
         hostname: cli-confluent
         entrypoint: /bin/bash
         tty: true

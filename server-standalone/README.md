@@ -7,58 +7,45 @@ The Kafka distribution included in the Docker image is built directly from [sour
 
 The standalone Docker image is based on [ueisele/apache-kafka-server](https://hub.docker.com/repository/docker/ueisele/apache-kafka-server). 
 
-The image contains an [OpenTelemetry JavaAgent](https://opentelemetry.io/docs/instrumentation/java/automatic/). In the default configuration, this exports metrics via a [Prometheus](https://prometheus.io/) endpoint on port _9464_.
-
 The Docker images are available on DockerHub repository [ueisele/apache-kafka-server-standalone](https://hub.docker.com/repository/docker/ueisele/apache-kafka-server), and the source files for the images are available on GitHub repository [ueisele/kafka-images](https://github.com/ueisele/kafka-images).
 
 ## Most Recent Tags
 
 Most recent tags for `RELEASE` builds:
 
-* `3.4.0`, `3.4.0-zulu17`, `3.4.0-zulu17.0.6`, `3.4.0-zulu17-ubi8.7`, `3.4.0-zulu17.0.6-ubi8.7-1085`
-* `3.3.2`, `3.3.2-zulu17`, `3.3.2-zulu17.0.6`, `3.3.2-zulu17-ubi8.7`, `3.3.2-zulu17.0.6-ubi8.7-1085`
-* `3.3.1`, `3.3.1-zulu17`, `3.3.1-zulu17.0.6`, `3.3.1-zulu17-ubi8.7`, `3.3.1-zulu17.0.6-ubi8.7-1085`
-* `3.3.0`, `3.3.0-zulu17`, `3.3.0-zulu17.0.6`, `3.3.0-zulu17-ubi8.7`, `3.3.0-zulu17.0.6-ubi8.7-1085`
-* `3.2.3`, `3.2.3-zulu17`, `3.2.3-zulu17.0.6`, `3.2.3-zulu17-ubi8.7`, `3.2.3-zulu17.0.6-ubi8.7-1085`
-* `3.2.2`, `3.2.2-zulu17`, `3.2.2-zulu17.0.6`, `3.2.2-zulu17-ubi8.7`, `3.2.2-zulu17.0.6-ubi8.7-1085`
-* `3.2.1`, `3.2.1-zulu17`, `3.2.1-zulu17.0.6`, `3.2.1-zulu17-ubi8.7`, `3.2.1-zulu17.0.6-ubi8.7-1085`
-* `3.2.0`, `3.2.0-zulu17`, `3.2.0-zulu17.0.6`, `3.2.0-zulu17-ubi8.7`, `3.2.0-zulu17.0.6-ubi8.7-1085`
-* `3.1.2`, `3.1.2-zulu17`, `3.1.2-zulu17.0.6`, `3.1.2-zulu17-ubi8.7`, `3.1.2-zulu17.0.6-ubi8.7-1085`
-* `3.1.1`, `3.1.1-zulu17`, `3.1.1-zulu17.0.6`, `3.1.1-zulu17-ubi8.7`, `3.1.1-zulu17.0.6-ubi8.7-1085`
-* `3.1.0`, `3.1.0-zulu17`, `3.1.0-zulu17.0.6`, `3.1.0-zulu17-ubi8.7`, `3.1.0-zulu17.0.6-ubi8.7-1085`
-* `3.0.2`, `3.0.2-zulu17`, `3.0.2-zulu17.0.6`, `3.0.2-zulu17-ubi8.7`, `3.0.2-zulu17.0.6-ubi8.7-1085`
-* `3.0.1`, `3.0.1-zulu17`, `3.0.1-zulu17.0.6`, `3.0.1-zulu17-ubi8.7`, `3.0.1-zulu17.0.6-ubi8.7-1085`
-* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17.0.6`, `3.0.0-zulu17-ubi8.7`, `3.0.0-zulu17.0.6-ubi8.7-1085`
-* `2.8.2`, `2.8.2-zulu11`, `2.8.2-zulu11.0.18`, `2.8.2-zulu11-ubi8.7`, `2.8.2-zulu11.0.18-ubi8.7-1085`
-* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.18`, `2.8.1-zulu11-ubi8.7`, `2.8.1-zulu11.0.18-ubi8.7-1085`
-* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.18`, `2.8.0-zulu11-ubi8.7`, `2.8.0-zulu11.0.18-ubi8.7-1085`
+* `3.4.1`, `3.4.1-zulu17`, `3.4.1-zulu17.0.7`, `3.4.1-zulu17-ubi8.8`, `3.4.1-zulu17.0.7-ubi8.8-860`
+* `3.4.0`, `3.4.0-zulu17`, `3.4.0-zulu17.0.7`, `3.4.0-zulu17-ubi8.8`, `3.4.0-zulu17.0.7-ubi8.8-860`
+* `3.3.2`, `3.3.2-zulu17`, `3.3.2-zulu17.0.7`, `3.3.2-zulu17-ubi8.8`, `3.3.2-zulu17.0.7-ubi8.8-860`
+* `3.3.1`, `3.3.1-zulu17`, `3.3.1-zulu17.0.7`, `3.3.1-zulu17-ubi8.8`, `3.3.1-zulu17.0.7-ubi8.8-860`
+* `3.3.0`, `3.3.0-zulu17`, `3.3.0-zulu17.0.7`, `3.3.0-zulu17-ubi8.8`, `3.3.0-zulu17.0.7-ubi8.8-860`
 
 Most recent tags for `SNAPSHOT` builds:
 
-* `3.5.0-SNAPSHOT`, `3.5.0-SNAPSHOT-zulu17`, `3.5.0-SNAPSHOT-zulu17.0.6`, `3.5.0-SNAPSHOT-zulu17-ubi8.7`, `3.5.0-SNAPSHOT-zulu17.0.6-ubi8.7-1085`
+* `3.6.0-SNAPSHOT`, `3.6.0-SNAPSHOT-zulu17`, `3.6.0-SNAPSHOT-zulu17.0.7`, `3.6.0-SNAPSHOT-zulu17-ubi8.8`, `3.6.0-SNAPSHOT-zulu17.0.7-ubi8.8-860`
+* `3.5.0-SNAPSHOT`, `3.5.0-SNAPSHOT-zulu17`, `3.5.0-SNAPSHOT-zulu17.0.7`, `3.5.0-SNAPSHOT-zulu17-ubi8.8`, `3.5.0-SNAPSHOT-zulu17.0.7-ubi8.8-860`
 
-Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-server-standalome:3.3.0-SNAPSHOT-g478de45`.
+Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-server-standalone:3.6.0-SNAPSHOT-g7eea2a3`.
 
 ## Quick Start
 
 To start a single Kafka instance in KRaft mode just run: 
 
 ```bash
-docker run --rm -p 9092:9092 ueisele/apache-kafka-server-standalone:3.4.0
+docker run --rm -p 9092:9092 ueisele/apache-kafka-server-standalone:3.4.1
 ```
 
 To start a single Kafka instance in KRaft mode with Ipv6 just run: 
 
 ```bash
 docker network create --ipv6 --subnet fd01::/80 kafka-standalone
-docker run --rm -p 9092:9092 --net kafka-standalone -e STANDALONE_BROKER_IP_VERSION=ipv6 ueisele/apache-kafka-server-standalone:3.4.0
+docker run --rm -p 9092:9092 --net kafka-standalone -e STANDALONE_BROKER_IP_VERSION=ipv6 ueisele/apache-kafka-server-standalone:3.4.1
 ```
 
 If you use Podman, the Container network is not reachable from localhost.
 You can use port 9093, which exposes `localhost:9093` as advertised listener. 
 
 ```bash
-podman run --rm -p 9093:9093 ueisele/apache-kafka-server-standalone:3.4.0
+podman run --rm -p 9093:9093 ueisele/apache-kafka-server-standalone:3.4.1
 ```
 
 ## Configuration
@@ -98,58 +85,6 @@ The logging configuration can be adjusted with the following environment variabl
 * `CONNECT_LOG4J_LOGGERS` is a comma separated list of logger and log level key-value pairs 
   (default: `kafka=INFO,kafka.network.RequestChannel$=WARN,kafka.producer.async.DefaultEventHandler=DEBUG,kafka.request.logger=WARN,kafka.controller=TRACE,kafka.log.LogCleaner=INFO,state.change.logger=TRACE,kafka.authorizer.logger=WARN`)
 
-### OpenTelemetry
-
-The image contains an [OpenTelemetry JavaAgent](https://opentelemetry.io/docs/instrumentation/java/automatic/). In the default configuration, this exports metrics via a [Prometheus](https://prometheus.io/) endpoint on port _9464_.
-The Kafka metrics are captured via [JMX](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/jmx-metrics/javaagent). 
-As configuration for the Kafka metrics, the file [kafka-broker.yaml](include/opt/opentelemetry/javaagent/kafka-broker.yaml) is used. 
-
-The OpenTelemetry JavaAgent can be [configured via environment variables](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/jmx-metrics/javaagent):
-
-> #### `OTEL_JAVAAGENT_ENABLED`
-> Can be used to disable the OpenTelemetry JavaAgent.
-> *   Type: `Boolean`
-> *   Default: `true`
->
-> #### `OTEL_SERVICE_NAME`
-> The name of the service.
-> *   Type: `String`
-> *   Default: `kafka-broker`
->
-> #### `OTEL_JMX_KAFKA_BROKER_ENABLED`
-> Can be used to disable the Kafka Broker JXM metrics.
-> *   Type: `Boolean`
-> *   Default: `true`
->
-> #### `OTEL_JMX_CONFIG`
-> To provide your own metric definitions, create one or more [YAML configuration files](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/jmx-metrics/javaagent), and specify their locations, separated by commas.
-> The provided [kafka-broker.yaml](include/opt/opentelemetry/javaagent/kafka-broker.yaml) can be used as an example.
-> *   Type: `List(String)`
-> *   Default: `true`
->
-> #### `OTEL_INSTRUMENTATION_COMMON_DEFAULT_ENABLED`
-> Can be used to enable [automatic agent configuration](https://opentelemetry.io/docs/instrumentation/java/automatic/agent-config/#enable-only-specific-instrumentation).
-> *   Type: `Boolean`
-> *   Default: `false`
->
-> #### `OTEL_TRACES_EXPORTER`
-> List of exporters to be used for tracing, separated by commas.
-> Available exporters and configurations are described in the [autoconfigure documentation](https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md#exporters). 
-> *   Type: `List(String)`
-> *   Default: `none`
->
-> #### `OTEL_METRICS_EXPORTER`
-> List of exporters to be used for metrics, separated by commas.
-> Available exporters and configurations are described in the [autoconfigure documentation](https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md#exporters). 
-> *   Type: `List(String)`
-> *   Default: `prometheus`
->
-> #### `OTEL_EXPORTER_PROMETHEUS_PORT`
-> The port on which the prometheus metrics are provided.
-> *   Type: `Integer`
-> *   Default: `9464`
->
-
 ### JMX
 
 Remote JMX can be enabled with the following environment variables:
@@ -166,13 +101,13 @@ In order to create your own Docker image for Apache Kafka clone the [ueisele/kaf
 ```bash
 git clone https://github.com/ueisele/kafka-images.git
 cd kafka-images
-server-standalone/build.sh --build --tag 3.4.0 --openjdk-release 17
+server-standalone/build.sh --build --tag 3.4.1 --openjdk-release 17
 ```
 
 To create an image with a specific OpenJDK version use the following command:
 
 ```bash
-server-standalone/build.sh --build --tag 3.4.0 --openjdk-release 17 --openjdk-version 17.0.6
+server-standalone/build.sh --build --tag 3.4.1 --openjdk-release 17 --openjdk-version 17.0.7
 ```
 
 To build the most recent `SNAPSHOT` of Apache Kafka 3.5.0 with Java 17, run:
@@ -185,7 +120,7 @@ server-standalone/build.sh --build --branch trunk --openjdk-release 17
 
 The `server-standalone/build.sh` script provides the following options:
 
-`Usage: server-standalone/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha b172a0a] [--tag 3.4.0] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.6]`
+`Usage: server-standalone/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha b172a0a] [--tag 3.4.1] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.7]`
 
 ## License 
 

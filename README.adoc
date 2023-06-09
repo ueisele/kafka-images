@@ -20,14 +20,14 @@ The Docker images are available on the following DockerHub repositories:
 .To start Kafka in KRaft single mode just run: 
 [source,bash]
 ----
-docker run --rm -p 9092:9092 ueisele/apache-kafka-server-standalone:3.4.0
+docker run --rm -p 9092:9092 ueisele/apache-kafka-server-standalone:3.4.1
 ----
 
 .To start Kafka in KRaft single mode with Ipv6 just run: 
 [source,bash]
 ----
 docker network create --ipv6 --subnet fd01::/80 kafka-standalone
-docker run --rm -p 9092:9092 --net kafka-standalone -e STANDALONE_BROKER_IP_VERSION=ipv6 ueisele/apache-kafka-server-standalone:3.4.0
+docker run --rm -p 9092:9092 --net kafka-standalone -e STANDALONE_BROKER_IP_VERSION=ipv6 ueisele/apache-kafka-server-standalone:3.4.1
 ----
 
 == Docker Compose Examples
@@ -100,9 +100,9 @@ cd example/kraft/single-mode
 podman-compose up
 ----
 
-It is important to note that at least link:https://github.com/containers/podman-compose[podman-compose] 1.0.4 is required. The reason is, that in the examples network alias are used. Unfortunately, 1.0.4 is not released at the moment. However, you could install it manually.
+It is important to note that at least link:https://github.com/containers/podman-compose[podman-compose] 1.0.4 is required. The reason is, that in the examples network alias are used.
 
-
+If you do not have the required minimum version, you could install it manually:
 [source,bash]
 ----
 pip3 install --upgrade --target=${HOME}/Applications/podman-compose git+https://github.com/containers/podman-compose.git

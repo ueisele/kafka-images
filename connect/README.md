@@ -6,37 +6,24 @@ The Kafka distribution included in the Docker image is built directly from [sour
 
 The Kafka Connect Docker image is based on [ueisele/apache-kafka-connect-base](https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect-base). It has the Confluent Hub Cli, as well as additional Kafka Connect plugins pre-installed.
 
-The image contains an [OpenTelemetry JavaAgent](https://opentelemetry.io/docs/instrumentation/java/automatic/). In the default configuration, this exports metrics via a [Prometheus](https://prometheus.io/) endpoint on port _9464_.
-
 The Docker images are available on DockerHub repository [ueisele/apache-kafka-connect](https://hub.docker.com/repository/docker/ueisele/apache-kafka-connect), and the source files for the images are available on GitHub repository [ueisele/kafka-images](https://github.com/ueisele/kafka-images).
 
 ## Most Recent Tags
 
 Most recent tags for `RELEASE` builds:
 
-* `3.4.0`, `3.4.0-zulu17`, `3.4.0-zulu17.0.6`, `3.4.0-zulu17-ubi8.7`, `3.4.0-zulu17.0.6-ubi8.7-1085`
-* `3.3.2`, `3.3.2-zulu17`, `3.3.2-zulu17.0.6`, `3.3.2-zulu17-ubi8.7`, `3.3.2-zulu17.0.6-ubi8.7-1085`
-* `3.3.1`, `3.3.1-zulu17`, `3.3.1-zulu17.0.6`, `3.3.1-zulu17-ubi8.7`, `3.3.1-zulu17.0.6-ubi8.7-1085`
-* `3.3.0`, `3.3.0-zulu17`, `3.3.0-zulu17.0.6`, `3.3.0-zulu17-ubi8.7`, `3.3.0-zulu17.0.6-ubi8.7-1085`
-* `3.2.3`, `3.2.3-zulu17`, `3.2.3-zulu17.0.6`, `3.2.3-zulu17-ubi8.7`, `3.2.3-zulu17.0.6-ubi8.7-1085`
-* `3.2.2`, `3.2.2-zulu17`, `3.2.2-zulu17.0.6`, `3.2.2-zulu17-ubi8.7`, `3.2.2-zulu17.0.6-ubi8.7-1085`
-* `3.2.1`, `3.2.1-zulu17`, `3.2.1-zulu17.0.6`, `3.2.1-zulu17-ubi8.7`, `3.2.1-zulu17.0.6-ubi8.7-1085`
-* `3.2.0`, `3.2.0-zulu17`, `3.2.0-zulu17.0.6`, `3.2.0-zulu17-ubi8.7`, `3.2.0-zulu17.0.6-ubi8.7-1085`
-* `3.1.2`, `3.1.2-zulu17`, `3.1.2-zulu17.0.6`, `3.1.2-zulu17-ubi8.7`, `3.1.2-zulu17.0.6-ubi8.7-1085`
-* `3.1.1`, `3.1.1-zulu17`, `3.1.1-zulu17.0.6`, `3.1.1-zulu17-ubi8.7`, `3.1.1-zulu17.0.6-ubi8.7-1085`
-* `3.1.0`, `3.1.0-zulu17`, `3.1.0-zulu17.0.6`, `3.1.0-zulu17-ubi8.7`, `3.1.0-zulu17.0.6-ubi8.7-1085`
-* `3.0.2`, `3.0.2-zulu17`, `3.0.2-zulu17.0.6`, `3.0.2-zulu17-ubi8.7`, `3.0.2-zulu17.0.6-ubi8.7-1085`
-* `3.0.1`, `3.0.1-zulu17`, `3.0.1-zulu17.0.6`, `3.0.1-zulu17-ubi8.7`, `3.0.1-zulu17.0.6-ubi8.7-1085`
-* `3.0.0`, `3.0.0-zulu17`, `3.0.0-zulu17.0.6`, `3.0.0-zulu17-ubi8.7`, `3.0.0-zulu17.0.6-ubi8.7-1085`
-* `2.8.2`, `2.8.2-zulu11`, `2.8.2-zulu11.0.18`, `2.8.2-zulu11-ubi8.7`, `2.8.2-zulu11.0.18-ubi8.7-1085`
-* `2.8.1`, `2.8.1-zulu11`, `2.8.1-zulu11.0.18`, `2.8.1-zulu11-ubi8.7`, `2.8.1-zulu11.0.18-ubi8.7-1085`
-* `2.8.0`, `2.8.0-zulu11`, `2.8.0-zulu11.0.18`, `2.8.0-zulu11-ubi8.7`, `2.8.0-zulu11.0.18-ubi8.7-1085`
+* `3.4.1`, `3.4.1-zulu17`, `3.4.1-zulu17.0.7`, `3.4.1-zulu17-ubi8.8`, `3.4.1-zulu17.0.7-ubi8.8-860`
+* `3.4.0`, `3.4.0-zulu17`, `3.4.0-zulu17.0.7`, `3.4.0-zulu17-ubi8.8`, `3.4.0-zulu17.0.7-ubi8.8-860`
+* `3.3.2`, `3.3.2-zulu17`, `3.3.2-zulu17.0.7`, `3.3.2-zulu17-ubi8.8`, `3.3.2-zulu17.0.7-ubi8.8-860`
+* `3.3.1`, `3.3.1-zulu17`, `3.3.1-zulu17.0.7`, `3.3.1-zulu17-ubi8.8`, `3.3.1-zulu17.0.7-ubi8.8-860`
+* `3.3.0`, `3.3.0-zulu17`, `3.3.0-zulu17.0.7`, `3.3.0-zulu17-ubi8.8`, `3.3.0-zulu17.0.7-ubi8.8-860`
 
 Most recent tags for `SNAPSHOT` builds:
 
-* `3.5.0-SNAPSHOT`, `3.5.0-SNAPSHOT-zulu17`, `3.5.0-SNAPSHOT-zulu17.0.6`, `3.5.0-SNAPSHOT-zulu17-ubi8.7`, `3.5.0-SNAPSHOT-zulu17.0.6-ubi8.7-1085`
+* `3.6.0-SNAPSHOT`, `3.6.0-SNAPSHOT-zulu17`, `3.6.0-SNAPSHOT-zulu17.0.7`, `3.6.0-SNAPSHOT-zulu17-ubi8.8`, `3.6.0-SNAPSHOT-zulu17.0.7-ubi8.8-860`
+* `3.5.0-SNAPSHOT`, `3.5.0-SNAPSHOT-zulu17`, `3.5.0-SNAPSHOT-zulu17.0.7`, `3.5.0-SNAPSHOT-zulu17-ubi8.8`, `3.5.0-SNAPSHOT-zulu17.0.7-ubi8.8-860`
 
-Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-server-standalome:3.3.0-SNAPSHOT-g478de45`.
+Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-connect:3.6.0-SNAPSHOT-g7eea2a3`.
 
 ## Quick Start
 
@@ -50,7 +37,7 @@ docker network create quickstart-kafka-connect
 Now, start a single Kafka instance: 
 
 ```bash
-docker run -d --name kafka --net quickstart-kafka-connect -p 9092:9092 ueisele/apache-kafka-server-standalone:3.4.0
+docker run -d --name kafka --net quickstart-kafka-connect -p 9092:9092 ueisele/apache-kafka-server-standalone:3.4.1
 ```
 
 In order to run Apache Kafka Connect with a single instance run the following command:
@@ -71,7 +58,7 @@ docker run -d --name kafka-connect --net quickstart-kafka-connect -p 8083:8083 \
     -e CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE=false \
     -e CONNECT_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter \
     -e CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE=false \
-    ueisele/apache-kafka-connect:3.4.0
+    ueisele/apache-kafka-connect:3.4.1
 ```
 
 You find additional examples in [examples/connect-standalone/]():
@@ -116,54 +103,6 @@ The logging configuration can be adjusted with the following environment variabl
 * `CONNECT_LOG4J_PATTERN` sets the logging pattern (default: `[%d] (%t) %p %m (%c)%n`)
 * `CONNECT_LOG4J_ROOT_LOGLEVEL` sets the root log level (default: `INFO`)
 * `CONNECT_LOG4J_LOGGERS` is a comma separated list of logger and log level key-value pairs (default: `org.reflections=ERROR,org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR`)
-
-### OpenTelemetry
-
-The image contains an [OpenTelemetry JavaAgent](https://opentelemetry.io/docs/instrumentation/java/automatic/). In the default configuration, this exports metrics via a [Prometheus](https://prometheus.io/) endpoint on port _9464_.
-Kafka producer and consumer metrics (and traces) are captured via [agent instrumentation](https://opentelemetry.io/docs/instrumentation/java/automatic/agent-config/#suppressing-specific-agent-instrumentation).
-The Kafka Connect metrics are captured via [JMX](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/jmx-metrics/javaagent). 
-As configuration for the Kafka Connect metrics, the file [kafka-connect.yaml](include/opt/opentelemetry/javaagent/kafka-connect.yaml) is used. 
-
-The OpenTelemetry JavaAgent can be [configured via environment variables](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/jmx-metrics/javaagent):
-
-> #### `OTEL_JAVAAGENT_ENABLED`
-> Can be used to disable the OpenTelemetry JavaAgent.
-> *   Type: `Boolean`
-> *   Default: `true`
->
-> #### `OTEL_SERVICE_NAME`
-> The name of the service.
-> *   Type: `String`
-> *   Default: `kafka-connect`
->
-> #### `OTEL_JMX_KAFKA_CONNECT_ENABLED`
-> Can be used to disable the Kafka Connect JXM metrics.
-> *   Type: `Boolean`
-> *   Default: `true`
->
-> #### `OTEL_JMX_CONFIG`
-> To provide your own metric definitions, create one or more [YAML configuration files](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/jmx-metrics/javaagent), and specify their locations, separated by commas.
-> The provided [kafka-connect.yaml](include/opt/opentelemetry/javaagent/kafka-connect.yaml) can be used as an example.
-> *   Type: `List(String)`
-> *   Default: `true`
->
-> #### `OTEL_TRACES_EXPORTER`
-> List of exporters to be used for tracing, separated by commas.
-> Available exporters and configurations are described in the [autoconfigure documentation](https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md#exporters). 
-> *   Type: `List(String)`
-> *   Default: `none`
->
-> #### `OTEL_METRICS_EXPORTER`
-> List of exporters to be used for metrics, separated by commas.
-> Available exporters and configurations are described in the [autoconfigure documentation](https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md#exporters). 
-> *   Type: `List(String)`
-> *   Default: `prometheus`
->
-> #### `OTEL_EXPORTER_PROMETHEUS_PORT`
-> The port on which the prometheus metrics are provided.
-> *   Type: `Integer`
-> *   Default: `9464`
->
 
 ### Debugging
 
@@ -226,13 +165,13 @@ In order to create your own Docker image for Apache Kafka Connect clone the [uei
 ```bash
 git clone https://github.com/ueisele/kafka-images.git
 cd kafka-images
-connect/build.sh --build --tag 3.4.0 --openjdk-release 17
+connect/build.sh --build --tag 3.4.1 --openjdk-release 17
 ```
 
 To create an image with a specific OpenJDK version use the following command:
 
 ```bash
-connect/build.sh --build --tag 3.4.0 --openjdk-release 17 --openjdk-version 17.0.6
+connect/build.sh --build --tag 3.4.1 --openjdk-release 17 --openjdk-version 17.0.7
 ```
 
 By default Apache Kafka 3.0.0 does not support Java 17. In order to build Apache Kafka 3.0.0 with Java 17, the Gradle configuration is patched with [patch/3.0.0-openjdk17.patch]().
@@ -251,7 +190,7 @@ connect/build.sh --build --branch trunk --openjdk-release 17
 
 The `connect/build.sh` script provides the following options:
 
-`Usage: connect/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha b172a0a] [--tag 3.4.0] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.6] [--patch 3.0.0-openjdk17.patch]`
+`Usage: connect/build.sh [--build] [--push] [--user ueisele] [--github-repo apache/kafka] [ [--commit-sha b172a0a] [--tag 3.4.1] [--branch trunk] [--pull-request 9999] ] [--openjdk-release 17] [--openjdk-version 17.0.7] [--patch 3.0.0-openjdk17.patch]`
 
 ## License 
 

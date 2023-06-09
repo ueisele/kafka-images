@@ -2,7 +2,7 @@
 set -e
 SCRIPT_DIR=$(dirname ${BASH_SOURCE[0]})
 source ${SCRIPT_DIR}/env
-source ${SCRIPT_DIR}/../connect-base/env
+source ${SCRIPT_DIR}/../connect/env
 source ${SCRIPT_DIR}/../openjdk/env
 
 PUSH=false
@@ -23,13 +23,12 @@ function usage () {
 
 function build_image () {
     local openjdk_tags=($(openjdk_image_tags "${ZULU_OPENJDK_RELEASE}" "${ZULU_OPENJDK_VERSION}"))
-    local connect_base_tags=($(kafka_connect_base_image_tags ${KAFKA_TAG_VERSION} $(echo ${KAFKA_GIT_COMMIT_SHA} | cut -c 1-7) ${openjdk_tags[@]}))
-    local connect_tags=($(kafka_connect_image_tags ${KAFKA_TAG_VERSION} $(echo ${KAFKA_GIT_COMMIT_SHA} | cut -c 1-7) ${openjdk_tags[@]}))
+    local kafka_tags=($(kafka_connect_image_tags ${KAFKA_TAG_VERSION} $(echo ${KAFKA_GIT_COMMIT_SHA} | cut -c 1-7) ${openjdk_tags[@]}))
     docker build \
-        $(for tag in ${connect_tags[@]}; do
-        echo -t "$(kafka_connect_image_name ${DOCKERREGISTRY_USER} ${KAFKA_GITHUB_REPO}):${tag}"
+        $(for tag in ${kafka_tags[@]}; do
+        echo -t "$(kafka_connect_otel_image_name ${DOCKERREGISTRY_USER} ${KAFKA_GITHUB_REPO}):${tag}"
         done) \
-        --build-arg KAFKA_CONNECT_BASE_IMAGE="$(kafka_connect_base_image_name ${DOCKERREGISTRY_USER} ${KAFKA_GITHUB_REPO}):${connect_base_tags[0]}" \
+        --build-arg KAFKA_CONNECT_IMAGE="$(kafka_connect_image_name ${DOCKERREGISTRY_USER} ${KAFKA_GITHUB_REPO}):${kafka_tags[0]}" \
         -f ${SCRIPT_DIR}/${DOCKERFILE} ${SCRIPT_DIR}
 }
 
@@ -40,9 +39,9 @@ function build () {
 
 function push_image () {
     local openjdk_tags=($(openjdk_image_tags "${ZULU_OPENJDK_RELEASE}" "${ZULU_OPENJDK_VERSION}"))
-    local connect_tags=($(kafka_connect_image_tags ${KAFKA_TAG_VERSION} $(echo ${KAFKA_GIT_COMMIT_SHA} | cut -c 1-7) ${openjdk_tags[@]}))
-    for tag in ${connect_tags[@]}; do
-        docker push "$(kafka_connect_image_name ${DOCKERREGISTRY_USER} ${KAFKA_GITHUB_REPO}):${tag}"
+    local kafka_tags=($(kafka_connect_image_tags ${KAFKA_TAG_VERSION} $(echo ${KAFKA_GIT_COMMIT_SHA} | cut -c 1-7) ${openjdk_tags[@]}))
+    for tag in ${kafka_tags[@]}; do
+        docker push "$(kafka_connect_otel_image_name ${DOCKERREGISTRY_USER} ${KAFKA_GITHUB_REPO}):${tag}"
     done
 }
 

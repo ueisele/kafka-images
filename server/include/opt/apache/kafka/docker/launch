@@ -17,8 +17,5 @@
 # JMX Configuration
 . /opt/apache/kafka/docker/jmx-config
 
-# OTEL Configuration
-. /opt/apache/kafka/docker/otel-config
-
 echo "===> Launching Kafka ... "
 exec kafka-server-start.sh /opt/apache/kafka/config/server.properties

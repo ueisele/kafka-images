@@ -1,0 +1,18 @@
+ARG KAFKA_CONNECT_IMAGE
+
+FROM ${KAFKA_CONNECT_IMAGE}
+LABEL maintainer="code@uweeisele.eu"
+
+# Add OTel configuration script
+COPY --chown=appuser:appuser include/opt/apache/kafka/docker /opt/apache/kafka/docker
+
+# https://opentelemetry.io/docs/instrumentation/java/automatic/agent-config/
+# https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/jmx-metrics/javaagent
+ARG OTEL_VERSION=1.26.0
+ARG OTEL_EXPORTER_PROMETHEUS_PORT=9464
+ENV OTEL_EXPORTER_PROMETHEUS_PORT=${OTEL_EXPORTER_PROMETHEUS_PORT}
+RUN mkdir -p /opt/opentelemetry/javaagent \
+  && curl -s -L -o /opt/opentelemetry/javaagent/opentelemetry-javaagent.jar \
+      https://repo1.maven.org/maven2/io/opentelemetry/javaagent/opentelemetry-javaagent/${OTEL_VERSION}/opentelemetry-javaagent-${OTEL_VERSION}.jar
+COPY --chown=appuser:appuser include/opt/opentelemetry/javaagent /opt/opentelemetry/javaagent
+EXPOSE ${OTEL_EXPORTER_PROMETHEUS_PORT}

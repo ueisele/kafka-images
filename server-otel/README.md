@@ -1,11 +1,14 @@
-# Docker Image for Apache Kafka Broker and Controller
+# Docker Image for Apache Kafka Broker and Controller with OTel
 
 Docker image for running the [Open Source version of Apache Kafka](https://github.com/apache/kafka/).
 It offers support for running Kafka [KRaft mode](https://github.com/apache/kafka/blob/3.3.1/config/kraft/README.md) as well as in ZooKeeper mode.
 
 The Kafka distribution included in the Docker image is built directly from [source](https://github.com/apache/kafka/).
 
-The Docker images are available on DockerHub repository [ueisele/apache-kafka-server](https://hub.docker.com/repository/docker/ueisele/apache-kafka-server), and the source files for the images are available on GitHub repository [ueisele/kafka-images](https://github.com/ueisele/kafka-images).
+The image contains an [OpenTelemetry JavaAgent](https://opentelemetry.io/docs/instrumentation/java/automatic/). In the default configuration, this exports metrics via a [Prometheus](https://prometheus.io/) endpoint on port _9464_.
+The Kafka metrics are captured via [JMX](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/jmx-metrics/javaagent). 
+
+The Docker images are available on DockerHub repository [ueisele/apache-kafka-server-otel](https://hub.docker.com/repository/docker/ueisele/apache-kafka-server-otel), and the source files for the images are available on GitHub repository [ueisele/kafka-images](https://github.com/ueisele/kafka-images).
 
 ## Most Recent Tags
 
@@ -22,7 +25,7 @@ Most recent tags for `SNAPSHOT` builds:
 * `3.6.0-SNAPSHOT`, `3.6.0-SNAPSHOT-zulu17`, `3.6.0-SNAPSHOT-zulu17.0.7`, `3.6.0-SNAPSHOT-zulu17-ubi8.8`, `3.6.0-SNAPSHOT-zulu17.0.7-ubi8.8-860`
 * `3.5.0-SNAPSHOT`, `3.5.0-SNAPSHOT-zulu17`, `3.5.0-SNAPSHOT-zulu17.0.7`, `3.5.0-SNAPSHOT-zulu17-ubi8.8`, `3.5.0-SNAPSHOT-zulu17.0.7-ubi8.8-860`
 
-Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-server:3.6.0-SNAPSHOT-g7eea2a3`.
+Additionally, a tag with the associated Git-Sha of the built Apache Kafka distribution is always published as well, e.g. `ueisele/apache-kafka-server-otel:3.6.0-SNAPSHOT-g7eea2a3`.
 
 ## Image
 
@@ -47,7 +50,7 @@ Since Apache Kafka 3.4 Kafka clusters can be migrated from ZooKeeper mode to KRa
 In order to run Apache Kafka with a single instance in `KRaft` mode, run the following command:
 
 ```bash
-docker run -d --name kafka-kraft -p 9092:9092 \
+docker run -d --name kafka-kraft -p 9092:9092 -p 9464:9464 \
     -e AUTO_GENERATE_CLUSTER_ID=true \
     -e AUTO_FORMAT_KAFKA_STORAGE_DIR=true \
     -e KAFKA_PROCESS_ROLES=broker,controller \
@@ -60,7 +63,7 @@ docker run -d --name kafka-kraft -p 9092:9092 \
     -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1 \
-    ueisele/apache-kafka-server:3.4.1
+    ueisele/apache-kafka-server-otel:3.4.1
 ```
 
 You find additional examples in [examples/kraft/]():
@@ -97,7 +100,7 @@ docker run -d --name kafka-zk --net host \
     -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1 \
-    ueisele/apache-kafka-server:3.4.1
+    ueisele/apache-kafka-server-otel:3.4.1
 ```
 
 You find additional examples in [examples/zk/]():
@@ -230,7 +233,7 @@ docker run -d --name kafka-kraft -p 9092:9092 \
     -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1 \
     -e KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1 \
-    ueisele/apache-kafka-server:3.4.1
+    ueisele/apache-kafka-server-otel:3.4.1
 ```
 
 ### Logging
@@ -241,6 +244,64 @@ The logging configuration can be adjusted with the following environment variabl
 * `CONNECT_LOG4J_ROOT_LOGLEVEL` sets the root log level (default: `INFO`)
 * `CONNECT_LOG4J_LOGGERS` is a comma separated list of logger and log level key-value pairs 
   (default: `kafka=INFO,kafka.network.RequestChannel$=WARN,kafka.producer.async.DefaultEventHandler=DEBUG,kafka.request.logger=WARN,kafka.controller=TRACE,kafka.log.LogCleaner=INFO,state.change.logger=TRACE,kafka.authorizer.logger=WARN`)
+
+### OpenTelemetry
+
+The image contains an [OpenTelemetry JavaAgent](https://opentelemetry.io/docs/instrumentation/java/automatic/). In the default configuration, this exports metrics via a [Prometheus](https://prometheus.io/) endpoint on port _9464_.
+The Kafka metrics are captured via [JMX](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/jmx-metrics/javaagent). 
+As configuration for the Kafka metrics, the file [kafka-broker.yaml](include/opt/opentelemetry/javaagent/kafka-broker.yaml) is used. 
+
+The OpenTelemetry JavaAgent can be [configured via environment variables](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/jmx-metrics/javaagent):
+
+> #### `OTEL_JAVAAGENT_ENABLED`
+> Can be used to disable the OpenTelemetry JavaAgent.
+> *   Type: `Boolean`
+> *   Default: `true`
+>
+> #### `OTEL_SERVICE_NAME`
+> The name of the service.
+> *   Type: `String`
+> *   Default: `kafka-broker`
+>
+> #### `OTEL_JMX_KAFKA_BROKER_ENABLED`
+> Can be used to disable the Kafka Broker JXM metrics.
+> *   Type: `Boolean`
+> *   Default: `true`
+>
+> #### `OTEL_JMX_CONFIG`
+> To provide your own metric definitions, create one or more [YAML configuration files](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/jmx-metrics/javaagent), and specify their locations, separated by commas.
+> The provided [kafka-broker.yaml](include/opt/opentelemetry/javaagent/kafka-broker.yaml) can be used as an example.
+> *   Type: `List(String)`
+> *   Default: `true`
+>
+> #### `OTEL_INSTRUMENTATION_COMMON_DEFAULT_ENABLED`
+> Can be used to enable [automatic agent configuration](https://opentelemetry.io/docs/instrumentation/java/automatic/agent-config/#enable-only-specific-instrumentation).
+> *   Type: `Boolean`
+> *   Default: `false`
+>
+> #### `OTEL_METRICS_EXPORTER`
+> List of exporters to be used for metrics, separated by commas.
+> Available exporters and configurations are described in the [autoconfigure documentation](https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md#exporters). 
+> *   Type: `List(String)`
+> *   Default: `prometheus`
+>
+> #### `OTEL_EXPORTER_PROMETHEUS_PORT`
+> The port on which the prometheus metrics are provided.
+> *   Type: `Integer`
+> *   Default: `9464`
+>
+> #### `OTEL_TRACES_EXPORTER`
+> List of exporters to be used for tracing, separated by commas.
+> Available exporters and configurations are described in the [autoconfigure documentation](https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md#exporters). 
+> *   Type: `List(String)`
+> *   Default: `none`
+>
+> #### `OTEL_LOGS_EXPORTER`
+> List of exporters to be used for logging, separated by commas.
+> Available exporters and configurations are described in the [autoconfigure documentation](https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md#exporters). 
+> *   Type: `List(String)`
+> *   Default: `none`
+>
 
 ### JMX
 

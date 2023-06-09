@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md
 if [ -z "${OTEL_JAVAAGENT_ENABLED:-}" ] || [[ ${OTEL_JAVAAGENT_ENABLED:-} == "true" ]]; then
   
   export KAFKA_OPTS="${KAFKA_OPTS:-} -javaagent:/opt/opentelemetry/javaagent/opentelemetry-javaagent.jar"
@@ -29,12 +30,16 @@ if [ -z "${OTEL_JAVAAGENT_ENABLED:-}" ] || [[ ${OTEL_JAVAAGENT_ENABLED:-} == "tr
     export OTEL_JMX_CONFIG="/opt/opentelemetry/javaagent/kafka-broker.yaml,${OTEL_JMX_CONFIG:-}"
   fi
 
-  if [ -z "${OTEL_TRACES_EXPORTER:-}" ]; then
-    export OTEL_TRACES_EXPORTER=none
-  fi
+  # https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md#exporters
   if [ -z "${OTEL_METRICS_EXPORTER:-}" ]; then
     export OTEL_METRICS_EXPORTER=prometheus
     export OTEL_EXPORTER_PROMETHEUS_PORT=${OTEL_EXPORTER_PROMETHEUS_PORT:-9464}
+  fi
+  if [ -z "${OTEL_TRACES_EXPORTER:-}" ]; then
+    export OTEL_TRACES_EXPORTER=none
+  fi
+  if [ -z "${OTEL_LOGS_EXPORTER:-}" ]; then
+    export OTEL_LOGS_EXPORTER=none
   fi
 
 fi

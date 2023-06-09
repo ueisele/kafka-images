@@ -13,7 +13,6 @@ services:
     restart: always
     ports:
       - 8083:8083
-      - 9464:9464
       - 6001:6001
       - 5005:5005
     volumes:
@@ -52,7 +51,6 @@ services:
     restart: always
     ports:
       - 9092:9092
-      - 9465:9464
       - 6002:6002
     volumes:
       - kafka:/opt/apache/kafka/data

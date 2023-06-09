@@ -17,8 +17,5 @@
 # JMX Configuration
 . /opt/apache/kafka/docker/jmx-config
 
-# OTEL Configuration
-. /opt/apache/kafka/docker/otel-config
-
 echo "===> Launching Kafka Connect Standalone ... "
 exec connect-standalone.sh /opt/apache/kafka/config/kafka-connect-worker.properties /opt/apache/kafka/config/kafka-connect-connector.properties

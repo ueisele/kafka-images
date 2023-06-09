@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 
-UBI8_RELEASE=8.7
-UBI8_VERSION=${UBI8_RELEASE}-1085
+# https://catalog.redhat.com/software/containers/ubi8/ubi-minimal/5c359a62bed8bd75a2c3fba8
+UBI8_RELEASE=8.8
+UBI8_VERSION=${UBI8_RELEASE}-860
 
+# https://www.azul.com/downloads/
 ZULU_OPENJDK_PACKAGES=(jre jdk)
-
-ZULU_OPENJDK_19_VERSION=19.0.2
-ZULU_OPENJDK_17_VERSION=17.0.6
-ZULU_OPENJDK_11_VERSION=11.0.18
-ZULU_OPENJDK_8_VERSION=8.0.362
+ZULU_OPENJDK_20_VERSION=20.0.1
+ZULU_OPENJDK_17_VERSION=17.0.7
+ZULU_OPENJDK_11_VERSION=11.0.19
+ZULU_OPENJDK_8_VERSION=8.0.372
 
 function openjdk_image_name () {
     local user=${1:?"Missing Docker registry user as first parameter!"}
@@ -25,7 +26,7 @@ function openjdk_image_tags () {
     local release=${1:?"Missing OpenJDK release as first parameter (e.g. 11)!"}
     local version=${2:-"$(openjdk_version_by_release "${release}")"}
     if [ -z "${version}" ]; then
-        echo "Missing OpenJDK version as second parameter (e.g. 11.0.13)!"
+        echo "Missing OpenJDK version as second parameter (e.g. 11.0.19)!"
         return 1
     fi
     echo "zulu${version}-ubi${UBI8_VERSION}" "zulu${release}-ubi${UBI8_RELEASE}" "zulu${version} zulu${release}"
@@ -37,7 +38,7 @@ function openjdk_image_name_and_tag () {
     local release=${3:?"Missing OpenJDK release as third parameter (e.g. 11)!"}
     local version=${4:-"$(openjdk_version_by_release "${release}")"}
     if [ -z "${version}" ]; then
-        echo "Missing OpenJDK version as fourth parameter (e.g. 11.0.13)!"
+        echo "Missing OpenJDK version as fourth parameter (e.g. 11.0.19)!"
         return 1
     fi
     local tags=($(openjdk_image_tags "${release}" "${version}"))
