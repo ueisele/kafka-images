@@ -22,6 +22,6 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     
     - name: Build
-      run: ./kcat/build.sh --build --tag ${{ matrix.kcat }} --librdkafka-version ${{ matrix.librdkafka }}
+      run: ./kcat/build.sh --build --branch ${{ matrix.kcat }} --librdkafka-version ${{ matrix.librdkafka }}
     - name: Push
-      run: ./kcat/build.sh --push --tag ${{ matrix.kcat }} --librdkafka-version ${{ matrix.librdkafka }}
+      run: ./kcat/build.sh --push --branch ${{ matrix.kcat }} --librdkafka-version ${{ matrix.librdkafka }}
