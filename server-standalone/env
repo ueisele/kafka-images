@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-function kafka_server_standalone_image_name () {
-    local user=${1:?"Missing Docker registry user as first parameter!"}
-    local git_repo=${2:?"Missing Git repo as second parameter!"}
-    echo "${user}/${git_repo//\//-}-server-standalone"
-}

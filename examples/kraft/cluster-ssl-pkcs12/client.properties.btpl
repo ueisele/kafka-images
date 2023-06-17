@@ -1,4 +1,0 @@
-security.protocol=SSL
-ssl.truststore.type=PKCS12
-ssl.truststore.location=${CA_TRUSTSTORE_FULLPATH}
-ssl.truststore.password=${CA_TRUSTSTORE_PASS}

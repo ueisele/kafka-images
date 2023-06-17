@@ -1,3 +1,0 @@
-{{- range $key, $value := envToProp "CONNECT_" "" "" -}}
-{{ $key }}={{ tpl $value $ }}
-{{ end }}
